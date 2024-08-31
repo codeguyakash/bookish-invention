@@ -1,0 +1,735 @@
+input[type="text"],
+input[type="password"],
+input[type="search"],
+select {
+    padding: 10px 0;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid;
+    font-size: 16px;
+    border-radius: 0;
+    &:focus,
+    &:hover {
+        box-shadow: none;
+        border-color: inherit !important;
+    }
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+    display: none;
+}
+
+select {
+    option {
+        padding: 5px 10px;
+    }
+}
+
+textarea {
+    background-color: #f1f5f9;
+    width: 100%;
+    height: 105px;
+    border: 1px solid #d6d9db;
+    font-size: 14px;
+    padding: 10px;
+    color: #666;
+    resize: none;
+    border-radius: 4px;
+}
+
+ng-select {
+    display: block;
+    outline: none !important;
+    >div {
+        border-color: transparent transparent #5f5f5a !important;
+        color: #4a4a44 !important;
+        font-size: 16px !important;
+        outline: none !important;
+        >div.single {
+            outline: none !important;
+            height: auto !important;
+            >div.placeholder {
+                color: #4a4a44 !important;
+                padding: 7px 10px 7px 0 !important;
+            }
+            div.toggle {
+                padding-top: 10px;
+                color: #4a4a44 !important;
+                font-size: 0 !important;
+                position: relative;
+                padding: 0 !important;
+                height: 43px;
+                &:hover {
+                    background-color: transparent !important;
+                }
+                &:before {
+                    content: '';
+                    display: block;
+                    border-width: 8px;
+                    border-style: solid;
+                    border-color: #f5bc1f transparent transparent;
+                    position: absolute;
+                    left: 0;
+                    top: 23px;
+                    right: 0;
+                    bottom: 0;
+                    margin: auto;
+                    width: 0;
+                    z-index: 9;
+                }
+                &:after {
+                    content: '';
+                    display: block;
+                    border-width: 8px;
+                    border-style: solid;
+                    border-color: #616161 transparent transparent;
+                    position: absolute;
+                    left: 0;
+                    top: 24px;
+                    right: 0;
+                    bottom: 0;
+                    margin: auto;
+                    width: 0;
+                }
+            }
+            >div.value {
+                padding: 6px 0 !important;
+                height: 43px !important;
+                span {
+                    line-height: normal;
+                }
+            }
+        }
+    }
+}
+
+select-dropdown {
+    >div {
+        z-index: 99 !important;
+        .filter {
+            input {
+                color: #4a4a44 !important;
+                font-size: 16px !important;
+            }
+        }
+        .options {
+            >ul {
+                >li {
+                    color: #4a4a44 !important;
+                    font-size: 16px !important;
+                }
+            }
+        }
+    }
+}
+
+.error {
+    color: orangered;
+    font-size: 14px;
+}
+
+.success {
+    color: green;
+    font-size: 14px;
+}
+
+// ::-webkit-input-placeholder {
+//     color: rgb(7, 29, 62);
+// }
+// ::-moz-placeholder {
+//     color: rgb(7, 29, 62);
+// }
+// :-ms-input-placeholder {
+//     color: rgb(7, 29, 62);
+// }
+// :-moz-placeholder {
+//     color: rgb(7, 29, 62);
+// }
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    transition: all .2s ease-in-out;
+    &.btn-blue {
+        @include button($bg-color: $btn-blue-bg, $shadow: $btn-blue-shadow, $border: $border-none, $color: $btn-white-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-go-solar {
+        @include button($bg-color: $btn-white-color, $shadow: $btn-go-solar-shadow, $border: $border-none, $color: $btn-go-solar-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-go-advanced {
+        @include button($bg-color: $btn-go-advanced-bg, $shadow: $btn-go-advanced-shadow, $border: $border-none, $color: $btn-white-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-need-backup {
+        @include button($bg-color: $btn-need-backup-bg, $shadow: $btn-need-backup-shadow, $border: $border-none, $color: $btn-white-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-sky-blue {
+        @include button($bg-color: $btn-sky-blue-bg, $shadow: $btn-sky-blue-shadow, $border: $border-none, $color: $btn-white-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-yellow {
+        @include button($bg-color: $btn-yellow-bg, $shadow: $btn-yellow-shadow, $border: $border-none, $color: $btn-blue-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-orange {
+        @include button($bg-color: #ff9900, $shadow: #ff9900, $border: $border-none, $color: $btn-white-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-gold {
+        @include button($bg-color: $btn-gold-bg, $shadow: $btn-gold-shadow, $border: $border-none, $color: $btn-white-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-green {
+        @include button($bg-color: $btn-green-bg, $shadow: $btn-green-shadow, $border: $border-none, $color: $btn-white-color, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-white {
+        @include button($bg-color: #fff, $shadow: $btn-blue-shadow, $border: $border-none, $color: $blue !important, $font-size: 18px, $height: 47);
+        padding: 0 30px;
+    }
+    &.btn-md {
+        width: 250px;
+        max-width: 100%;
+    }
+    &.btn-lg {
+        width: 100%;
+    }
+}
+
+.btn-outline {
+    height: 40px;
+    line-height: 40px;
+    @extend .white-color;
+    border: 1px solid #fff;
+    font-size: 14px;
+    padding-left: 35px;
+    padding-right: 35px;
+    border-radius: 20px;
+}
+
+.btn-visit {
+    font-size: 12px;
+    color: $white;
+    padding: 0 10px;
+    border-radius: 18px;
+    background-color: #104fae;
+    background: linear-gradient(#104fae, #1d6ce3);
+    height: 35px;
+    line-height: 35px;
+}
+
+.radio {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    font-family: $family-lato;
+    input {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        &+label {
+            color: $black;
+            padding-left: 38px;
+            &:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                width: 20px;
+                height: 20px;
+                border: 1px solid #4a4945;
+                border-radius: 50%;
+                top: 1px;
+            }
+            &:after {
+                background-color: rgba(168, 143, 0, .75);
+                border-radius: 50%;
+                content: '';
+                width: 14px;
+                height: 14px;
+                opacity: 0;
+                left: 3px;
+                top: 4px;
+                position: absolute;
+                transition: opacity 300ms;
+            }
+        }
+        &:checked {
+            &+label:after {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.disabled-submit {
+    opacity: .7 !important;
+    cursor: not-allowed !important;
+}
+
+.form-field {
+    margin-bottom: 20px;
+    text-align: left;
+    [class*='icon-'] {
+        padding-right: 20px;
+        background-image: url(../images/sprite.png);
+        background-repeat: no-repeat;
+    }
+    .field-addon {
+        @extend .pos-rel;
+        .field-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .form-text,
+        input[type="text"] {
+            width: 100%;
+            padding-left: 50px;
+            color: #0d274e;
+        }
+        .right {
+            .form-text,
+            input[type="text"] {
+                padding-right: 50px;
+            }
+        }
+        &.mandate-field {
+             ::-webkit-input-placeholder {
+                color: $mandate-field !important;
+            }
+             ::-moz-placeholder {
+                color: $mandate-field !important;
+            }
+             :-ms-input-placeholder {
+                color: $mandate-field !important;
+            }
+             ::placeholder {
+                color: $mandate-field !important;
+            }
+            .placeholder {
+                color: $mandate-field !important;
+            }
+        }
+    }
+    .verify-link {
+        @extend .pos-abs;
+        right: 0;
+        bottom: -24px;
+        text-decoration: underline;
+        z-index: 1;
+    }
+}
+
+.icon-location {
+    background-position: right -41px top 13px;
+}
+
+.icon-bill {
+    background-position: right -41px top -28px;
+}
+
+.icon-info {
+    background-position: right -41px top -65px;
+}
+
+.request-call-back {
+    padding: 36px 0 45px;
+    background-color: rgba(254, 244, 226, .36);
+    p {
+        font-size: 23px;
+        @extend .blue-color;
+    }
+    .form-field {
+        max-width: 585px;
+        margin: 0 auto;
+        display: flex;
+        input[type=text] {
+            border-bottom-color: #acacac !important;
+            font-size: 18px;
+            color: #4b4a4a;
+            font-weight: 300;
+        }
+        .btn {
+            margin-left: 10px;
+            width: 150px;
+        }
+    }
+}
+
+.register-pane,
+.login-pane,
+[id*="schedule-site-survey"] {
+    .form-field {
+        margin-top: 20px;
+        margin-bottom: 0;
+        .error {
+            text-align: left;
+        }
+    }
+    .button {
+        box-shadow: 0px 3px 18px 0px rgba(10, 35, 73, 0.47);
+        width: 255px;
+    }
+    ng-select>div {
+        border-color: transparent transparent #0d274e !important;
+        >div.single {
+            padding-left: 50px;
+            div.toggle {
+                &:before {
+                    border-color: #e0edfe transparent transparent;
+                }
+                &:after {
+                    border-color: #0d274e transparent transparent;
+                }
+            }
+        }
+    }
+    ng-select>div>div.single>div.placeholder,
+    ng-select>div>div.single>div.value,
+    select-dropdown>div .options>ul>li {
+        color: #0d274e !important;
+    }
+     ::-webkit-input-placeholder {
+        color: #0d274e !important;
+    }
+     ::-moz-placeholder {
+        color: #0d274e !important;
+    }
+     :-ms-input-placeholder {
+        color: #0d274e !important;
+    }
+}
+
+[id*="schedule-site-survey"] {
+    .actions {
+        margin: 50px 0;
+    }
+    .generate-otp {
+        float: right;
+    }
+    ng-select>div>div.single div.toggle:before {
+        border-color: #dfedfd transparent transparent;
+    }
+}
+
+app-dashboard [id*="schedule-site-survey"] ng-select>div>div.single div.toggle:before {
+    border-color: #f1f5f9 transparent transparent;
+}
+
+.resend-otp {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2b7efa;
+}
+
+.register-pane {
+    .register-actions {
+        @extend .text-center;
+        padding: 30px 0 20px;
+        .btn {
+            margin-bottom: 15px;
+        }
+    }
+}
+
+.login-pane {
+    @extend .text-center;
+    .or-text {
+        margin-top: 10px;
+    }
+    .login-actions {
+        padding: 30px 0 20px;
+        .btn {
+            margin-bottom: 15px;
+        }
+    }
+}
+
+.icon_mobile {
+    @include background-image('icon-mobile', 16px 24px);
+}
+
+.icon_lock {
+    @include background-image('icon-lock', 18px 22px);
+}
+
+.icon_user {
+    @include background-image('user-icon', 24px 24px);
+}
+
+.icon_message {
+    @include background-image('icon-message', 24px 17px);
+}
+
+.icon_date {
+    @include background-image('icon-date', 20px 22px);
+}
+
+.icon_time {
+    @include background-image('icon-time', 23px 23px);
+}
+
+.icon_address {
+    @include background-image('icon-address', 17px 23px);
+}
+
+.icon_city {
+    @include background-image('icon-city', 26px 25px);
+}
+
+.icon_state {
+    @include background-image('icon-state', 22px 29px);
+}
+
+.icon_locality {
+    @include background-image('icon-locality', 17px 26px);
+}
+
+.icon_landmark {
+    @include background-image('icon-landmark', 16px 21px);
+}
+
+.icon_residential {
+    @include background-image('icon-residential', 22px 22px);
+}
+
+.icon_help {
+    @include background-image('icon-help', 24px 24px);
+}
+
+.mandatory-field-message {
+    font-size: 14px;
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    color: #0d274e;
+}
+
+.field-checkbox {
+    @extend .pos-rel;
+    font-size: 16px;
+    input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        &+.icons {
+            font-size: 18px;
+            color: #0d274e;
+            .fa {
+                position: absolute;
+                left: 0;
+                top: 4px;
+                z-index: 1;
+                transition: opacity 200ms ease-in-out;
+                color: #aaa;
+                &.fa-square {
+                    opacity: 1;
+                }
+                &.fa-check-square {
+                    opacity: 0;
+                    color: #04357f;
+                }
+            }
+        }
+        &:checked+.icons {
+            .fa {
+                &.fa-square {
+                    opacity: 0;
+                }
+                &.fa-check-square {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+    label {
+        padding-left: 20px;
+        position: relative;
+        z-index: 9;
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.agree-to-pay {
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 3px 18px 0px rgba(10, 35, 73, 0.47);
+    .field-checkbox {
+        input[type="checkbox"] {
+            &+.icons {
+                font-size: 32px;
+            }
+        }
+        label {
+            padding-left: 40px;
+            font-size: 11px;
+        }
+        &+.error {
+            padding-left: 40px;
+        }
+    }
+    p {
+        font-size: 11px;
+        margin: 0;
+        padding-left: 40px;
+    }
+    .error {
+        padding-left: 40px;
+        font-size: 11px
+    }
+    .field-checkbox input[type="checkbox"] {
+        width: 21px;
+        height: 28px;
+        z-index: 9;
+    }
+}
+
+.field-tooltip-wrapper {
+    position: relative;
+    z-index: 10;
+    [class*="tooltip-"] {
+        position: absolute;
+        right: 2px;
+        cursor: pointer;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        svg {
+            vertical-align: top;
+        }
+        dfn {
+            display: none;
+            font-size: 13px;
+            width: 160px;
+            padding: 5px;
+            background-color: #fff;
+            box-shadow: 0px 3px 18px 0px rgba(130, 172, 235, 0.4);
+            position: absolute;
+            left: 50%;
+            bottom: 25px;
+            transform: translateX(-50%);
+            border-radius: 3px;
+            font-style: normal;
+            text-align: center;
+            &:after {
+                content: '';
+                border-width: 5px;
+                display: block;
+                width: 0;
+                border-color: #fff transparent transparent;
+                border-style: solid;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }
+            &.active {
+                display: block;
+            }
+        }
+        &:hover {
+            dfn {
+                display: block;
+            }
+        }
+    }
+    .tooltip-bill {
+        width: 14px;
+        height: 19px;
+    }
+    .tooltip-load {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+app-calculator-basic app-calculator,
+app-calculator-advanced app-calculator {
+    .field-tooltip-wrapper {
+        [class*="tooltip-"] {
+            dfn {
+                transform: none;
+                bottom: auto;
+                left: calc(100% + 10px);
+                top: -10px;
+                &:after {
+                    border-color: transparent #fff transparent transparent;
+                    top: 10px;
+                    left: auto;
+                    right: 100%;
+                }
+            }
+        }
+    }
+}
+
+.form-field-otp {
+    display: flex;
+    >div {
+        width: 50%;
+        &.otp-div {
+            .otp-button {
+                padding-right: 20px;
+                padding-top: 5px;
+                margin-bottom: 5px;
+                .btn {
+                    height: 40px;
+                    line-height: 40px;
+                    font-size: 16px;
+                    box-shadow: none;
+                    background-color: rgba(255, 192, 0, 1);
+                    box-shadow: none;
+                }
+            }
+        }
+        &.field-addon {
+            height: 45px;
+        }
+    }
+}
+
+#schedule-site-survey {
+    .survey-field-otp {
+        padding-top: 25px;
+        &+.form-field {
+            padding-left: 175px;
+        }
+        .btn {
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            box-shadow: none;
+            background-color: rgba(255, 192, 0, 1);
+            box-shadow: none;
+        }
+    }
+}
+
+.contact-us-disclaimer {
+    font-size: 11px;
+    position: relative;
+    padding-left: 20px;
+    input[type="checkbox"] {
+        position: absolute;
+        left: 0;
+        top: -2px;
+    }
+}

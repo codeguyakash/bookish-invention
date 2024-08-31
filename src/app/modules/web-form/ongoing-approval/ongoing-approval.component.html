@@ -1,0 +1,59 @@
+<div class="main">
+
+    <div class="container">
+        <h2>Approve task to Ongoing</h2>
+
+        <div class="project-details">
+            <div class="project-details-item">
+                <div class="title">Project ID</div>
+                <div class="detail">{{ taskData?.ptask_pp_id }}</div>
+            </div>
+            <div class="project-details-item">
+                <div class="title">Project Code</div>
+                <div class="detail">{{ taskData?.project_code }}</div>
+            </div>
+            <div class="project-details-item">
+                <div class="title">Tranche</div>
+                <div class="detail">{{ getTrancheName(taskData?.ptask_ttid) }}</div>
+            </div>
+            <div class="project-details-item">
+                <div class="title">Tranche Amount</div>
+                <div class="detail">{{ 'Rs. ' + taskData?.ptask_amount_total }}</div>
+            </div>
+            <div class="project-details-item">
+                <div class="title">Start Date</div>
+                <div class="detail">{{ taskData?.taskstartdate }}</div>
+            </div>
+            <div class="project-details-item">
+                <div class="title">End Date</div>
+                <div class="detail">{{ taskData?.taskenddate | date: 'yyyy-MM-dd' }}</div>
+            </div>
+            <div class="project-details-item">
+                <div class="title">Reason</div>
+                <div class="detail">{{ taskData?.ptask_approval_reason }}</div>
+            </div>
+    
+        </div>
+    
+        <div *ngIf="!isTaskApproved && !isTaskRejected && taskData?.ptask_pending_approval == '1'" class="action-items">
+            <button *ngIf="showApproveBtn" class="btn btn-green btn-md" (click)="approve('approve')">Approve</button>
+            <button *ngIf="showApproveBtn" class="btn button-blue btn-md" (click)="approve('reject')">Reject</button>
+        </div>
+    
+        <div *ngIf="isTaskApproved" style="margin-top:30px;display: flex;align-items: center">
+            <img src="/assets/images chamge/thanks-icon.png" alt="Task Approved" style="height: 30px;
+            width: 30px; margin-right: 20px;">
+            <h3 style="display:inline-block">Task has been approved</h3>
+        </div>
+    
+        <div *ngIf="isTaskRejected" style="margin-top:30px;display: flex;align-items: center">
+            <h3 style="display:inline-block">Task has been rejected</h3>
+        </div>
+    </div>
+
+    
+
+</div>
+
+
+

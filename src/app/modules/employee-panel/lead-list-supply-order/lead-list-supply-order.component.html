@@ -1,0 +1,1516 @@
+<div class="loader-container" *ngIf="actionLoader == 'fillKart_loader'">
+  <img
+    src="/assets/images/loader.gif"
+    style="
+      width: 35%;
+    "
+  />
+</div>
+<div class="main-container" [ngClass]="{ 'cc-container': isListing }">
+  <aside class="sidebar">
+    <div class="employee-info">
+      <div class="pic">
+        <i class="fa fa-user-circle" aria-hidden="true"></i>
+      </div>
+      <div class="detail">
+        <span>SO Designer</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-tabs">
+      <a
+        (click)="getLeadList_actionable(); resetSoFiles();"
+        [ngClass]="{ active: isListing == 'lead-list' }"
+      >
+        <i class="fa fa-address-card" aria-hidden="true"></i>
+        <span>SO Designer</span>
+      </a>
+    </nav>
+  </aside>
+
+  <smart-search
+    (SearchResults)="smartSearchResults($event)"
+    *ngIf="showSmartSearchComponent"
+  ></smart-search>
+
+  <div class="container" *ngIf="isListing == 'lead-list'">
+    <h2>Supply Order List</h2>
+    <div class="table-wrapper" *ngIf="actionable_lst.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Project ID</th>
+            <th>Customer Name</th>
+            <th>Contact No.</th>
+            <th>Address</th>
+            <th>Surveyor Name</th>
+            <th>Project Status</th>
+            <th style="width: 125px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of actionable_lst; let i = index">
+            <td>{{ data.handOff.h_data.consumerProject.project_code }}</td>
+            <td>{{ data?.handOff.h_data.customer_name }}</td>
+            <td>{{ data?.handOff.h_data.cceLeaddata?.cceld_mobileno }}</td>
+            <td>
+              {{
+                data?.handOff.h_data.cceLeaddata?.cceld_address1 != "NULL"
+                  ? data.handOff.h_data.cceLeaddata.cceld_address1
+                  : ""
+              }}
+              {{
+                data?.handOff.h_data.district_name != "NULL"
+                  ? data.handOff.h_data.district_name
+                  : ""
+              }}
+              {{
+                data?.handOff.h_data.state_name != "NULL"
+                  ? data.handOff.h_data.state_name
+                  : ""
+              }}
+            </td>
+            <!-- <td>{{data?.cceld_scheduledate}}</td> -->
+            <td>{{ data?.emp_name }}</td>
+            <td>
+              {{
+                data.handOff.is_reject_project_manager == 0
+                  ? "Pending for Project Management Allocation"
+                  : "Rejected by Project Manager"
+              }}
+            </td>
+            <td>
+              <a class="gbgBtn" (click)="ViewHandoffDetails(data?.handOff)"
+                >{{ data.so_draft ? 'Open Draft': 'Open' }}</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="no-data" *ngIf="loader">
+      <img
+        src="/assets/images/loader.gif"
+        style="width: 30px; height: 30px; display: block; margin: 0 auto"
+        alt="LUMINOUS"
+      />
+    </div>
+    <div class="no-data" *ngIf="record">No Data found</div>
+  </div>
+
+  <div class="container" *ngIf="isListing == 'lead-search'">
+    <h2>Search In Supply Order</h2>
+    <br />
+    <div>
+      <form [formGroup]="searchLeadForm" (ngSubmit)="submitLeadSearch()">
+        <div class="field-wrapper">
+          <label for="">Search Type</label>
+          <div class="form-field">
+            <select formControlName="qType">
+              <option value="">Select</option>
+              <option value="lead_id">Lead Id</option>
+              <option value="lead_fname">First Name</option>
+              <option value="lead_mname">Middle Name</option>
+              <option value="lead_lname">Last Name</option>
+              <option value="lead_mobile">Phone</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-wrapper">
+          <label for="">Search String</label>
+          <div class="form-field">
+            <input type="text" formControlName="q" placeholder="" />
+            <div
+              class="error"
+              *ngIf="
+                searchLeadForm.controls?.q?.errors?.required &&
+                isLeadSearchFormSubmitted
+              "
+            >
+              Please enter search string
+            </div>
+            <div
+              class="error"
+              *ngIf="
+                searchLeadForm.controls?.q?.errors?.pattern &&
+                isLeadSearchFormSubmitted
+              "
+            >
+              Special character not allowed
+            </div>
+          </div>
+        </div>
+        <div class="field-wrapper serchFild">
+          <div class="form-field">
+            <button type="submit" class="nbtn btn btn-blue btn-md">
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <h2>Lead Search Results</h2>
+    <div class="table-wrapper" *ngIf="unprocessedLeads.length > 0">
+      <!-- <p>hello</p> -->
+      <table cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Lead ID</th>
+            <th>Customer Name</th>
+            <th>Contact No.</th>
+            <th>Address</th>
+            <th>Lead Created ON</th>
+            <th>Lead Status</th>
+            <th>Queue Status</th>
+            <th>Lead Payment Status</th>
+            <th>Locked By CCE</th>
+            <th>CCE ID</th>
+            <th>CCE Mobile</th>
+            <th>CCE Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of unprocessedLeads; let i = index">
+            <td>{{ data?.lead_id }}</td>
+            <td>
+              {{ data?.lead_fname }} {{ data?.lead_mname }}
+              {{ data?.lead_lname }}
+            </td>
+            <td>{{ data?.lead_mobile }}</td>
+            <td>
+              {{ data?.lead_address1 }} {{ data?.lead_address2 }}
+              {{ data?.district_name }} {{ data?.state_name }}-{{
+                data?.lead_lead_pincode
+              }}
+            </td>
+            <td>{{ data?.lead_createdon }}</td>
+            <td>{{ lead_states[data?.lead_status] }}</td>
+            <td>{{ data?.lead_queuestatus }}</td>
+            <td>
+              {{
+                data?.lead_iswaived == 0
+                  ? data?.payment_status == 3
+                    ? "Paid"
+                    : "Not Paid"
+                  : "Waived"
+              }}
+            </td>
+            <td>
+              {{ data?.emp_firstname }} {{ data?.emp_middlename }}
+              {{ data?.emp_lastname }}
+            </td>
+            <td>{{ data?.emp_code }}</td>
+            <td>{{ data?.emp_mobileno }}</td>
+            <td>{{ data?.emp_email }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="no-data" *ngIf="unprocessedLeads.length <= 0">No Results.</div>
+  </div>
+
+  <div class="container" *ngIf="!isListing">
+    <div class="tab-box fixed">
+      <div class="box">
+        <section class="lead-panel-tab">
+          <div
+            class="tab"
+            (click)="showTabData(1)"
+            [ngClass]="{ activatedSurveyView: panelSteps == 1 }"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="36px"
+              height="47px"
+            >
+              <path
+                fill-rule="evenodd"
+                fill="rgb(117, 183, 59)"
+                d="M34.109,46.053 L1.890,46.053 C1.082,46.053 0.426,45.394 0.426,44.582 L0.426,2.418 C0.426,1.605 1.082,0.947 1.890,0.947 L20.929,0.947 L20.929,14.185 C20.929,14.996 21.585,15.655 22.393,15.655 L35.574,15.655 L35.574,44.582 C35.574,45.394 34.917,46.053 34.109,46.053 ZM7.748,22.519 C6.939,22.519 6.284,23.178 6.284,23.990 C6.284,24.802 6.939,25.461 7.748,25.461 C8.558,25.461 9.213,24.802 9.213,23.990 C9.213,23.177 8.558,22.519 7.748,22.519 ZM7.748,28.402 C6.939,28.402 6.284,29.061 6.284,29.874 C6.284,30.686 6.939,31.344 7.748,31.344 C8.558,31.344 9.213,30.686 9.213,29.874 C9.213,29.061 8.558,28.402 7.748,28.402 ZM7.748,34.286 C6.939,34.286 6.284,34.945 6.284,35.757 C6.284,36.569 6.939,37.228 7.748,37.228 C8.558,37.228 9.213,36.569 9.213,35.757 C9.213,34.945 8.558,34.286 7.748,34.286 ZM28.251,22.519 L13.606,22.519 C12.798,22.519 12.142,23.178 12.142,23.990 C12.142,24.802 12.798,25.461 13.606,25.461 L28.251,25.461 C29.060,25.461 29.716,24.802 29.716,23.990 C29.716,23.178 29.060,22.519 28.251,22.519 ZM28.251,28.402 L13.606,28.402 C12.798,28.402 12.142,29.061 12.142,29.874 C12.142,30.686 12.798,31.344 13.606,31.344 L28.251,31.344 C29.060,31.344 29.716,30.686 29.716,29.874 C29.716,29.061 29.060,28.402 28.251,28.402 ZM28.251,34.286 L13.606,34.286 C12.798,34.286 12.142,34.945 12.142,35.757 C12.142,36.569 12.798,37.228 13.606,37.228 L28.251,37.228 C29.060,37.228 29.716,36.569 29.716,35.757 C29.716,34.945 29.060,34.286 28.251,34.286 ZM23.858,1.808 L34.716,12.713 L23.858,12.713 L23.858,1.808 Z"
+              />
+            </svg>
+            <span>Handoff View</span>
+          </div>
+          <div
+            class="tab"
+            (click)="showTabData(2)"
+            [ngClass]="{ activatedFillCart: panelSteps == 2 }"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="45px"
+              height="46px"
+            >
+              <path
+                fill-rule="evenodd"
+                fill="rgb(49, 213, 202)"
+                d="M43.957,31.537 L32.331,43.081 L26.455,44.671 L26.062,45.060 C25.916,45.207 25.722,45.280 25.528,45.280 C25.339,45.280 25.148,45.207 25.002,45.065 L24.986,45.069 L24.990,45.053 C24.701,44.761 24.701,44.291 24.995,44.000 L25.387,43.610 L26.988,37.776 L38.616,26.234 C39.467,25.388 40.952,25.388 41.804,26.234 L43.957,28.371 C44.383,28.794 44.618,29.355 44.618,29.954 C44.618,30.552 44.383,31.114 43.957,31.537 ZM27.139,42.930 L30.484,42.025 L28.050,39.610 L27.139,42.930 ZM28.733,38.166 L31.938,41.349 L39.676,33.666 L36.470,30.484 L28.733,38.166 ZM42.889,29.432 L40.735,27.294 C40.454,27.015 39.964,27.015 39.684,27.294 L37.539,29.424 L40.744,32.606 L42.889,30.476 C43.030,30.337 43.107,30.151 43.107,29.954 C43.107,29.757 43.030,29.572 42.889,29.432 ZM8.688,35.000 C8.271,35.000 7.933,35.335 7.933,35.750 C7.933,36.165 8.271,36.500 8.688,36.500 L25.069,36.500 L24.961,36.608 L22.519,45.500 L0.379,45.500 L0.379,0.500 L24.865,0.500 L35.883,11.439 L35.883,25.764 L26.581,35.000 L8.688,35.000 ZM8.688,18.500 L27.573,18.500 C27.990,18.500 28.329,18.165 28.329,17.750 C28.329,17.335 27.990,17.000 27.573,17.000 L8.688,17.000 C8.271,17.000 7.933,17.335 7.933,17.750 C7.933,18.165 8.271,18.500 8.688,18.500 ZM7.933,23.750 C7.933,24.165 8.271,24.500 8.688,24.500 L27.573,24.500 C27.990,24.500 28.329,24.165 28.329,23.750 C28.329,23.335 27.990,23.000 27.573,23.000 L8.688,23.000 C8.271,23.000 7.933,23.335 7.933,23.750 ZM16.242,11.000 L8.688,11.000 C8.271,11.000 7.933,11.335 7.933,11.750 C7.933,12.165 8.271,12.500 8.688,12.500 L16.242,12.500 C16.659,12.500 16.998,12.165 16.998,11.750 C16.998,11.335 16.659,11.000 16.242,11.000 ZM23.796,2.000 L23.796,12.500 L34.372,12.500 L23.796,2.000 ZM28.329,29.750 C28.329,29.335 27.990,29.000 27.573,29.000 L8.688,29.000 C8.271,29.000 7.933,29.335 7.933,29.750 C7.933,30.165 8.271,30.500 8.688,30.500 L27.573,30.500 C27.990,30.500 28.329,30.165 28.329,29.750 Z"
+              />
+            </svg>
+            <span>Fill SO Details</span>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="survey-page-container">
+      <div class="survey-page-left">
+        <!-- Panel 1 -->
+        <div class="survey-form audit-form" *ngIf="panelSteps == 1">
+          <app-supply-order-handoff
+            [handoff_data]="handoff_data"
+          ></app-supply-order-handoff>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="box schedule-call-back" *ngIf="panelSteps == 2">
+          <h2 class="box-title">Fill SO Details</h2>
+          <section class="box-content survey-form">
+            <form [formGroup]="sodesignerform" (ngSubmit)="submitSoform()">
+              <div class="field-wrapper">
+                <!-- <input type="checkbox" data-md-icheck (change)="toggleVisibility($event)"> -->
+                <b id="shipping-label"
+                  >Billing Address same as Shipping Address</b
+                >
+                <input
+                  id="shippingSameBilling"
+                  class="checkBoxInput-x"
+                  type="checkbox"
+                  formControlName = "so_is_billing_shipping_same"
+                  data-md-icheck
+                  (change)="toggleVisibility($event)"
+                  [checked]="sodesignerform.controls.so_is_billing_shipping_same.value == 1"
+                />
+                <label for="shippingSameBilling"></label>
+              </div>
+              <div class="field-wrapper">
+                <label for=""> First Name* </label>
+                <div class="form-field">
+                  <input
+                    class="text-caps"
+                    type="text"
+                    formControlName="so_fname"
+                    placeholder="First Name"
+                    (input)="sodesignerform.controls.so_is_billing_shipping_same.patchValue(0)"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_fname?.errors?.required &&
+                      submitted
+                    "
+                  >
+                    Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label for="">Last Name* </label>
+                <div class="form-field">
+                  <input
+                    class="text-caps"
+                    type="text"
+                    formControlName="so_lname"
+                    placeholder="Last Name"
+                    (input)="sodesignerform.controls.so_is_billing_shipping_same.patchValue(0)"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_lname?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <label for="">Contact Number*</label>
+                <div class="form-field">
+                  <input
+                    class="text-caps"
+                    type="text"
+                    formControlName="so_mobileno"
+                    placeholder="Contact Number"
+                    maxlength="10"
+                    (input)="sodesignerform.controls.so_is_billing_shipping_same.patchValue(0)"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_mobileno?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                  <div class="error" *ngIf="sodesignerform?.controls?.so_mobileno?.errors?.pattern &&
+                  submitted">Please enter a valid phone number.</div>
+                </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label for="">Address 1*</label>
+                <div class="form-field">
+                  <input
+                    type="text"
+                    formControlName="so_address"
+                    placeholder="Address"
+                    (input)="sodesignerform.controls.so_is_billing_shipping_same.patchValue(0)"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_address?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <label for="">Email*</label>
+                <div class="form-field">
+                  <input
+                    type="text"
+                    formControlName="so_email"
+                    placeholder="Email"
+                    (input)="sodesignerform.controls.so_is_billing_shipping_same.patchValue(0)"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_email?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                  <div class="error" *ngIf="sodesignerform?.controls?.so_email?.errors?.pattern &&
+                  submitted">Please enter a valid email.</div>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <label for="">GST</label>
+                <div class="form-field">
+                  <input
+                    type="text"
+                    formControlName="so_gst"
+                    placeholder="GST"
+                    (input)="sodesignerform.controls.so_is_billing_shipping_same.patchValue(0)"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_gst?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                  <div class="error" *ngIf="sodesignerform?.controls?.so_gst?.errors?.pattern &&
+                  submitted">Please enter a valid GST.</div>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <label for="">Whether IGST?</label>
+                <div class="form-field">
+                  <select formControlName="so_igst">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                  </select>
+                </div>
+                <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_igst?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+              </div>
+              <div class="field-wrapper">
+                <label for="">NRV Date*</label>
+                <div class="form-field">
+                  <p-calendar
+                    dateFormat="dd-mm-yy"
+                    [maxDate]="currentDate"
+                    [utc]="true"
+                    formControlName="so_nrv_date"
+                    placeholder="Date"
+                  ></p-calendar>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_nrv_date?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <h2>Cost of Key Components</h2>
+
+              <!-- Solution type* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Solution type*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="solutionTypeOptions"
+                    formControlName="so_solution_type"
+                    placeholder="Solution Type"
+                    (selected)="solutionTypeChanged($event)"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_solution_type?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Connection type* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Connection type*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="connectionType"
+                    formControlName="so_connection_type"
+                    placeholder="Connection type"
+                    (change)="updateInverterPcuRating()"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_connection_type?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Solar PV module -->
+              <div class="field-wrapper mt-20">
+                <label for="">Solar PV Modules Price*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_solarpv"
+                    placeholder="Solar PV"
+                    (blur)="getSspScope()"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_solarpv?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Solar PV Modules Rating* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Solar PV Modules Rating*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="solarPvModuleRating"
+                    formControlName="so_solarpv_rat"
+                    placeholder="Solar PV Modules Rating"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_solarpv_rat?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Solar PV Modules Qty* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Solar PV Modules Qty*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_solarpv_qty"
+                    placeholder="Solar PV Modules Qty"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_solarpv_qty?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label for=""><b>No Of Solar Inverter with Different Rating</b></label>
+                <div class="form-field">
+                    <ng-select autocomplete="off"  class="numberField" [options]="SolarInverterNumber" formControlName="proposal_inverter_number" placeholder="No. Of Solar Inverter"></ng-select>
+                    <div class="error" *ngIf="sodesignerform.controls?.proposal_inverter_number?.errors?.required && submitted">Please Select No of solar Inverter</div>
+
+                </div>
+            </div>
+
+              <!-- Solar Inverter 1-->
+              <ng-container *ngIf="showInverter1">
+                <div class="field-wrapper">
+                  <label for="">Solar Inverter Price 1*</label>
+                  <div class="form-field">
+                    <input
+                      type="number"
+                      formControlName="so_solarinverter"
+                      placeholder="Solar Inverter"
+                      (blur)="getSspScope()"
+                    />
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Solar Inverter Rating -->
+                <div class="field-wrapper mt-20">
+                  <label for="">Solar Inverter/PCU Rating 1*</label>
+                  <div class="form-field">
+                    <ng-select
+                      [options]="getInverterRatingType()"
+                      formControlName="so_solarinverter_rat"
+                      placeholder="Solar Inverter/PCU Rating"
+                    ></ng-select>
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter_rat?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Solar Inverter/PCU Qty -->
+                <div class="field-wrapper mt-20">
+                  <label for="">Solar Inverter/PCU Qty 1</label>
+                  <div class="form-field">
+                    <input
+                      type="number"
+                      formControlName="so_solarinverter_qty"
+                      placeholder="Solar Inverter/PCU Qty"
+                    />
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter_qty?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Solar Inverter 2-->
+              <ng-container *ngIf="showInverter2">
+                <div class="field-wrapper">
+                  <label for="">Solar Inverter Price 2*</label>
+                  <div class="form-field">
+                    <input
+                      type="number"
+                      formControlName="so_solarinverter2"
+                      placeholder="Solar Inverter"
+                      (blur)="getSspScope()"
+                    />
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Solar Inverter Rating -->
+                <div class="field-wrapper mt-20">
+                  <label for="">Solar Inverter/PCU Rating 2*</label>
+                  <div class="form-field">
+                    <ng-select
+                      [options]="getInverterRatingType()"
+                      formControlName="so_solarinverter_rat2"
+                      placeholder="Solar Inverter/PCU Rating"
+                    ></ng-select>
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter_rat?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Solar Inverter/PCU Qty -->
+                <div class="field-wrapper mt-20">
+                  <label for="">Solar Inverter/PCU Qty 2</label>
+                  <div class="form-field">
+                    <input
+                      type="number"
+                      formControlName="so_solarinverter_qty2"
+                      placeholder="Solar Inverter/PCU Qty"
+                    />
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter_qty?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Solar Inverter 3-->
+              <ng-container *ngIf="showInverter3">
+                <div class="field-wrapper">
+                  <label for="">Solar Inverter Price 3*</label>
+                  <div class="form-field">
+                    <input
+                      type="number"
+                      formControlName="so_solarinverter3"
+                      placeholder="Solar Inverter"
+                      (blur)="getSspScope()"
+                    />
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Solar Inverter Rating -->
+                <div class="field-wrapper mt-20">
+                  <label for="">Solar Inverter/PCU Rating 3*</label>
+                  <div class="form-field">
+                    <ng-select
+                      [options]="getInverterRatingType()"
+                      formControlName="so_solarinverter_rat3"
+                      placeholder="Solar Inverter/PCU Rating"
+                    ></ng-select>
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter_rat?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Solar Inverter/PCU Qty -->
+                <div class="field-wrapper mt-20">
+                  <label for="">Solar Inverter/PCU Qty 3</label>
+                  <div class="form-field">
+                    <input
+                      type="number"
+                      formControlName="so_solarinverter_qty3"
+                      placeholder="Solar Inverter/PCU Qty"
+                    />
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_solarinverter_qty?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+
+              <ng-container *ngIf="getSolutionType == 2 || getSolutionType == 3">
+                <!-- Battery* -->
+              <div *ngIf="getSolutionType == 2 || getSolutionType == 3" class="field-wrapper mt-20">
+                <label for="">Battery*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_battery"
+                    placeholder="Battery Price"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_battery?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Battery Rating* -->
+              <div *ngIf="getSolutionType == 2 || getSolutionType == 3" class="field-wrapper mt-20">
+                <label for="">Battery Rating*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="batteryRatingOffgrid"
+                    formControlName="so_battery_rating"
+                    placeholder="Battery Rating"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_battery_rating?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Battery Qty* -->
+              <div *ngIf="getSolutionType == 2 || getSolutionType == 3" class="field-wrapper mt-20">
+                <label for="">Battery Qty*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_battery_qty"
+                    placeholder="Battery Qty"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_battery_qty?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+              </ng-container>
+
+
+              <ng-container *ngIf="getSolutionType == 1 || getSolutionType == 3">
+              <!-- Remote Monitoring -->
+              <div class="field-wrapper">
+                <label for="">Remote Monitoring Price*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_remote_monitoring"
+                    placeholder="Remote Monitoring"
+                    (blur)="getSspScope()"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_remote_monitoring?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Remote Monitoring System Type* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Remote Monitoring System Type*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="getRemoteMonitoringType()"
+                    formControlName="so_remote_monitoring_type"
+                    placeholder="Remote Monitoring System Type"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_remote_monitoring_type?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Remote Monitoring System Qty* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Remote Monitoring System Qty*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_remote_monitoring_qty"
+                    placeholder="Remote Monitoring System Qty"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_remote_monitoring_qty?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+              </ng-container>
+
+
+              <ng-container *ngIf="getSolutionType == 1">
+                <!-- Zero export -->
+                <div class="field-wrapper">
+                  <label for="">Zero Export Device Price*</label>
+                  <div class="form-field">
+                    <input
+                      type="number"
+                      formControlName="so_zero_export_device"
+                      placeholder="Zero Export Device"
+                      (blur)="getSspScope()"
+                    />
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_zero_export_device ?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Zero Export Device Type* -->
+                <div class="field-wrapper mt-20">
+                  <label for="">Zero Export Device Type*</label>
+                  <div class="form-field">
+                    <ng-select
+                      [options]="zeroExportDeviceType"
+                      formControlName="so_zero_export_device_type"
+                      placeholder="Zero Export Device Type"
+                    ></ng-select>
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_zero_export_device_type?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Zero Export Device Type Qty* -->
+                <div class="field-wrapper mt-20">
+                  <label for="">Zero Export Device Type Qty*</label>
+                  <div class="form-field">
+                    <input
+                      type="number"
+                      formControlName="so_zero_export_device_qty"
+                      placeholder="Zero Export Device Type Qty"
+                    />
+                    <div
+                      class="error"
+                      *ngIf="
+                        sodesignerform?.controls?.so_zero_export_device_qty?.errors?.required &&
+                        submitted
+                      "
+                    >
+                    Mandatory
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+
+              <!-- Platform Charges -->
+              <div class="field-wrapper">
+                <label for="">Platform charges*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_platform"
+                    placeholder="Platform charges"
+                    min="0"
+                    max="99"
+                    (blur)="getSspScope()"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_platform?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                  <div
+                    class="error"
+                    *ngIf="
+                      (sodesignerform?.controls?.so_platform?.errors?.min || sodesignerform?.controls?.so_platform?.errors?.max) &&
+                      submitted
+                    "
+                  >
+                  Platform charges percentage should be between 0 and 100 percent.
+                  </div>
+                </div>
+              </div>
+
+              <!-- SSP Scope* -->
+              <div class="field-wrapper mt-20">
+                <label for="">SSP Scope*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_ssp_scope"
+                    placeholder="SSP Scope"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_ssp_scope?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Module Mounting Structure Type* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Module Mounting Structure Type*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="moduleMountingStructureType"
+                    formControlName="so_mounting_structure_type"
+                    placeholder="Module Mounting Structure Type"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_mounting_structure_type?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Module Mounting Stucture Array* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Module Mounting Stucture Array*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_mountring_structure"
+                    placeholder="Module Mounting Stucture Array"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_mountring_structure?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label for="">MMS material*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="mmsStructure"
+                    formControlName="so_mms"
+                    placeholder="MMS structure"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_mms?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tilt Angle* -->
+              <div class="field-wrapper mt-20">
+                <label for="">Tilt Angle*</label>
+                <div class="form-field">
+                  <input
+                    type="number"
+                    formControlName="so_tilt_angle"
+                    placeholder="Tilt Angle"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_tilt_angle?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label for=""> Partner*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="partnerList"
+                    formControlName="so_partner_id"
+                    placeholder="Select Partner"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_partner_id?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <label for=""> Project Engineer*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="projectEngineer"
+                    formControlName="so_projectengineer"
+                    placeholder="Project Engineer"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_projectengineer?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <label for=""> Operations Head*</label>
+                <div class="form-field">
+                  <input
+                    type="text"
+                    formControlName="so_opshead"
+                    placeholder="Operations Head"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_opshead?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+              <div class="field-wrapper">
+                <label for=""> SBL Business Head*</label>
+                <div class="form-field">
+                  <input
+                    type="text"
+                    formControlName="so_sblbusinesshead"
+                    placeholder="SBL Business Head"
+                  />
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_sblbusinesshead?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label for="">Additional BOS and I&C Text</label>
+                <div class="form-field">
+                  <textarea cols="30" rows="10" formControlName="so_annexture1_additional_text" placeholder="Additional text for Annexture 1 BOS and i&C"></textarea>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_annexture1_additional_text?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label for="">Lighting Arrester*</label>
+                <div class="form-field">
+                  <ng-select
+                    [options]="lightingOptions"
+                    formControlName="so_lightingArrester"
+                    placeholder="Lighting Arrester"
+                  ></ng-select>
+                  <div
+                    class="error"
+                    *ngIf="
+                      sodesignerform?.controls?.so_lightingArrester?.errors?.required &&
+                      submitted
+                    "
+                  >
+                  Mandatory
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label for="">Upload Additional Files</label>
+                <div class="form-field">
+                  <form [formGroup]="uploadDocument">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="file" (change)="fileChange($event,handoff_data.h_projectid)" name="file" formControlName="uploadDocumentFile" />
+                                <div class="error" *ngIf="uploadDocument.controls?.uploadDocumentFile?.errors?.required && isSubmittedDocument">Upload document is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                 <!-- File dropalble directive by @ctrl/ngx-droppable@1.2.2  @developer: Roshan-->
+                 <div droppable (filesDropped)="handleFilesDropped($event)" style="height:150px; width:100%; border:1px dotted grey">Or Drop File Here</div>
+                 <!--Ends dropable-->
+                </div>
+              </div>
+
+
+
+             <h2 class="bom-heading">Fill BOM Details</h2>
+              <div *ngFor="let item of annexture2; let i = index">
+                <p-panel [toggleable]="true" [collapsed]="formsection != item.name" (click)="formsection = item.name">
+                  <p-header class="ui-helper-clearfix">
+                      <span class="ui-panel-title">{{ item.name }}</span>
+                  </p-header>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Component</th>
+                        <th>Specifications</th>
+                        <th>Make</th>
+                        <th>Qty</th>
+                        <th>Scope</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of item.value; let j = index">
+                          <td width="5%">
+                            <input
+                              [id]="data.id"
+                              class="checkBoxInput-x"
+                              type="checkbox"
+                              [value]="data.component"
+                              [checked]="data.checked"
+                              (change)="onChangeItem($event, i, j)"
+                            />
+                            <label [for]="data.id"></label>
+                          </td>
+
+                          <td width="22%">
+                            <input
+                              type="text"
+                              [ngClass]="data.isComponentHiglight ? 'highlighted' : ''"
+                              [(ngModel)]="data.component"
+                              [ngModelOptions]="{ standalone: true }"
+                              (blur)="onBlur(data, data.component)"
+                            />
+                          </td>
+                          <td width="35%">
+                            <textarea
+                              cols="30"
+                              rows="5"
+                              [(ngModel)]="data.description"
+                              [ngClass]="data.isDescHighlighted ? 'highlighted' : ''"
+                              [ngModelOptions]="{ standalone: true }"
+                              (blur)="onBlur(data, data.component)"
+                            ></textarea>
+                            <div *ngIf="data.descriptionNote"><strong>Note</strong></div>
+                            <textarea *ngIf="data.descriptionNote"
+                              cols="30"
+                              rows="5"
+                              [(ngModel)]="data.descriptionNote"
+                              [ngModelOptions]="{ standalone: true }"
+                              (blur)="onBlur(data, data.component)"
+                            ></textarea>
+                          </td>
+                          <td width="15%">
+                            <input
+                              type="text"
+                              [(ngModel)]="data.make"
+                              [ngModelOptions]="{ standalone: true }"
+                              (blur)="onBlur(data, data.component)"
+                            />
+                          </td>
+                          <td width="8%">
+                            <input
+                              type="text"
+                              [ngClass]="data.isQtyHighlighted ? 'highlighted' : ''"
+                              [(ngModel)]="data.qty"
+                              [ngModelOptions]="{ standalone: true }"
+                              (blur)="onBlur(data, data.component)"
+                            />
+                          </td>
+                          <td width="15%">
+                            <input
+                              type="text"
+                              [(ngModel)]="data.scope"
+                              [ngModelOptions]="{ standalone: true }"
+                              (blur)="onBlur(data, data.component)"
+                            />
+                          </td>
+                        </tr>
+                    </tbody>
+                  </table>
+              </p-panel>
+              </div>
+              <!-- <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Component</th>
+                    <th>Specifications</th>
+                    <th>Make</th>
+                    <th>Qty</th>
+                    <th>Scope</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let item of annexture2; let i = index">
+                    <tr *ngFor="let data of item.value; let j = index">
+                      <td width="5%">
+                        <input
+                          [id]="data.id"
+                          class="checkBoxInput-x"
+                          type="checkbox"
+                          [value]="data.component"
+                          [checked]="data.checked"
+                          (change)="onChangeItem($event, i, j)"
+                        />
+                        <label [for]="data.id"></label>
+                      </td>
+
+                      <td width="25%">
+                        <input
+                          type="text"
+                          [ngClass]="data.isComponentHiglight ? 'highlighted' : ''"
+                          [(ngModel)]="data.component"
+                          [ngModelOptions]="{ standalone: true }"
+                          (blur)="onBlur(data, data.component)"
+                        />
+                      </td>
+                      <td width="35%">
+                        <textarea
+                          cols="30"
+                          rows="5"
+                          [(ngModel)]="data.description"
+                          [ngClass]="data.isDescHighlighted ? 'highlighted' : ''"
+                          [ngModelOptions]="{ standalone: true }"
+                          (blur)="onBlur(data, data.component)"
+                        ></textarea>
+                      </td>
+                      <td width="15%">
+                        <input
+                          type="text"
+                          [(ngModel)]="data.make"
+                          [ngModelOptions]="{ standalone: true }"
+                          (blur)="onBlur(data, data.component)"
+                        />
+                      </td>
+                      <td width="15%">
+                        <input
+                          type="text"
+                          [ngClass]="data.isQtyHighlighted ? 'highlighted' : ''"
+                          [(ngModel)]="data.qty"
+                          [ngModelOptions]="{ standalone: true }"
+                          (blur)="onBlur(data, data.component)"
+                        />
+                      </td>
+                      <td width="15%">
+                        <input
+                          type="text"
+                          [(ngModel)]="data.scope"
+                          [ngModelOptions]="{ standalone: true }"
+                          (blur)="onBlur(data, data.component)"
+                        />
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table> -->
+              <div class="text-center">
+                <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" appendTo="body"></p-confirmDialog>
+                <button class="btn button-blue btn-md" type="button" (click)="confirm()" pButton label="Cancel">
+
+                </button>
+                <input
+                  *ngIf="!actionLoader"
+                  type="submit"
+                  class="btn btn-green btn-md"
+                  value="Submit"
+                />
+
+                <button *ngIf="showSoDraft" class="btn button-blue btn-md" type="button" (click)="saveDraft()" pButton label="Save Draft"></button>
+              </div>
+            </form>
+          </section>
+          <div class="form-actions">
+
+          </div>
+        </div>
+
+        <!-- end survey-form do task-->
+      </div>
+      <div *ngIf="panelSteps == 2" class="survey-page-right">
+        <h2>Supply Order PDF</h2>
+
+        <ng-container *ngFor="let item of supplyOrderFilePaths; let first = first;">
+
+          <div *ngIf="first">
+            <h3>Latest Versions</h3>
+            <a  [href]="item.path" target="_blank" (click)="randomNumber()">
+              <img
+              style="width: 70% !important"
+              src="/assets/images/pdf_image.png"
+            />
+            <div>
+              {{ item.fileName }}
+            </div>
+            </a>
+            <div *ngIf="supplyOrderCount">
+              <button class="btn btn-blue btn-md" (click)="sendSupplyOrderEmail()">Send Email</button>
+            </div>
+
+            <h3 class="mt-80">Previous Versions</h3>
+          </div>
+
+
+          <div *ngIf="!first">
+            <a  [href]="item.path" target="_blank" (click)="randomNumber()">
+              <img
+              style="width: 70% !important"
+              src="/assets/images/pdf_image.png"
+            />
+            <div class="wordwrap">
+              {{ item.fileName }}
+            </div>
+            </a>
+          </div>
+
+
+        </ng-container>
+
+        <h2 *ngIf="projectDocuments" class="mt-80">Supply Order Additional Documents</h2>
+        <ng-container *ngIf="projectDocuments">
+          <div *ngFor="let document of projectDocuments;">
+            <a  href={{baseurl}}{{document.pdoc_filename}} target="_blank">
+              <img style="width: 70% !important" src="/assets/images/pdf_image.png">
+            </a>
+            <div style="margin-bottom: 20px;" class="wordwrap" >{{ document.displayName }}</div>
+          </div>
+        </ng-container>
+        <!-- <a
+            *ngIf="isPdfExist"
+          href="{{ baseurl }}/public/uploads/supplyorder/{{
+            handoff_data.h_projectid
+          }}/Solar_by_Luminous_SupplyOrder.pdf?param={{ randomParam }}"
+          target="_blank"
+          (click)="randomNumber()"
+        >
+          <img
+            style="width: 70% !important"
+            src="/assets/images/pdf_image.png"
+          />
+        </a> -->
+
+      </div>
+    </div>
+  </div>
+
+  <!-- <div
+    *ngIf="isLoginEmp == true"
+    style="
+      margin: 30px;
+      padding: 30px;
+      background-color: #fff;
+      font-size: 32px;
+      text-align: center;
+    "
+  >
+    <p>Unauthorised Access. Please login to access.</p>
+  </div> -->
+
+  <div class="loader-wrapper" [style.display]="!userData ? 'block' : 'none'">
+    <div class="loader"></div>
+  </div>
+</div>

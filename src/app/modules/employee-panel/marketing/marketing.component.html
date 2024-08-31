@@ -1,0 +1,130 @@
+<div class="main-container cc-container">
+    <aside class="sidebar">
+        <!-- <div class="brand-logo-wrapper">
+            <a class="brand-logo">
+                <img src="/assets/images/logo.png" alt="LUMINOUS" title="Home" />
+            </a>
+        </div> -->
+        <div class="employee-info">
+            <div class="pic">
+                <i class="fa fa-user-circle" aria-hidden="true"></i>
+            </div>
+            <div class="detail">
+                <span>Marketing</span>
+            </div>
+        </div>
+        <!-- <nav class="sidebar-tabs">
+            <a (click)="stripList()">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Footer Strip Text List</span>
+            </a>
+        </nav> -->
+        <nav class="sidebar-tabs">
+            <a (click)="addNewStripText()">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Add New Footer Strip Text</span>
+            </a>
+        </nav>
+        <!-- <nav class="sidebar-tabs">
+          <a (click)="toggleStrip()">
+              <i class="fa fa-address-card" aria-hidden="true"></i>
+              <span>Toggle Strip</span>
+          </a>
+      </nav> -->
+    </aside>
+    <br><br>
+        <div>
+          <label>
+            Toggle Footer Strip
+          </label>
+          <label class="switch" >
+            <input type="checkbox" (click)="toggleFooterStrip()" [checked]="!toggleStatus" >
+            <span class="slider round"></span>
+          </label>
+        </div>
+      <br>
+      <br>
+    <div class="container survey-page-container">
+
+        <div *ngIf="showForm == 'new_strip'">
+            <form [formGroup]="footerStripForm" (ngSubmit)="newStripSubmit()">
+                <!-- start survey-form -->
+                <div class="survey-form">
+                    <div class="field-wrapper">
+                        <label for="">Text</label>
+                        <div class="form-field">
+                            <!-- <textarea formControlName="blog_content" class="summernote" id="summernote">
+                            </textarea> -->
+                            <app-ngx-editor [spellcheck]="true" formControlName="fs_text"></app-ngx-editor>
+                        </div>
+                    </div>
+                    <div class="field-wrapper">
+                        <label for="">Strip Background Colour </label>
+                        <div class="form-field">
+                            <input class="text-caps" type="text" formControlName="fs_color_code" placeholder="Background Color Code without #">
+                            <div class="error" *ngIf="footerStripForm.controls?.fs_color_code?.errors?.pattern" style="color:red;">
+                                *Wrong color code pattern
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field-wrapper">
+                      <label for="">Close Button Colour </label>
+                      <div class="form-field">
+                          <input class="text-caps" type="text" formControlName="fs_close_button_color" placeholder="Close Button colour without #">
+                          <div class="error" *ngIf="footerStripForm.controls?.fs_close_button_color?.errors?.pattern" style="color:red;">
+                              *Wrong color code pattern
+                          </div>
+                      </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label for="">Maximum Height of Image Icon </label>
+                    <div class="form-field">
+                        <input class="text-caps" type="text" formControlName="fs_img_max_height" maxlength="2" placeholder="Maximum height of Image Icon">
+                        <div class="error" *ngIf="footerStripForm.controls?.fs_img_max_height?.errors?.pattern" style="color:red;">
+                           Please enter height between range 10 to 30.
+                        </div>
+                    </div>
+                </div>
+                    <div class="field-wrapper">
+                        <label>Upload Icon Image</label>
+                        <input #myInput type="file" (change)="fileChangeEvent($event)">
+                    </div>
+                    <div class="field-wrapper" *ngIf="imageSelected">
+                        <label>Your Image</label>
+                        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="false" [resizeToWidth]="150"
+                            format="png" (imageCroppedBase64)="imageCropped($event)"></image-cropper>
+                    </div>
+                    <div class="field-wrapper" *ngIf="imageShow">
+                        <label>Cropped Image</label>
+                        <img alt="image" [src]="croppedImage" />
+                    </div>
+                    <div class="btn-set">
+                        <button type="button" class="btn btn-blue" (click)="showPreview()">Preview</button>
+                        <button *ngIf="!actionLoader" class="btn btn-blue">Submit</button>
+                        <span *ngIf="actionLoader == 'surveyForm_loader'" class="btn btn-blue">
+                            <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoginEmp == true" style="margin: 30px; padding: 30px; background-color: #fff; font-size: 32px; text-align: center;">
+    <p>Unauthorised Access. Please login to access.</p>
+</div>
+
+<div *ngIf="stripData" class="fix-strip" [ngClass]="{hidestrip:closeStrip,showstrip:!closeStrip}" [ngStyle]="{'background': '#'+stripData?.fs_color_code}">
+    <div class="stripData">
+        <img *ngIf="croppedImage" [src]="croppedImage" alt="logo" class="gift" [ngStyle]="{'max-height': (stripData.fs_img_max_height>9 && stripData.fs_img_max_height<31)?(stripData.fs_img_max_height+'px'):('30px')}">
+        <p [innerHTML]="stripData?.fs_text | safeHtml"></p>
+        <a href="javascript:void(0)" class="close-strip" (click)="closeStrip=!closeStrip" [ngStyle]="{'color': '#'+stripData?.fs_close_button_color}">x
+            <span>Close</span>
+        </a>
+    </div>
+</div>
+
+<div class="loader-wrapper" [style.display]="!userData ? 'block' : 'none'">
+    <div class="loader"></div>
+</div>

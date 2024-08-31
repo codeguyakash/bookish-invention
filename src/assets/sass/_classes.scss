@@ -1,0 +1,191 @@
+// Global Classes
+.text-center{
+    text-align: center;
+}
+.text-right{
+    text-align: right;
+}
+.text-left{
+    text-align: left;
+}
+.top-bottom-spacer{
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.text-upper{
+    text-transform: uppercase;
+}
+.border-none{
+    border: none;
+}
+.white-bg{
+    background-color: $white;
+}
+.grey-bg{
+    background-color: $grey-bg;
+}
+.blue-bg{
+    background-color: $blue;
+}
+.blue-light-bg{
+    background-color: $blue-light;
+}
+.white-color{
+    color: $white;
+}
+
+
+.grey-color{
+    color: $grey;
+}
+.blue-color{
+    color: $blue;
+}
+.pos-rel{
+    position: relative;
+}
+.pos-abs{
+    position: absolute;
+}
+.overflow-hide{
+    overflow: hidden;
+}
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.transition-300{
+    transition: all 300ms; 
+}
+.fs-33{
+    font-size: 33px;
+}
+.fs-30{
+    font-size: 30px;
+}
+.fs-22{
+    font-size: 22px;
+}
+.fs-20{
+    font-size: 20px;
+}
+.fs-18{
+    font-size: 18px;
+}
+.fs-16{
+    font-size: 16px;
+}
+.fs-15{
+    font-size: 15px;
+}
+.fs-14{
+    font-size: 14px;
+}
+.fs-13{
+    font-size: 13px;
+}
+
+.pd-20{
+    padding: 20px;
+}
+.pd-20-40{
+    padding: 20px 40px;
+}
+.mt-20{
+    margin-top: 20px;
+}
+.mt-10{
+    margin-top: 10px;
+}
+.pointer-none{
+    pointer-events: none;
+    opacity: .7;
+}
+
+.sky-blue-color{
+    color: #2b7efa;
+    text-decoration: underline;
+}
+.aqua-marine{
+    color: $aqua-marine;
+}
+.deep-sky-blue{
+    color: $deep-sky-blue;
+}
+.text-caps{
+    text-transform: capitalize;
+}
+
+[class*="heading-"]{
+    h2{
+        font-size: 38px;
+        line-height: 42px;
+        padding-bottom: 16px;
+        @extend .pos-rel;
+        @extend .blue-color;
+        &:after{
+            content: '';
+            width: 47px;
+            height: 3px;
+            @extend .blue-bg;
+        }
+    }
+    p{
+        margin: 10px 0;
+        font-size: 18px;
+        line-height: 34px;
+    }
+}
+
+.heading-center{
+    @extend .text-center;
+    h2{
+        &:after{
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            @extend .pos-abs;
+        }
+        // span, strong{
+        //     position: relative;
+        // }
+        // .text-1{
+        //     left: -50px;
+        // }
+        // .text-2{
+        //     right: -50px;
+        // }
+    }
+}
+.heading-left{
+    h2:after{
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+    }
+}
+.heading-right{
+    text-align: right;
+    h2{
+        &:after{
+            display: none;
+        }
+        &:before{
+            content: '';
+            width: 47px;
+            height: 3px;
+            @extend .blue-bg;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    }
+}
+.f-right{
+    float: right;
+}
+.close{
+    cursor: pointer;
+}

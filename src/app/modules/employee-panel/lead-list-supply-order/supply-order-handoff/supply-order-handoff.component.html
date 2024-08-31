@@ -1,0 +1,473 @@
+<div class="project-wrap">
+    <div class="row">
+        <div class="col-12">
+            <div class="title d-flex align-items-center justify-content-between">
+                <div class="left">
+                    <h3>Sales to Project Management Handing Over Document</h3>
+                </div>
+                <div class="right date d-flex align-items-center justify-content-between">
+                    <strong>Date</strong>
+                    <span> {{handoff_data.h_created_on | date: 'dd/MM/yyyy'}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="customer-detail">
+        <div class="row">
+            <div class="col-12">
+                <div class="divide-heading">
+                    <h4>Customer Details</h4>
+                </div>
+                <div class="row-wrap border-top-0 d-flex align-items-center justify-content-between">
+                    <div class="left">
+                        <strong>Proposal ID &amp; Date</strong>
+                        <span>{{handoff_data.h_data.proposalDetails.proposal_code}} (generated
+                            on
+                            {{handoff_data.h_data.proposalDetails.proposal_created_on | date: 'dd/MM/yyyy' }})</span>
+                    </div>
+                    <div class="right">
+                        <strong>Project ID</strong>
+                        <span>{{handoff_data.h_data.consumerProject.project_code}}</span>
+                    </div>
+                </div>
+                <div class="row-wrap d-flex align-items-center justify-content-between">
+                    <div class="left">
+                        <strong>Customer Name</strong>
+                        <span>{{handoff_data.h_data.customer_name}}</span>
+                    </div>
+                    <div class="right">
+                        <strong>Customer ID</strong>
+                        <span>{{handoff_data.h_data.consumer.consumer_code}}</span>
+                    </div>
+                </div>
+                <div class="row-wrap white d-flex align-items-center justify-content-between">
+                    <div class="left border-right-0">
+                        <strong>Site Address</strong>
+                        {{handoff_data.h_data?.cceLeaddata?.cceld_address1}}
+                            {{handoff_data.h_data?.cceLeaddata?.cceld_address2}}
+                            {{handoff_data.h_data?.district_name}}
+                            {{handoff_data.h_data?.state_name}}-{{handoff_data.h_data?.cceLeaddata?.cceld_pincode}}
+                    </div>
+
+                </div>
+                <div class="row-wrap d-flex align-items-center justify-content-between">
+                    <div class="left border-right-0">
+                        <strong>GST No (if applicable)</strong>
+                        <span>{{handoff_data.h_data.consumer.consumer_gst}}</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="project-details">
+        <div class="row">
+            <div class="col-12">
+                <div class="divide-heading">
+                    <h4>Project Details</h4>
+                </div>
+                <div class="row-wrap d-flex justify-content-between">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Solution Type</strong>
+                    </div>
+                    <div class="divide-three d-flex">
+                        <ul class="d-flex w-100 border-none">
+                            <li>
+                                <strong>Installation Type</strong>
+                                <!-- <span>{{(handoff_data.h_data?.proposalDetails?.proposal_solution_type == 1) ?"Grid-Tied" :"Off-Grid" }}</span> -->
+                                <span *ngIf="handoff_data.h_data?.proposalDetails?.proposal_solution_type == 1">Grid-Tied</span>
+                                <span *ngIf="handoff_data.h_data?.proposalDetails?.proposal_solution_type == 2">Off-Grid</span>
+                                <span *ngIf="handoff_data.h_data?.proposalDetails?.proposal_solution_type == 3">Hybrid</span>
+                            </li>
+                            <!-- <li>
+                                <strong>Package</strong>
+                                <span>{{(handoff_data.h_data?.proposalDetails?.proposal_pricing_options == 1) ? "GOLD" : (HandoffLeadListingData?.proposalDetails?.proposal_pricing_options == 2) ? "SILVER" : "GOLD - SILVER"}}</span>
+                            </li> -->
+                            <li>
+                                <strong>DC Capacity</strong>
+                                <span>{{handoff_data?.h_data?.proposalDetails?.proposal_dc_capacity}}</span>
+                            </li>
+                            <li>
+                                <strong>Phases</strong>
+                                <span>{{handoff_data?.h_data?.surveyForm?.sf_connection_type}} <span>Phase</span></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                 
+              <div class="row-wrap d-flex justify-content-between">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Panel Rating / Quantity</strong>
+                    </div>
+                    <div class="divide-three d-flex">
+                        <ul class="d-flex w-100 border-none">
+                            <li>
+                                <strong>Panel Type</strong>
+                                <span *ngIf="handoff_data.h_data?.proposalDetails?.proposal_panel_type == 1">72-Cell Poly-Crystalline</span>
+                                <span *ngIf="handoff_data.h_data?.proposalDetails?.proposal_panel_type == 2">144-Cell Mono PERC Half Cut</span>
+                                <span *ngIf="handoff_data.h_data?.proposalDetails?.proposal_panel_type == 3">72-Cell Mono Crystalline</span>
+                                <span *ngIf="handoff_data.h_data?.proposalDetails?.proposal_panel_type == 4">72-Cell Mono Crystalline PERC</span>
+                            </li>
+                            
+                            <li>
+                                <strong>Module capacity</strong>
+                                <span>{{handoff_data?.h_data?.proposalDetails?.proposal_module_capacity}}</span>
+                            </li>
+                            <li>
+                                <strong>Panel Qty</strong>
+                                <span>{{handoff_data.h_data?.proposalDetails?.proposal_number_of_solar_panel}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row-wrap white  d-flex justify-content-between" *ngIf="handoff_data.h_data?.proposalDetails?.proposal_solution_type =='2' ">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Batteries</strong>
+                    </div>
+                    <div class="divide-two d-flex">
+                          <ul class="d-flex w-100 border-none">
+                                <li>
+                                    <strong>Battery Type</strong>
+                                    <span>{{handoff_data?.h_data?.proposalDetails?.proposal_solar_battery}}</span>
+                                </li>
+                                <li>
+                                    <strong *ngIf="handoff_data?.h_data?.proposalDetails?.battery_nos">Battery Quantity</strong>
+                                    <span>{{handoff_data?.h_data?.proposalDetails?.battery_nos}}</span>
+                                </li>
+                            </ul>
+                    </div>
+                </div>
+
+                <div class="row-wrap d-flex justify-content-between" *ngIf="handoff_data.h_data?.proposalDetails?.proposal_solution_type =='2' ">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Battery Rating / Quantity</strong>
+                    </div>
+                    <div class="divide-three d-flex">
+                        <ul class="d-flex w-100 border-none">
+                            <li>
+                                <strong>Battery</strong>
+                                <span>{{handoff_data.h_data?.proposalDetails?.proposal_solar_battery}}</span>
+                            </li>
+                            
+                            <li>
+                                <strong>Battery H-Series/L-Series</strong>
+                                <span>{{handoff_data.h_data?.proposalDetails?.battery_series=='5' ? 'H Series / 5 Years': handoff_data.h_data?.proposalDetails?.battery_series=='3' ? 'L Series / 3 Years': ''}}</span>
+                            </li>
+                            <li>
+                                <strong>Battery Qty</strong>
+                                <span>{{handoff_data.h_data?.proposalDetails?.battery_nos}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+                <div class="row-wrap d-flex justify-content-between">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Other Customisation</strong>
+                    </div>
+                    <div class="customize-area d-flex align-items-center">
+                        {{handoff_data.h_customization_remark}}
+                    </div>
+                </div>
+                 
+                  <div class="row-wrap d-flex justify-content-between" *ngIf="handoff_data?.h_data?.proposalDetails?.proposal_inverter_number =='1' || handoff_data?.h_data?.proposalDetails?.proposal_inverter_number =='2' || handoff_data?.h_data?.proposalDetails?.proposal_inverter_number =='3' " >
+                            <div class="docs-title d-flex  align-items-center ">
+                                <strong>Inverter Rating/ Quantity</strong>
+                            </div>
+                            <div class="divide-three d-flex"  >
+                                <ul class="d-flex w-100 border-none">
+                                    <li>
+                                        <strong>Solar Inverter Rating (S.no.1)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_rating}}</span>
+                                    </li>
+                                    <li>
+                                        <strong>Solar Inverter Phase (S.no.1)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_phase}}</span>
+                                    </li>
+                                    <li>
+                                        <strong>Solar Inverter Quantity (S.no.1)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_quantity}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row-wrap d-flex justify-content-between" *ngIf=" handoff_data?.h_data?.proposalDetails?.proposal_inverter_number =='2' || handoff_data?.h_data?.proposalDetails?.proposal_inverter_number =='3' " >
+                            <div class="docs-title d-flex  align-items-center ">
+                            </div>
+                            <div class="divide-three d-flex">
+                                <ul class="d-flex w-100 border-none">
+                                    <li>
+                                        <strong>Solar Inverter Rating (S.no.2)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_rating2}}</span>
+                                    </li>
+                                    <li>
+                                        <strong>Solar Inverter Phase (S.no.2)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_phase2}}</span>
+                                    </li>
+                                    <li>
+                                        <strong>Solar Inverter Quantity (S.no.2)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_quantity2}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row-wrap d-flex justify-content-between" *ngIf="handoff_data?.h_data?.proposalDetails?.proposal_inverter_number =='3' " >
+                            <div class="docs-title d-flex  align-items-center ">
+                            </div>
+                            <div class="divide-three d-flex">
+                                <ul class="d-flex w-100 border-none">
+                                    <li>
+                                        <strong>Solar Inverter Rating (S.no.3)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_rating3}}</span>
+                                    </li>
+                                    <li>
+                                        <strong>Solar Inverter Phase (S.no.3)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_phase3}}</span>
+                                    </li>
+                                    <li>
+                                        <strong>Solar Inverter Quantity (S.no.3)</strong>
+                                        <span>{{handoff_data?.h_data?.proposalDetails?.proposal_inverter_quantity3}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row-wrap d-flex justify-content-between">
+                            <div class="docs-title d-flex  align-items-center ">
+                                <strong>Structure</strong>
+                            </div>
+                            <div class="divide-two d-flex">
+                                <div class="item top">
+                                    <ul class="d-flex w-100 border-none">
+                                        <li>
+                                            <strong>Structure Type</strong>
+                                            <span>{{handoff_data?.h_data?.proposalDetails?.proposal_structure_type}}</span>
+                                        </li>
+                                        <li>
+                                            <strong>Structure BOM</strong>
+                                            <span>{{handoff_data?.h_data?.proposalDetails?.StrucBOM}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+    <div class="pricing-details">
+        <div class="row">
+            <div class="col-12">
+                <div class="divide-heading">
+                    <h4>Pricing &amp; Other Terms</h4>
+                </div>
+                <div class="row-wrap white d-flex align-items-center justify-content-between">
+                    <div class="left border-right-0">
+                        <strong>Solution Value including taxes (INR)</strong>
+                         <span
+                            *ngIf="handoff_data.h_data?.proposalDetails?.proposal_project_value_gold && handoff_data.h_data?.proposalDetails?.proposal_project_value_gold !=0">GOLD
+                            -
+                            ₹{{(handoff_data.h_data?.proposalDetails?.proposal_project_value_gold - handoff_data.h_data?.proposalDetails?.discount)}}</span>
+                        <span
+                            *ngIf="handoff_data.h_data?.proposalDetails?.proposal_project_value_silver && handoff_data.h_data?.proposalDetails?.proposal_project_value_silver !=0" class="p-1">SILVER
+                            -
+                            ₹{{(handoff_data.h_data?.proposalDetails?.proposal_project_value_silver - handoff_data.h_data?.proposalDetails?.discount_silver)}}</span>
+                    </div>
+
+                </div>
+                <div class="row-wrap d-flex align-items-center justify-content-between">
+                    <div class="left border-right-0">
+                        <strong>Payment Terms / Plan</strong>
+                        <span
+                            *ngIf="(handoff_data.plan_selected==1) && handoff_data.h_data?.proposalDetails?.proposal_project_value_gold && handoff_data.h_data?.proposalDetails?.proposal_project_value_gold !=0">GOLD
+                            <span>{{handoff_data.h_data?.proposalDetails?.proposal_advanced}}-{{handoff_data.h_data?.proposalDetails?.proposal_payment_2}}-{{handoff_data.h_data?.proposalDetails?.proposal_payment_3}}</span><span *ngIf="handoff_data.h_data.proposalDetails.proposal_payment_4">-{{handoff_data.h_data?.proposalDetails?.proposal_payment_4}}
+                            </span>
+                        </span>
+                        <span
+                            *ngIf="(handoff_data.plan_selected==2) && handoff_data.h_data?.proposalDetails?.proposal_project_value_silver && handoff_data.h_data?.proposalDetails?.proposal_project_value_silver !=0">SILVER
+                        <span>{{handoff_data.h_data?.proposalDetails?.proposal_advance_silver}}-{{handoff_data.h_data?.proposalDetails?.proposal_advance_silver_1}}-{{handoff_data.h_data?.proposalDetails?.proposal_advance_silver_2}}</span><span *ngIf="handoff_data.h_data.proposalDetails.proposal_advance_silver_3">-{{handoff_data.h_data?.proposalDetails?.proposal_advance_silver_3}}</span>
+                          </span>
+                    </div>
+                </div>
+                <div class="row-wrap white  d-flex justify-content-between"
+                    *ngIf="(handoff_data.plan_selected==1) && handoff_data.h_data?.proposalDetails?.proposal_project_value_gold && handoff_data.h_data?.proposalDetails?.proposal_project_value_gold !=0">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Payment GOLD Slabs
+                            (in INR)</strong>
+                    </div>
+                    <div class="divide-two">
+                        <div class="item top">
+                            <ul class="d-flex">
+                                <li>
+                                    <strong>P1</strong>
+                                    <span>₹
+                                        {{ ( handoff_data.h_data?.proposalDetails?.proposal_advanced?((handoff_data.h_data?.proposalDetails?.proposal_advanced* (handoff_data.h_data?.proposalDetails?.proposal_project_value_gold - handoff_data.h_data?.proposalDetails?.discount) )/100):'' )}}</span>
+                                </li>
+                                <li>
+                                    <strong>P2</strong>
+                                    <span>₹{{ ( handoff_data.h_data?.proposalDetails?.proposal_payment_2?((handoff_data.h_data?.proposalDetails?.proposal_payment_2* (handoff_data.h_data?.proposalDetails?.proposal_project_value_gold - handoff_data.h_data?.proposalDetails?.discount) )/100):'' )}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="item bottom">
+                            <ul class="d-flex">
+                                <li>
+                                    <strong>P3</strong>
+                                    <span>₹{{ ( handoff_data.h_data?.proposalDetails?.proposal_payment_3?((handoff_data.h_data?.proposalDetails?.proposal_payment_3* (handoff_data.h_data?.proposalDetails?.proposal_project_value_gold - handoff_data.h_data?.proposalDetails?.discount) )/100):'' )}}</span>
+                                </li>
+                                <li *ngIf="handoff_data.h_data?.proposalDetails?.proposal_payment_4">
+                                    <strong>P4</strong>
+                                    <span>₹{{ ( handoff_data.h_data?.proposalDetails?.proposal_payment_4?((handoff_data.h_data?.proposalDetails?.proposal_payment_4* (handoff_data.h_data?.proposalDetails?.proposal_project_value_gold - handoff_data.h_data?.proposalDetails?.discount) )/100):'' )}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-wrap white  d-flex justify-content-between"
+                    *ngIf="(handoff_data.plan_selected==2) && handoff_data.h_data?.proposalDetails?.proposal_project_value_silver && handoff_data.h_data?.proposalDetails?.proposal_project_value_silver !=0">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Payment SILVER Slabs
+                            (in INR)</strong>
+                    </div>
+                    <div class="divide-two">
+                        <div class="item top">
+                            <ul class="d-flex">
+                                <li>
+                                    <strong>P1</strong>
+                                    <span>₹
+                                        {{ ( handoff_data.h_data?.proposalDetails?.proposal_advance_silver?((handoff_data.h_data?.proposalDetails?.proposal_advance_silver* (handoff_data.h_data?.proposalDetails?.proposal_project_value_silver - handoff_data.h_data?.proposalDetails?.discount_silver) )/100):'' )}}</span>
+                                </li>
+                                <li>
+                                    <strong>P2</strong>
+                                    <span>₹{{ ( handoff_data.h_data?.proposalDetails?.proposal_advance_silver_1?((handoff_data.h_data?.proposalDetails?.proposal_advance_silver_1* (handoff_data.h_data?.proposalDetails?.proposal_project_value_silver - handoff_data.h_data?.proposalDetails?.discount_silver) )/100):'' )}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="item bottom">
+                            <ul class="d-flex">
+                                <li>
+                                    <strong>P3</strong>
+                                    <span>₹{{ ( handoff_data.h_data?.proposalDetails?.proposal_advance_silver_2?((handoff_data.h_data?.proposalDetails?.proposal_advance_silver_2* (handoff_data.h_data?.proposalDetails?.proposal_project_value_silver - handoff_data.h_data?.proposalDetails?.discount_silver) )/100):'' )}}</span>
+                                </li>
+                                <li *ngIf="handoff_data.h_data?.proposalDetails?.proposal_advance_silver_4">
+                                    <strong>P4</strong>
+                                    <span>₹{{ ( handoff_data.h_data?.proposalDetails?.proposal_advance_silver_3?((handoff_data.h_data?.proposalDetails?.proposal_advance_silver_3* (handoff_data.h_data?.proposalDetails?.proposal_project_value_silver - handoff_data.h_data?.proposalDetails?.discount_silver) )/100):'' )}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="(handoff_data.plan_selected == '1')" class="row-wrap   d-flex justify-content-between">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Other Inclusions/Commitments </strong>
+                    </div>
+                    <div class="divide-two">
+                        <div class="item top">
+                            <ul class="d-flex">
+                                <li>
+                                    <strong>Insurance</strong>
+                                    <span>{{ handoff_data.h_data?.proposalDetails?.proposal_insurance_gold}}</span>
+                                </li>
+                                <li>
+                                    <strong>Maintenance Visits</strong>
+                                    <span>{{handoff_data.h_data?.proposalDetails?.proposal_maintenance_gold}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="item bottom">
+                            <ul class="d-flex">
+                                <li>
+                                    <strong>RMS</strong>
+                                    <span>{{handoff_data.h_data?.proposalDetails?.proposal_remote_monitoring_system_gold}}</span>
+                                </li>
+                                <li>
+                                    <strong>Any Other</strong>
+                                    <span>  {{handoff_data.commitment_remark}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                 
+                <div *ngIf="(handoff_data.plan_selected == '2')" class="row-wrap   d-flex justify-content-between">
+                    <div class="docs-title d-flex  align-items-center ">
+                        <strong>Other Inclusions/Commitments </strong>
+                    </div>
+                    <div class="divide-two">
+                        <div class="item top">
+                            <ul class="d-flex">
+                                <li>
+                                    <strong>Insurance</strong>
+                                    <span>{{handoff_data.h_data?.proposalDetails?.proposal_insurance_silver}}</span>
+                                </li>
+                                <li>
+                                    <strong>Maintenance Visits</strong>
+                                    <span>{{handoff_data.h_data?.proposalDetails?.proposal_maintenance_silver}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="item bottom">
+                            <ul class="d-flex">
+                                <li>
+                                    <strong>RMS</strong>
+                                    <span>{{handoff_data.h_data?.proposalDetails?.proposal_remote_monitoring_system_silver}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> 
+
+
+
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="project-document">
+    <div class="row">
+        <div class="col-12">
+            <div class="title d-flex align-items-center justify-content-between">
+                <h3>Project Documents</h3>
+
+            </div>
+            <div class="doc-wrap d-flex justify-content-between">
+                <div class="upload">
+                    <strong>Uploaded Document:</strong>
+                    <ul class="d-flex flex-wrap">
+                        <li
+                            *ngFor="let projectDocuments of handoff_data.h_data?.ProjectDocuments; let i = index">
+                            <a href="{{baseurl}}{{projectDocuments.pdoc_filename}}" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="26"
+                                    viewBox="0 0 20 26">
+                                    <g fill="none" fill-rule="nonzero">
+                                        <path fill="#E9E9E0"
+                                            d="M14.084 0H.892C.525 0 .227.298.227.875V25c0 .157.298.455.665.455h18.216c.367 0 .665-.298.665-.455V5.9c0-.317-.043-.42-.117-.494l-5.29-5.29A.402.402 0 0 0 14.085 0z" />
+                                        <path fill="#D9D7CA" d="M14.318.069v5.386h5.386z" />
+                                        <path fill="#CC4B4C"
+                                            d="M6.143 15.147a.73.73 0 0 1-.44-.148c-.473-.355-.537-.75-.507-1.019.083-.74.998-1.515 2.72-2.304A30.512 30.512 0 0 0 9.64 6.79c-.454-.987-.895-2.268-.574-3.02.113-.263.254-.465.516-.552.104-.034.365-.078.462-.078.229 0 .43.295.573.477.134.17.438.533-.17 3.092.613 1.265 1.481 2.554 2.313 3.437a8.843 8.843 0 0 1 1.526-.163c.712 0 1.144.166 1.32.508.145.283.085.613-.178.982-.253.354-.602.541-1.009.541-.553 0-1.196-.349-1.914-1.039-1.29.27-2.795.75-4.013 1.283-.38.807-.744 1.456-1.083 1.932-.466.653-.868.957-1.265.957zm1.21-2.33c-.972.546-1.368.995-1.396 1.248-.005.041-.017.151.196.314.067-.021.463-.202 1.2-1.562zm6.198-2.019c.37.285.461.43.704.43.106 0 .41-.005.55-.201a.72.72 0 0 0 .104-.189c-.056-.03-.13-.09-.534-.09-.23.001-.518.011-.824.05zm-3.395-2.992a32.405 32.405 0 0 1-1.216 3.439c.95-.37 1.983-.69 2.953-.919a15.56 15.56 0 0 1-1.737-2.52zM9.88 3.96c-.045.015-.605.799.044 1.462.431-.962-.024-1.468-.044-1.462zM19.108 25.455H.892a.665.665 0 0 1-.665-.665v-7.063h19.546v7.063a.665.665 0 0 1-.665.665z" />
+                                        <g fill="#FFF">
+                                            <path
+                                                d="M5.175 24.09h-.746v-4.58h1.317c.195 0 .388.032.578.094.19.062.361.156.513.28.151.124.273.274.367.45.093.176.14.374.14.594 0 .232-.04.442-.119.63a1.319 1.319 0 0 1-.33.476c-.14.128-.31.228-.509.298a1.96 1.96 0 0 1-.658.106h-.553v1.653zm0-4.014v1.815h.684c.09 0 .18-.016.27-.047a.681.681 0 0 0 .426-.447 1.397 1.397 0 0 0 .037-.727.744.744 0 0 0-.127-.28.753.753 0 0 0-.27-.223c-.117-.06-.27-.09-.46-.09h-.56zM11.918 21.674c0 .376-.04.699-.122.966-.08.267-.183.49-.307.671a1.58 1.58 0 0 1-.42.426c-.155.104-.305.181-.45.233a1.861 1.861 0 0 1-.398.1c-.12.014-.21.02-.267.02H8.22v-4.58H9.6c.385 0 .724.062 1.015.184.292.122.535.285.728.488.192.203.336.434.432.693.095.259.143.525.143.799zm-2.213 1.87c.506 0 .87-.161 1.094-.484.224-.324.336-.792.336-1.405 0-.19-.023-.38-.069-.565a1.21 1.21 0 0 0-.264-.507 1.394 1.394 0 0 0-.531-.367c-.224-.093-.514-.14-.87-.14h-.435v3.468h.74zM13.757 20.076v1.442h1.914v.51h-1.914v2.063H13v-4.58h2.865v.565z" />
+                                        </g>
+                                    </g>
+                                </svg> 
+                                <span *ngIf="projectDocuments.pdoc_type != 'Add more files' && projectDocuments.pdoc_type != 'Other'" class="docnem">{{projectDocuments.pdoc_type}}</span>
+                                <span *ngIf="projectDocuments.pdoc_type === 'Add more files' ||projectDocuments.pdoc_type === 'Other'" class="docnem">{{projectDocuments.pdoc_filename.split("/").pop()}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                </div>
+                </div>
+                </div>
+</div>
+<div class="remark-wrap d-flex  ">
+    <h4 *ngIf="handoff_data.h_remark">Site surveyor remarks </h4>
+     <p>{{handoff_data.h_remark}}</p>
+    <h4 style="margin-left: 15px;" *ngIf="handoff_data.is_reject_project_manager ==1 "  >Rejected remarks by project manager</h4>
+    <p *ngIf="handoff_data.is_reject_project_manager ==1 " >{{handoff_remark.hrj_remark}}</p>
+ </div>

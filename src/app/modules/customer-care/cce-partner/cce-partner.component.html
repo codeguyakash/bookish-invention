@@ -1,0 +1,737 @@
+<style>
+    .call-history .remarks {
+        width: 50%;
+    }
+
+    ul {
+        overflow: hidden;
+    }
+
+    li {
+        display: inline-block;
+    }
+
+    .sidebar-tabs a.active {
+        background: #053395;
+        color: #fff;
+    }
+
+    .oNoFFBtn {
+        padding: 15px 25px;
+        position: fixed;
+        top: 45px;
+        right: 0;
+        width: 100%;
+        text-align: right;
+        vertical-align: middle;
+        background: #e0edfd;
+        z-index: 999;
+    }
+
+    .oNoFFBtn .switch {
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+
+    .tab-box.fixed {
+        top: 100px
+    }
+
+    .field-wrapper .field-date-time .field-time {
+        margin-left: 40px;
+    }
+
+    @media screen and (max-width: 1024px) {
+
+        /* .calculate-value li span.pic{display: none;}
+        .lead-info-panel .calculator-info .calculate-value li span{padding-left: 8px; font-size: 18px;} */
+        .Box-panel {
+            flex-direction: column
+        }
+
+        .assigned-lead,
+        .calculator-info {
+            width: 100%;
+        }
+
+        #lead-information .form-n-script {
+            flex-direction: column
+        }
+
+        .text-top .col-form {
+            order: 2;
+        }
+
+        .text-top .col-script {
+            order: 1;
+        }
+
+        .tab-box.fixed {
+            margin-left: 165px;
+            top: 80px;
+        }
+
+        .posBox {
+            margin-top: 50px;
+        }
+
+        .field-wrapper .form-field {
+            width: 100%;
+        }
+
+        .form-actions .button {
+            padding: 0 15px;
+        }
+    }
+
+    .lead-contain {
+        padding-top: 100px
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .switch input {
+        display: none;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked+.slider {
+        background-color: #2196F3;
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .click {
+        color: #09357f;
+        cursor: pointer;
+    }
+
+    .exportData {
+        float: right;
+        margin-top: 0px;
+        margin-bottom: 15px;
+        border-radius: 0px !important;
+        font-size: 14px !important;
+    }
+
+    .clearboth {
+        clear: both;
+    }
+
+    .partnerQueryWrapper {
+        height: 100%;
+        overflow: auto;
+        background: #ffffff;
+        display: block;
+    }
+    .sendWrapper-close-icon{
+        right: 10px!important;
+        top: 10px!important;
+        background: transparent!important;
+        border-radius: unset!important;
+    }
+</style>
+<aside class="sidebar">
+
+    <div class="employee-info">
+        <div class="pic">
+            <i class="fa fa-user-circle" aria-hidden="true"></i>
+        </div>
+        <div class="detail">
+            <h4>Employee Name</h4>
+            <span>Senior Executive</span>
+        </div>
+    </div>
+    <nav class="sidebar-tabs">
+        <a (click)="partnerQueryDataOpen(1)" [ngClass]="{'active':(QueryType=='open')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Partner Query [open]</span>
+        </a>
+    </nav>
+
+    <nav class="sidebar-tabs">
+        <a (click)="partnerQueryDataClosed(1)" [ngClass]="{'active':(QueryType=='closed')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Partner Query [close]</span>
+        </a>
+    </nav>
+
+</aside>
+
+<div class="container missed-call-listing" *ngIf="isListing=='partnerQueryListing'">
+    <smart-search (SearchResults)="smartSearchResult($event)" *ngIf="showSmartSearchComponent"></smart-search>
+    <h2>Partner Query Log List <a *ngIf="partnerQueryLogsList.length>0" class="exportData btn btn-blue"
+            (click)="ExportCSVForParterLog()">Export</a></h2>
+    <div class="table-wrapper clearboth">
+        <table *ngIf="partnerQueryLogsList.length>0">
+            <thead>
+                <tr>
+                    <th>Serial No.</th>
+                    <th>Partner Name</th>
+                    <th>Firm Name</th>
+                    <th>Phone No</th>
+                    <th>Alternate Phone No</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                    <th>Resolution Date</th>
+                    <th>Missed Call Count</th>
+                    <th>Missed Call Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of partnerQueryLogsList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.partnerQuery.prt_name}}</td>
+                    <td>{{data.partnerQuery.prt_firm}}</td>
+                    <td>{{data.partnerQuery.prt_mobile}}</td>
+                    <td>{{data.partnerQuery.prt_alternate_no}}</td>
+                    <td>{{data.partnerQuery.prt_address + ' ' + data.districtMaster.district_name + ' ' + data.stateMaster.state_name}}
+                    </td>
+                    <td>{{data.partnerQuery.prt_user_status==1?'Closed':'Open'}}</td>
+                    <td>{{data.partnerQuery.prt_remark}}</td>
+                    <td>{{data.partnerQuery.prt_resolution_date | date:'yyyy-MM-dd'}}</td>
+                    <td>{{data.missedCallData.count_missed_call}}</td>
+                    <td>{{data.missedCallData.missed_call_date | date:'yyyy-MM-dd'}}</td>
+                    <td (click)="OpenPartnerDetail(data)" class="click">Query Detail</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="noRecordFound" *ngIf="partnerQueryLogsList.length==0">
+            <span>No Record Found!</span>
+        </div>
+    </div>
+
+    <ul *ngIf="partnerQueryLogsList.length>0" style="white-space:nowrap;">
+
+        <li [ngClass]="{disabled:pages === 1}">
+            <a (click)="partnerQueryLogsList(pages - 1)">
+                <i *ngIf="pages > 1" class="fa fa-angle-left" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        &nbsp; &nbsp;
+        <li>
+            <a>Page {{pages}} of {{pageCount}}</a>
+        </li>
+        &nbsp; &nbsp;
+        <li [ngClass]="{disabled:pages === pageCount}">
+            <a (click)="partnerQueryLogsList(pages + 1)">
+                <i *ngIf="pages < pageCount" class="fa fa-angle-right" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        <li>
+            <div class="custom-pagination">
+                <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                    <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}">
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                        be less than or
+                        equal to {{pageCount}}</span>
+                </form>
+
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+<!--div class="container lead-contain" *ngIf="isListing=='partner_listing'">
+
+    <div class="tab-box fixed">
+        <div class="box">
+            <section class="lead-panel-tab">
+                <div class="tab" (click)="PartnerTab('fill_form')" [ngClass]="{activatedFillForm: panelSteps == 2}">
+                    <img src="/assets/images/cc-images/icon-fill-form.svg" alt="">
+                    <span>Fill Form</span>
+                </div>
+                <div class="tab" (click)="PartnerTab('no_response')" [ngClass]="{activatedNoResponse: panelSteps == 3}">
+                    <img src="/assets/images/cc-images/icon-no-response.svg" alt="">
+                    <span>No Response</span>
+                </div>
+                <div class="tab" (click)="PartnerTab('partner-logs')" [ngClass]="{activatedNotInterested: panelSteps == 4}">
+                    <img src="/assets/images/cc-images/icon-not-intrested.svg" alt="">
+                    <span>Partner Logs</span>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="box mb-30 posBox" *ngIf="PartnerTabData=='fill_form'">
+        <section class="lead-info-panel">
+            <div class="heading-panel">
+                <h2></h2>
+            </div>
+            <div class="content-panel Box-panel">
+
+            </div>
+        </section>
+    </div>
+    <div id="fill-form-widget" class="manage-top-spaces" >
+        <div class="box fill-form mb-30" *ngIf="PartnerTabData=='fill_form'">
+            <h2 class="box-title">PARTNER APPLICATION FROM</h2>
+            <section class="box-content">
+
+                <form id="lead-information" [formGroup]="partnerFillForm" (ngSubmit)="SubmitPartnerData()">
+                    <div class="form-n-script text-top">
+                        <div class="col-form">
+                            <h3>Partner Information</h3>
+                            <div class="field-wrapper">
+                                <label for="">Full Name</label>
+                                <div class="form-field">
+                                    <input type="text" class="text-caps mandate-field" formControlName="name" maxlength="30" placeholder="Partner Name" (focusout)="submitPartnerReqForm('auto')">
+                                    <div class="error" *ngIf="partnerFillForm.controls?.name?.errors?.required && isSubmitpartner">
+                                        {{lead_panal_form.BLANK_FIELD}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field-wrapper">
+                                    <label for="">Firm Name</label>
+                                    <div class="form-field">
+                                        <input type="text" class="text-caps mandate-field" formControlName="firm_name" maxlength="30" placeholder="Firm Name" (focusout)="submitPartnerReqForm('auto')">
+                                        <div class="error" *ngIf="partnerFillForm.controls?.firm_name?.errors?.required && isSubmitpartner">
+                                            {{lead_panal_form.BLANK_FIELD}}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <div class="field-wrapper">
+                                <label for="">Contact Number</label>
+                                <div class="form-field">
+                                    <input class="mandate-field" type="text" formControlName="mobileno" placeholder="Contact Number" maxlength="10" (focusout)="submitPartnerReqForm('auto')">
+                                    <div class="error" *ngIf="partnerFillForm.controls?.mobileno?.errors?.pattern && isSubmitpartner">
+                                        {{lead_panal_form.MOBILENO_PATTERN}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field-wrapper">
+                                <label for="">Contact Number</label>
+                                <div class="form-field">
+                                    <input class="mandate-field" type="text" formControlName="alternate_mobileno" placeholder="Alternate Contact Number" maxlength="10" (focusout)="submitPartnerReqForm('auto')">
+                                    <div class="error" *ngIf="partnerFillForm.controls?.cceld_mobileno?.errors?.pattern && isSubmitpartner">
+                                        {{lead_panal_form.MOBILENO_PATTERN}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field-wrapper">
+                                    <label for="">Email</label>
+                                    <div class="form-field">
+                                        <input class="mandate-field" type="text" formControlName="email" placeholder="Email"  (focusout)="submitPartnerReqForm('auto')">
+                                        <div class="error" *ngIf="partnerFillForm.controls?.email?.errors?.required && isSubmitpartner">
+                                                {{lead_panal_form.BLANK_FIELD}}
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div class="field-wrapper">
+                                    <label for="">Office Address</label>
+                                    <div class="form-field">
+                                        <textarea formControlName="address" cols="30" rows="10" placeholder="Office Address" (focusout)="submitPartnerReqForm('auto')" required></textarea>
+                                        <div class="error" *ngIf="partnerFillForm.controls?.address?.errors?.required && isSubmitpartner">
+                                                {{lead_panal_form.BLANK_FIELD}}
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div class="field-wrapper">
+                                    <label for="">Pin Code</label>
+                                    <div class="form-field">
+                                        <input class="mandate-field" type="text" formControlName="pincode" placeholder="Pin Code" maxlength="10" (focusout)="submitPartnerReqForm('auto')">
+                                        <div class="error" *ngIf="partnerFillForm.controls?.address?.errors?.required && isSubmitpartner">
+                                                {{lead_panal_form.BLANK_FIELD}}
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div class="field-wrapper">
+                                <label for="">State</label>
+                                <div class="form-field">
+                                    <ng-select [options]="stateList" formControlName="state" placeholder="Select State" (selected)="ifStateIfCity('state', 'partner-form')" (focusout)="submitPartnerReqForm('auto')"></ng-select>
+                                    <div class="error" *ngIf="partnerFillForm.controls?.state?.errors?.required && isSubmitpartner">
+                                            {{lead_panal_form.BLANK_FIELD}}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="field-wrapper">
+                                    <label for="">City</label>
+                                    <div class="form-field">
+                                        <ng-select [options]="cityList" formControlName="city" placeholder="Select City" (selected)="ifStateIfCity('city', 'partner-form')" (focusout)="submitPartnerReqForm('auto')"></ng-select>
+                                        <div class="error" *ngIf="partnerFillForm.controls?.city?.errors?.required && isSubmitpartner">
+                                                {{lead_panal_form.BLANK_FIELD}}
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div class="field-wrapper">
+                                    <label for="">Query</label>
+                                    <div class="form-field">
+                                        <input class="mandate-field" type="text" formControlName="query" placeholder="Query" maxlength="10" (focusout)="submitPartnerReqForm('auto')">
+                                        <div class="error" *ngIf="partnerFillForm.controls?.query?.errors?.required && isSubmitpartner">
+                                                {{lead_panal_form.BLANK_FIELD}}
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div class="form-actions" style="flex-direction: column;">
+                                <div style="text-align: right;">
+                                    <input *ngIf="!loading" class="button button-blue" type="button" value="Submit" (click)="submitPartnerReqForm('submit')">
+                                    <button *ngIf="loading" class="button button-blue" type="button">
+                                        <img src="/assets/images/loader.gif" style="width:20px;height:20px;" alt="LUMINOUS" />
+                                    </button>
+                                </div>
+                                <div style="text-align: right;">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-script">
+
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+    <div class="box no-response" *ngIf="PartnerTabData=='no_response'">
+        <h2 class="box-title">NO RESPONSE ?</h2>
+        <section class="box-content">
+            <form id="not-response" [formGroup]="noResponseRequest" (ngSubmit)="submitNoResponseRequest()">
+                <div class="field-wrapper">
+                    <label for="">Remarks*</label>
+                    <div class="form-field">
+                        <textarea formControlName="lead_callowner_remarks" cols="30" rows="10" placeholder="Add Remarks" required></textarea>
+                        <div class="error" *ngIf="noResponseRequest.controls?.lead_callowner_remarks?.errors?.required && isSubmitNoResponseRequest">Mandatory Field</div>
+                    </div>
+                </div>
+                <p class="reschedule">* These fields are mandatory</p>
+                <div class="form-actions">
+                    <input class="button button-grey" type="button" value="Cancel">
+                    <input class="button button-blue" type="submit" value="Submit">
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="box partner-logs" *ngIf="PartnerTabData=='partner-logs'">
+        <h2 class="box-title">Query Logs</h2>
+        <section class="box-content">
+
+        </section>
+    </div>
+
+</div-->
+
+<div *ngIf="isLoginEmp == true"
+    style="margin: 30px; padding: 30px; background-color: #fff; font-size: 32px; text-align: center;">
+    <p>Unauthorised Access. Please login to access.</p>
+</div>
+
+<style>
+    .padleft50 {
+        padding: 0px 20px;
+    }
+</style>
+<div class="sendBox" [ngClass]="{hideAside:partnerQryDetailForm,showAside:!partnerQryDetailForm}"
+    *ngIf="partnerQryDetailForm">
+    <div class="box-wrapper cash-box">
+        <div class="tableBoxx">
+            <div class="cellBoxx">
+                <div class="sendWrapper">
+                    <h4>Partner Query Detail
+                        <a href="javascript:void(0)" class="menu example5 sendWrapper-close-icon" (click)="ClosePartnerDetail()">
+                            <span>x</span>
+                        </a>
+                    </h4>
+                    <div class="partnerQueryWrapper">
+                        <h3 class="padleft50" style="margin-top: 20px; margin-bottom: 10px;">Partner query remark history logs</h3>
+                        <div class="field-wrapper padleft50"
+                            style="max-height:200px; overflow-y: scroll; overflow-x: hidden; display: block">
+                            
+                            <div class="table-wrapper" style="margin-top:0px;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Serial No</th>
+                                            <th>Partner name</th>
+                                            <th>Firm name</th>
+                                            <th>Phone Number</th>
+                                            <th>Address</th>
+                                            <th>Status</th>
+                                            <th>Remark</th>
+                                            <th>Resolution Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let loghistory of partnerLogDataHistory ; let i = index">
+                                            <td>{{i+1}}</td>
+                                            <td>{{partnerQryDetailData.partnerQuery.prt_name}}</td>
+                                            <td>{{partnerQryDetailData.partnerQuery.prt_firm}}</td>
+                                            <td>{{partnerQryDetailData.partnerQuery.prt_mobile}}</td>
+                                            <td>{{partnerQryDetailData.partnerQuery.prt_address + ' ' + partnerQryDetailData.districtMaster.district_name + ' ' + partnerQryDetailData.stateMaster.state_name}}
+                                            </td>
+                                            <td>{{loghistory.prt_log_user_status==0?'Open':'close'}}</td>
+                                            <td>{{loghistory.prt_log_query_remark}}</td>
+                                            <td>{{loghistory.prt_log_resolution_date | date:'yyyy-MM-dd'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="field-wrapper padleft50">
+                            <div class="form-field">
+                                <label>Complete
+                                    Address:</label><span>{{partnerQryDetailData.partnerQuery.prt_address + ' ' + partnerQryDetailData.districtMaster.district_name + ' ' + partnerQryDetailData.stateMaster.state_name}}</span>
+                            </div>
+                        </div>
+                        <div class="field-wrapper padleft50">
+                            <div class="form-field">
+                                <label>City:</label><span> {{partnerQryDetailData.districtMaster.district_name}}</span>
+                            </div>
+                            <div class="form-field">
+                                <label>pincode: </label><span> {{partnerQryDetailData.partnerQuery.prt_pincode}}</span>
+                            </div>
+                            <div class="form-field">
+                                <label>State: </label><span> {{partnerQryDetailData.stateMaster.state_name}}</span>
+                            </div>
+                        </div>
+                        <div class="field-wrapper padleft50">
+                            <div class="form-field">
+                                <label>Email Id: </label><span>{{partnerQryDetailData.partnerQuery.prt_email}}</span>
+                            </div>
+                        </div>
+                        <div class="field-wrapper padleft50">
+                            <div class="form-field">
+                                <label>Query: </label><span>{{partnerQryDetailData.partnerQuery.prt_query}}</span>
+                            </div>
+                        </div>
+
+                        <form [formGroup]="queryDetailForm" style="padding:0px;" (ngSubmit)="submitQueryDetail()">
+                            <div class="field-wrapper padleft50">
+                                <label>Remark:</label>
+                                <div class="form-field">
+                                    <textarea placeholder="Remark" formControlName="remarks" ></textarea>
+                                    <div class="error" *ngIf="queryDetailForm.controls?.remarks?.errors?.required">
+                                        This Field is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field-wrapper padleft50">
+                                <label>Status:</label>
+                                <div class="form-field">
+                                    <select formControlName="resolutionStatus"
+                                        [attr.disabled]="(resolutionStatus==1)?true:null">
+                                        <option value="0">Open</option>
+                                        <option value="1">Close</option>
+                                    </select>
+                                    <div class="error"
+                                        *ngIf="queryDetailForm.controls?.resolutionStatus?.errors?.required">
+                                        This Field is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field-wrapper padleft50">
+                                <label>Resolution Date:</label>
+                                <div class="form-field">
+                                    <p-calendar class="form-text" dateFormat="yy-mm-dd" [minDate]="minDate"
+                                        readonlyInput="true" formControlName="resolutionDate" placeholder="Date"
+                                        [defaultDate]="defaultResolutionDate"
+                                        [disabled]="(resolutionStatus==1)?true:false"></p-calendar>
+                                    <div class="error"
+                                        *ngIf="queryDetailForm.controls?.resolutionDate?.errors?.required">
+                                        This Field is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field-wrapper padleft50" style="margin-top:20px;">
+                                <div class="form-field" style="    text-align: right; width: 100%;">
+                                    <input type="submit" class="button button-blue" style="width: 100px; height: 40px; border-radius: 0px !important;margin-right:20px; " value="Submit">
+                                    <input type="close" class="button button-grey" (click)="ClosePartnerDetail()" value="Close" style="width: 100px; height: 40px; border-radius: 0px !important;">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .sendBox {
+        position: fixed;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.5);
+        width: 100%;
+        height: 100%;
+        top: -100%;
+        left: 0;
+        opacity: 0
+    }
+
+    .sendBox.hideAside {
+        top: 0;
+        opacity: 1;
+    }
+
+    .box-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        height: 100%;
+    }
+
+    .tableBoxx {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cellBoxx {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .sendWrapper {
+        width: 100%;
+        float: left;
+        background: #fff;
+        padding: 0px;
+        border-radius: 5px;
+        position: relative;
+        height: 400px;
+        /* overflow-y: scroll;
+        overflow-x: hidden; */
+    }
+
+    .menu.example5 {
+        position: absolute;
+        color: #fff;
+        background: #000;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        line-height: 30px;
+        text-align: center;
+        font-size: 17px;
+        padding: 0;
+        vertical-align: middle;
+        right: 1px;
+        top: -2px;
+    }
+
+    .sendWrapper h4 {
+        padding: 20px;
+        margin-bottom: 0;
+        background: #09357f;
+        color: #fff;
+    }
+
+    .sendWrapper form .field-wrapper {
+        flex-direction: column;
+    }
+
+    .cash-box .sendWrapper form .field-wrapper {
+        display: block;
+        width: 100%;
+        float: left;
+    }
+
+    .sendWrapper form .field-wrapper label {
+        padding: 0;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .cash-box .sendWrapper form .field-wrapper label {
+        width: 160px;
+        float: left
+    }
+
+    .cash-box .sendWrapper form .field-wrapper .form-field {
+        width: calc(100% - 160px);
+        float: left
+    }
+
+    .cash-box .sendWrapper form .field-wrapper .form-field.save-btn {
+        float: right;
+    }
+
+    .cash-box .error {
+        width: calc(100% - 160px);
+        float: right
+    }
+
+    .cash-box .sendWrapper form .field-wrapper .form-field input {
+        width: 100%;
+    }
+
+    .sendWrapper form .field-wrapper .form-field {
+        width: 100%;
+    }
+
+    .sendWrapper form {
+        padding: 20px;
+    }
+
+    .sendWrapper .btn-blue {
+        margin-top: 0
+    }
+
+    .coldData .btn.btn-blue {
+        font-size: 14px;
+        text-transform: capitalize;
+    }
+
+    .sendWrapper textarea {
+        border: 1px solid #706f6f;
+    }
+</style>

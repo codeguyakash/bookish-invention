@@ -1,0 +1,1246 @@
+<!-- <style>
+  
+  </style> -->
+<div class="main-container cc-container">
+  <aside class="sidebar">
+    <div class="employee-info">
+      <div class="pic">
+        <i class="fa fa-user-circle" aria-hidden="true"></i>
+      </div>
+      <div class="detail">
+        <span>Admin </span>
+      </div>
+    </div>
+    <nav class="sidebar-tabs">
+      <!-- <a (click)=viewListing() [ngClass]="{'active':(initialListing)}">
+          <span>Follow up Listing</span>
+        </a> -->
+      <a (click)="funnelSystem()" [ngClass]="{'active':(funnelListing)}">
+        <span>Funnel System</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="container">
+    <div class="folow-box" *ngIf="initialListing">
+      <smart-search (SearchResults)="smartSearchResult($event)" *ngIf="showSmartSearchComponent"></smart-search>
+      <h2>Follow Up/Inside Sales</h2>
+      <div class="listing-tabs">
+        <ul>
+          <li (click)="getFollowupListing('today')" [ngClass]="{'active':(followUpType === 'today')}">Scheduled For
+            Today </li>
+          <li (click)="getFollowupListing('total')" [ngClass]="{'active':(followUpType === 'total')}">My Follow-ups</li>
+          <li (click)="getFollowupListing('AllUsersLead')" [ngClass]="{'active':(followUpType === 'AllUsersLead')}">
+            Total Follow-ups</li>
+          <!-- <li (click)="getFollowupListing('insightSales')" [ngClass]="{'active':(followUpType === 'insightSales')}">Inside Sales</li>
+            <li (click)="getFollowupListing('allinsightSales')" [ngClass]="{'active':(followUpType === 'allinsightSales')}" *ngIf="isOpsHeadOrSupervisor1">Total Inside Sales</li> -->
+        </ul>
+      </div>
+      <div class="follow-search">
+        <form [formGroup]="SearchForm" (ngSubmit)="submitSearch()">
+          <div class="form-field">
+            <ng-select formControlName="type" placeholder="Search Filter" (selected)="CheckSearchFilter()"
+              [options]="searchFilters"></ng-select>
+            <div class="error" *ngIf="SearchForm.controls?.type?.errors?.required  && isSubmittedSearch">Please Select
+              Filter</div>
+            <div class="error" *ngIf="SearchForm.controls?.search?.errors?.required && isSubmittedSearch">Please enter
+              keyword to search</div>
+          </div>
+          <div class="form-field">
+            <ng-select formControlName="search" *ngIf="searchType === 'select'" placeholder="{{searchPlaceholder}}"
+              [options]="searchOptions"></ng-select>
+          </div>
+          <!-- <div class="form-field">
+              <ng-select formControlName="search" *ngIf="SearchForm.value.type === 'lead_status'" placeholder="Lead Status" [options]="leadStatus"></ng-select>
+            </div>
+            <div class="form-field">
+              <ng-select formControlName="search" *ngIf="SearchForm.value.type === 'project_status'" placeholder="Project Status" [options]="projectStatus"></ng-select>
+            </div> -->
+          <div class="form-field">
+            <input placeholder="Search" *ngIf="searchType === 'input'" formControlName="search" type="text">
+          </div>
+          <div class="form-field">
+            <button type="submit">Search</button>
+          </div>
+          <div class="form-field" *ngIf="followUpListing"><a *ngIf="followUpListing.length>0"
+              class="exportData btn btn-blue" (click)="ExportCSVForFollowUp()">Export</a></div>
+        </form>
+      </div>
+
+      <div *ngIf="loader" class="follow-search">
+        <img src="/assets/images/loader.gif" style="width:30px;height:30px;display: block;margin: 0 auto;"
+          alt="LUMINOUS" />
+      </div>
+      <div *ngIf="!noRecords && !loader">
+
+        <div class="table-wrapper total-sides">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  Lead ID
+                </th>
+                <th>
+                  Project ID
+                </th>
+                <th>
+                  Customer Name
+                </th>
+                <th>
+                  Customer Mobile No.
+                </th>
+                <th>
+                  Customer add
+                </th>
+                <th>
+                  Scheduled Date & Time
+                </th>
+                <th>
+                  Assigned To
+                </th>
+                <th style="width:70px">
+                  Aging
+                </th>
+                <th>
+                  Project Status
+                </th>
+                <th>
+                  Lead Status
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)=viewCustomerDetails(item) *ngFor="let item of followUpListing; let i = index">
+                <td>{{item.lead_id}}</td>
+                <td>{{item.project_code}}</td>
+                <td>{{item.customer_name}}</td>
+                <td>******{{item.cceld_mobileno}}</td>
+                <td>{{item.cceld_address1}}</td>
+                <td>{{item.fup_call_scheduled_time}}</td>
+                <td>{{item.emp_fullname}} </td>
+                <td>{{item.aging}}</td>
+                <td>{{item.pmstate_name}}</td>
+                <td>{{item.flsm_status}} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- <style>
+            
+          </style> -->
+        <ul *ngIf="showPagination" style="white-space:nowrap;">
+          <li>
+            <div class="custom-pagination">
+              <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}">
+                <button type="submit" class="btn btn-blue btn-md">Go</button>
+                <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must be
+                  less than or
+                  equal to {{pageCount}}</span>
+              </form>
+            </div>
+          </li>
+          <li>Total records: <strong>{{totalRecords}}</strong></li>
+        </ul>
+      </div>
+      <div class="follow-search" *ngIf="noRecords">
+        No Records Found!
+      </div>
+    </div>
+    <!--                   screen 3 start here                -->
+    <div class="cts-wraper" *ngIf='customerDetails'>
+      <div class="listing-tabs">
+        <ul>
+          <li [ngClass]="{'active':(showHistory == 'contact')}" (click)="showContactHistory()">Interaction</li>
+          <li *ngIf="!isSiteSurveyLead" [ngClass]="{'active':(showHistory == 'proposal')}"
+            (click)="showProposalHistory()">Proposal History</li>
+        </ul>
+      </div>
+      <div class="ct-history">
+        <!-- <div class="ct-name">
+                <div class="prsn-name">
+                  <label>Customer Name:</label>
+                  <span>{{customerName}}</span>
+                </div>
+                
+              </div> -->
+
+        <div class="ct-left" *ngIf="showHistory == 'contact'">
+          <!-- <div class="table-wrapper head-hWraper">
+          </div> -->
+          <!-- <div class="table-wrapper" *ngIf="!cust_interactionListing">
+              No Interactions!
+            </div> -->
+          <div class="ct-boxWraper">
+            <h2>Record Interaction</h2>
+            <div class="ct-form">
+              <form [formGroup]="customerInteractionForm" (ngSubmit)="submitCustomerinteractionForm('submit')">
+                <div class="form-grp">
+                  <label> Interaction*</label>
+                  <div class="grp-right">
+                    <textarea rows="4" cols="50" formControlName="fui_conversation"
+                      (focusout)="submitCustomerinteractionForm()" placeholder="Enter Text Here">
+
+                          </textarea>
+                    <!-- <input type="text" formControlName="fui_conversation" (focusout)="submitCustomerinteractionForm()" placeholder="Enter Text Here"> -->
+                    <div class="error"
+                      *ngIf="(customerInteractionForm.controls?.fui_conversation?.errors?.required) && isSubmittedInteraction">
+                      Mandatory Field</div>
+                  </div>
+                </div>
+                <div class="form-grp lead-status">
+                  <label>Lead Status </label>
+                  <div class="grp-right">
+                    <div class="form-field">
+                      <ng-select formControlName="fui_lead_new_status" placeholder="Lead Status" [options]="leadStatus">
+                      </ng-select>
+                    </div>
+                    <div class="form-field"
+                      *ngIf="customerInteractionForm.value.fui_lead_new_status === '4' || customerInteractionForm.value.fui_lead_new_status == '8'">
+                      <ng-select formControlName="fui_remarks_id" placeholder="Rejection Status"
+                        (focusout)="submitCustomerinteractionForm()" [options]="rejectionStatus"></ng-select>
+                      <div class="error"
+                        *ngIf="(customerInteractionForm.controls?.fui_remarks_id?.errors?.required) && isSubmittedInteraction">
+                        Mandatory Field</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-grp"
+                  *ngIf="!(customerInteractionForm.value.fui_lead_new_status == '4' || customerInteractionForm.value.fui_lead_new_status == '5' || customerInteractionForm.value.fui_lead_new_status == '8')">
+                  <label>Re-assign</label>
+                  <div class="grp-right">
+                    <div class="form-field">
+                      <ng-select formControlName="fui_new_assigne" placeholder="Select Employee"
+                        (focusout)="submitCustomerinteractionForm()" [options]="reassignEmployees"></ng-select>
+                      <div class="error"
+                        *ngIf="(customerInteractionForm.controls?.fui_new_assigne?.errors?.required) && isSubmittedInteraction">
+                        Mandatory Field</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-grp"
+                *ngIf="!(customerInteractionForm.value.fui_lead_new_status == '4' || customerInteractionForm.value.fui_lead_new_status == '5' || customerInteractionForm.value.fui_lead_new_status == '8')">
+                <label>Assign Partner</label>
+                <div class="grp-right">
+                  <div class="form-field">
+                    <ng-select formControlName="fup_partner" placeholder="Select Partner"
+                      (focusout)="submitCustomerinteractionForm()" [options]="partnerList"></ng-select>
+                   </div>
+                </div>
+              </div>
+
+                <div class="form-grp"
+                  *ngIf="!(customerInteractionForm.value.fui_lead_new_status == '4' || customerInteractionForm.value.fui_lead_new_status == '5' || customerInteractionForm.value.fui_lead_new_status == '8')">
+                  <label>Action</label>
+                  <div class="grp-right">
+                    <div class="form-field">
+                      <ng-select formControlName="fui_new_follow_up_project_status" placeholder="Action"
+                        (selected)="projectStatusSubmit()" [options]="projectStatus"></ng-select>
+                      <div class="error"
+                        *ngIf="(customerInteractionForm.controls?.fui_new_follow_up_project_status?.errors?.required) && isSubmittedInteraction">
+                        Mandatory Field</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-grp"
+                  *ngIf="!(customerInteractionForm.value.fui_lead_new_status == '4' || customerInteractionForm.value.fui_lead_new_status == '8')">
+                  <label> Project Status</label>
+                  <div class="grp-right">
+                    <div class="form-field" style="margin-top: 8px;">
+                      <!-- <input [value]="recordInteractionProjectStatus" style="font-size:18px;font-weight:400;width:300px"> -->
+                      {{recordInteractionProjectStatus}}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-grp date-side"
+                  *ngIf="!(customerInteractionForm.value.fui_lead_new_status == '4' || customerInteractionForm.value.fui_lead_new_status == '5' || customerInteractionForm.value.fui_lead_new_status == '8')">
+                  <label>Call Reminder*</label>
+                  <div class="grp-right">
+                    <div class="form-field field-date-time">
+                      <div class="field-date">
+                        <p-calendar class="form-text" [minDate]="minDate" [(ngModel)]="interactionDate"
+                          formControlName="fui_next_call_scheduled_at" (focusout)="submitCustomerinteractionForm()"
+                          dateFormat="dd/mm/y HH:mm" placeholder="Date" [showIcon]="true"></p-calendar>
+                        <div class="error"
+                          *ngIf="(customerInteractionForm.controls?.fui_next_call_scheduled_at?.errors?.required) && isSubmittedInteraction">
+                          Mandatory Field</div>
+                      </div>
+                      <div class="field-time">
+                        <p-calendar class="form-text" [timeOnly]="true" [(ngModel)]="interactionDate"
+                          formControlName="time" (focusout)="submitCustomerinteractionForm()" hourFormat="12"
+                          readonlyInput="true" placeholder="Time" [showIcon]="true"></p-calendar>
+                        <div class="error"
+                          *ngIf="(customerInteractionForm.controls?.time?.errors?.required) && isSubmittedInteraction">
+                          Mandatory Field</div>
+                        <div class="error" *ngIf="wrongTime">Invalid Time</div>
+                      </div>
+                    </div>
+                    <!-- <input type="submit" class="btn rads btn-yellow btn-md" value="Save"> -->
+                  </div>
+                </div>
+                <div class="form-grp"
+                  *ngIf="!(customerInteractionForm.value.fui_lead_new_status == '4' || customerInteractionForm.value.fui_lead_new_status == '8')">
+                  <label>Expected Closure*</label>
+                  <!-- dd/mm/yy -->
+                  <!-- dateFormat="yy/mm/dd -->
+                  <div class="grp-right">
+                    <p-calendar class="form-text" formControlName="expected_closure" dateFormat="yy/mm/dd"
+                      placeholder="Date" [showIcon]="true"></p-calendar>
+                    <div class="error"
+                      *ngIf="(customerInteractionForm.controls?.expected_closure?.errors?.required) && isSubmittedInteraction">
+                      Mandatory Field</div>
+                      <div class="error"
+                      *ngIf="(customerInteractionForm.controls?.expected_closure?.errors?.invalid)">
+                      Invalid Date</div>
+                  </div>
+                </div>
+                <div class="form-grp"
+                  *ngIf="!(customerInteractionForm.value.fui_lead_new_status == '4' || customerInteractionForm.value.fui_lead_new_status == '8')">
+                  <label> Estimated DC Capacity (KWp)</label>
+                  <div class="grp-right">
+                    <!-- <input type="number" formControlName="estimated_dc_capacity" placeholder="Estimated dc capacity"> -->
+                    <input type="text" formControlName="estimated_dc_capacity" placeholder="Estimated dc capacity">
+                    <div class="error"
+                      *ngIf="(customerInteractionForm.controls?.estimated_dc_capacity?.errors?.validationNumber) && isSubmittedInteraction">
+                      Enter Number</div>
+                  </div>
+                </div>
+                <div class="form-grp def-text"
+                  *ngIf="!(customerInteractionForm.value.fui_lead_new_status == '4' || customerInteractionForm.value.fui_lead_new_status == '5'|| customerInteractionForm.value.fui_lead_new_status == '8')">
+                  <form [formGroup]="customerNotificationForm" (ngSubmit)="submitCustomerNotification()">
+                    <div class="sel-text">
+                      <ng-select formControlName="text" placeholder="Select SMS/Email" [options]="followupSmsEmail"
+                        (selected)="messagePreview($event)"></ng-select>
+                    </div>
+                    <div class="sel-text">
+                      <ng-select formControlName="contact_id" placeholder="Select Contact Person"
+                        [options]="ContactListSelect"></ng-select>
+                    </div>
+                    <div>
+                      <input type="button" *ngIf="!actionLoaderSMS" (click)="submitCustomerNotification('sms')"
+                        class="btn btn-yellow btn-md" value="Send SMS to Customer" style="background: dodgerblue;">
+                      <span *ngIf="actionLoaderSMS == 'send_sms_notification_loader'" class="btn btn-yellow">
+                        <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                      </span>
+                      <input type="button" *ngIf="!actionLoaderEmail" (click)="submitCustomerNotification('email')"
+                        class="btn btn-yellow btn-md" value="Send Email to Customer" style="background: dodgerblue;">
+                      <span *ngIf="actionLoaderEmail == 'send_email_notification_loader'" class="btn btn-blue">
+                        <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                      </span>
+                    </div>
+                  </form>
+                </div>
+                <div class="actions text-center ct-form-action">
+                 <input class="btn btn-md ng-star-inserted" style="background: gray;
+                 width: 100px;" (click)=funnelSystem() value="Exit">
+                    <input type="submit" [disabled]="isNonActionable" *ngIf="!actionLoader"
+                    class="btn rads btn-blue btn-md" value="Save">
+                  
+                  <span *ngIf="actionLoader == 'customer_interaction_loader'" class="btn btn-yellow">
+                    <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!--  preview of mail and sms  -->
+          <div class="loader-wrapper" *ngIf="previewMessagePopUp">
+            <div class="mailsmstext">
+              <b style="font-weight: bold;" *ngIf="emailContentPopUp !=''">MAIL: </b>
+              <p style="border: 1px dotted #c5bcbc; word-break: break-all;" class="" *ngIf="emailContentPopUp !='' ">{{
+                emailContentPopUp }} </p>
+              <b style="font-weight: bold;" *ngIf="smsContentPopUp !='' ">SMS: </b>
+              <p style="border: 1px dotted #c5bcbc; word-break: break-all;" class="" *ngIf="smsContentPopUp !='' ">{{
+                smsContentPopUp }} </p>
+              <div class="alignRight">
+                <input type="button" class="btn sndmalbtn" (click)="hideMessagePopUp()" value="Close">
+              </div>
+            </div>
+          </div>
+
+          <!--  end of preview of mail and sms -->
+          <div class="ct-boxWraper ct-adrsForms">
+            <h2>Customer Details</h2>
+            <div class="ct-form form-types">
+              <form [formGroup]="customerDetailsForm" (ngSubmit)=submitCustomerDetailsForm()>
+                <div class="form-grp">
+                  <label>Customer Name</label>
+                  <div class="grp-right">
+                    {{customerName }}
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>Address</label>
+                  <div class="grp-right">
+                    {{cceld_address1}}
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>City</label>
+                  <div class="grp-right">
+                    <!-- <ng-select [options]="cityList" [disabled]="true" formControlName="cceld_city" placeholder="Select City" (selected)="ifStateIfCity('city')"></ng-select> -->
+                    {{customerInteractionCity}}
+                    <div class="error"
+                      *ngIf="(customerDetailsForm.controls?.cceld_city?.errors?.required) && isSubmittedCustomerDetails">
+                      Enter City</div>
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>State </label>
+                  <div class="grp-right">
+                    <!-- <ng-select [options]="stateList" [disabled]="true" formControlName="cceld_state" placeholder="Select State" (selected)="ifStateIfCity('state')"></ng-select> -->
+                    {{customerInteractionState}}
+                    <div class="error"
+                      *ngIf="(customerDetailsForm.controls?.cceld_state?.errors?.required) && isSubmittedCustomerDetails">
+                      Enter State</div>
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>Email</label>
+                  <div class="grp-right">
+                    {{cceld_email}}
+
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>Monthly Bill</label>
+                  <div class="grp-right">
+                    {{cceld_avgelectricitybill}}
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>Proposed DC Capacity</label>
+                  <div class="grp-right" *ngIf="proposal_dc_capacity">
+                    {{proposal_dc_capacity+' '+'kWp'}}
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>Solution type</label>
+                  <div class="grp-right">
+                    <!-- <input type="text" formControlName="cceld_ongridoffgrid" placeholder="Solution type Here"> -->
+                    <!-- <ng-select [options]="solutionType" [disabled]="true" formControlName="cceld_ongridoffgrid" placeholder="Solution Type"></ng-select> -->
+                    {{customerInteractionGridType}}
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>Building Type</label>
+                  <div class="grp-right">
+                    {{cceld_buildingtype}}
+                    <!-- <input type="text" formControlName="cceld_buildingtype" placeholder="Building Type Here"> -->
+                    <!-- <ng-select [options]="buildingType" [disabled]="true" formControlName="cceld_buildingtype" placeholder="Building Type"></ng-select> -->
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>Type of Site</label>
+                  <div class="grp-right">
+                    {{cceld_sitetype }}
+                  </div>
+                </div>
+                <div class="form-grp">
+                  <label>Roof Type</label>
+                  <div class="grp-right">
+                    {{cceld_rooftype }}
+                  </div>
+                </div>
+                <div class="form-grp contct">
+                  <label> Contact Number</label>
+                  <div class="grp-right">
+                    {{customerNumber}}
+                  </div>
+                </div>
+                <div class="form-grp contct">
+                  <label>Lead From</label>
+                  <div class="grp-right">
+                    {{(fup_project_from == 1) ? 'Site Surveyor' : 'Solution Designer'}}
+                  </div>
+                </div>
+
+                <!-- <div class="actions text-center ct-form-action">
+                  <input type="submit" *ngIf="!actionLoaderCustomerDetails" class="btn rads btn-yellow btn-md" value="Save & Exit">
+                  <span *ngIf="actionLoaderCustomerDetails == 'update_customer_details_loader'" class="btn btn-yellow">
+                    <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                  </span>
+                </div> -->
+              </form>
+            </div>
+          </div>
+          <div class="" style="margin: 10px 0">
+            <div class="ct-form form-types formFull table-wrapper">
+              <h2>Project Contacts</h2>
+              <table cellpadding="0" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Designation</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr [formGroup]="customerProjects">
+                    <td><input type="text" formControlName="fname" placeholder="Enter First Name"></td>
+                    <td><input type="text" formControlName="lname" placeholder="Enter Last Name"></td>
+                    <td><input type="text" formControlName="mobile" placeholder="Enter Mobile Here"></td>
+                    <td><input type="text" formControlName="email" placeholder="Enter Email Here"></td>
+                    <td><input type="text" formControlName="designation" placeholder="Enter Designation"></td>
+                    <td><input type="submit" (click)="submitAddContact()" class="btn btn-blue btn-md" /></td>
+                  </tr>
+                  <tr *ngFor="let contact of contactsList">
+                    <td>{{contact.pc_fname}}</td>
+                    <td>{{contact.pc_lname}}</td>
+                    <td>{{contact.pc_mobile}}</td>
+                    <td style="text-transform: none">{{contact.pc_email}}</td>
+                    <td>{{contact.pc_designation}}</td>
+                    <td><input (click)="confirmContactDelete(contact.pc_id,contact.pc_project_id)"
+                        class="btn btn-blue btn-md" type="button" value="Delete"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="" style="margin: 10px 0">
+            <div class="ct-form form-types formFull table-wrapper" style="margin-top: 10px;overflow: hidden;">
+              <h2>Contact History</h2>
+              <div class="table-wrapper call-history" *ngIf="iscust_interactionListing">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>
+                        Date & Time
+                      </th>
+                      <th>
+                        Username
+                      </th>
+                      <!-- <th>
+                      User Role
+                    </th> -->
+                      <th>
+                        Funnel Status
+                      </th>
+                      <th>
+                        Interaction
+                      </th>
+                      <th>
+                        Interaction Completed
+                      </th>
+                      <th>
+                        SMS Sent
+                      </th>
+                      <th>
+                        E-mail sent
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of cust_interactionListing; let i = index">
+                      <td> {{item.followUpInteractions.fui_created_at}} </td>
+                      <td> {{item.emp_full_name}} </td>
+                      <!-- <td> {{item.primary_role_name}} </td> -->
+                      <td> {{item.flsm_status}} </td>
+                      <td> {{item.followUpInteractions.fui_conversation}}</td>
+                      <td *ngIf="item.followUpInteractions.fui_is_submited === '0'" style="color: red">NO</td>
+                      <td *ngIf="item.followUpInteractions.fui_is_submited === '1'" style="color: green">YES</td>
+                      <td> {{item.followUpInteractions.fui_sent_sms}} </td>
+                      <td>
+                        <div [innerHtml]="item.followUpInteractions.fui_sent_email"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-wrapper" *ngIf="!iscust_interactionListing">
+                No Interactions!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ct-right" *ngIf="showHistory == 'proposal'">
+
+          <h2>Proposal History </h2>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    Proposal ID
+                  </th>
+                  <th>
+                    Size
+                  </th>
+                  <th>
+                    Gold Cost
+                  </th>
+                  <th>
+                    Silver Cost
+                  </th>
+                  <th>
+                    View Proposal
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let proposal of proposalHistoryData; let i=index;">
+                  <td>{{proposal.proposal_code}}</td>
+                  <td>DC Capacity/{{(proposal.proposal_module_capacity/1000)}} kW</td>
+                  <td>{{proposal.proposal_project_value|number}}</td>
+                  <td>{{proposal.proposal_project_value_silver|number}}</td>
+                  <td>
+                    <p *ngFor="let file of proposal.files; let j=index">
+                      <a href="{{baseurl}}{{proposal.files[j]}}" target="_blank">
+                        <img width="20px" src="/assets/images/pdf_image.png">
+                      </a>
+                    </p>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div id="funnelTab" class="folow-box" *ngIf="funnelListing">
+      <!-- <smart-search (SearchResults)="smartSearchResult($event)" *ngIf="showSmartSearchComponent"></smart-search> -->
+      <div class="container">
+        <div class="search-feild smart-box">
+          <!-- <form [formGroup]="followUpForm" *ngIf="currentSearchForm === 'total' || currentSearchForm === 'today'  || currentSearchForm === 'AllUsersLead'"> -->
+          <form [formGroup]="followUpForm">
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Firstname</span> -->
+                <input type="text" formControlName="project_code" placeholder="Project Id" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Customer First Name</span> -->
+                <input type="text" formControlName="customer_firstname" placeholder="Customer First Name" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Customer Last Name</span> -->
+                <input type="text" formControlName="customer_lastname" placeholder="Customer Last Name" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Customer Mobile No</span> -->
+                <input type="text" formControlName="cceld_mobileno" placeholder="Customer Mobile No" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field field-date">
+                <p-calendar class="form-text" formControlName="fup_call_scheduled_time" dateFormat="dd/mm/y"
+                  placeholder="Scheduled Date" [showIcon]="true"></p-calendar>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-field">
+                <ng-select [options]="reassignEmployee" formControlName="assignedTo" placeholder="Select Assigned To"
+                  [allowClear]="true"></ng-select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Firstname</span> -->
+                <!-- <ng-select  [options]="projectStatus" formControlName="fui_new_follow_up_project_status" placeholder="Select Project Status" [allowClear]="true"></ng-select> -->
+                <ng-select [options]="projectStatusList" formControlName="fui_new_follow_up_project_status"
+                  placeholder="Select Project Status" [allowClear]="true"></ng-select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                <ng-select formControlName="flsm_status" placeholder="Select Lead Status" [options]="leadStatus"
+                  [allowClear]="true"></ng-select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                <input type="text" formControlName="cceld_email" placeholder="Email" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Customer First Name</span> -->
+                <!-- <input type="text" formControlName="city" placeholder="City"/> -->
+                <ng-select [options]="cityList" formControlName="city" placeholder="City" [allowClear]="true">
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Customer First Name</span> -->
+                <!-- <input type="text" formControlName="lead_entry_date" placeholder="Lead Entry Date"/> -->
+                <p-calendar class="form-text" formControlName="lead_entry_date" dateFormat="dd/mm/y"
+                  placeholder="Lead Entry Date" [showIcon]="true"></p-calendar>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Customer First Name</span> -->
+                <input type="text" formControlName="remarks" placeholder="Remarks" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-field">
+                <!-- <span class="field-icon">Customer First Name</span> -->
+                <!-- <input type="text" formControlName="customerType" placeholder="Customer Type"/> -->
+                <ng-select [options]="customerType" formControlName="customerType" placeholder="Customer Type"
+                  [allowClear]="true"></ng-select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                <input type="text" formControlName="lead_id" placeholder="Lead Id"/>
+              </div>
+            </div>
+
+            <div class="form-group search-cancel">
+              <div class="form-field">
+                <input type="submit" (click)="submitFollowUpForm()" class="searchButton" value="Search" />
+              </div>
+              <div class="form-field">
+                <input type="button" (click)="clearSmartSearch()" class="searchButton" value="Reset" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <h2>Sales Funnel System</h2>
+      <form [formGroup]='exportDurationFormFroup'
+        *ngIf="followUpListing && followUpListing.length>0 && followUpType!='dashbaordList'">
+       <div class="form-group" style="float: right;">
+          <div class="form-field field-date">
+            <p-calendar class="form-text" formControlName="endDate" dateFormat="dd/mm/y" placeholder="End Date"
+              (keypress)="_keyPress($event)" [showIcon]="true"></p-calendar>
+          </div>
+        </div>
+        <div class="form-group" style="float: right;margin-right: 30px;">
+          <div class="form-field field-date">
+            <p-calendar class="form-text" formControlName="startDate" dateFormat="dd/mm/y" placeholder="Start Date"
+              (keypress)="_keyPress($event)" [showIcon]="true"></p-calendar>
+          </div>
+        </div>
+        <div class="form-group" style="float: right;">
+          <div class="form-field field-date">
+            <select formControlName="report_name" placeholder="Select Report">
+             <option value="funnel_report">Funnel Report</option>
+              <option value="funnel_stagewise">Funnel Stage-wise</option>
+              <option value="top_leads">Top-Leads</option>
+              <option value="new_leads">New Leads</option>
+              <option value="proposal">Proposal Report</option>
+          </select>
+          </div>
+        </div>
+      </form>
+
+      <div class="form-field" *ngIf="followUpListing && followUpType!='dashbaordList'">
+        <input type="button" *ngIf="actionexport" (click)="ExportCSVForFollowUp('export')"
+          class="exportData btn btn-yellow btn-md" value="Export">
+        <span *ngIf="!actionexport" class="btn btn-blue" style="float: right;">
+          <img src="/assets/images/loader.gif" style="width: 30px; height:30px;display: block;margin: 0 auto;"
+            alt="Export" />
+        </span>
+      </div>
+      <div class="listing-tabs">
+        <ul>
+          <li (click)="pages=1;pagesNonAction=1;getFollowupListing('today');"
+            [ngClass]="{'active':(followUpType === 'today')}">Scheduled For Today </li>
+          <li (click)="pages=1;pagesNonAction=1;getFollowupListing('AllUsersLead');"
+            [ngClass]="{'active':(followUpType === 'AllUsersLead')}">Total Funnel Leads
+          </li>
+
+          <li (click)="pages=1;pagesNonAction=1;getFollowupListing('dashbaordList');"
+            [ngClass]="{'active':(followUpType === 'dashbaordList')}" >Dashboard
+          </li>
+          </ul>
+      </div>
+
+      <div class="follow-search">
+        <!-- <form [formGroup]="SearchForm" (ngSubmit)="submitSearch()">
+          <div class="form-field">
+            <ng-select formControlName="type" placeholder="Search Filter" (selected)="CheckSearchFilter()" [options]="searchFilters"></ng-select>
+            <div class="error" *ngIf="SearchForm.controls?.type?.errors?.required  && isSubmittedSearch">Please Select Filter</div>
+            <div class="error" *ngIf="SearchForm.controls?.search?.errors?.required && isSubmittedSearch">Please enter keyword to search</div>
+          </div>
+          <div class="form-field">
+            <ng-select formControlName="search" *ngIf="searchType === 'select'" placeholder="{{searchPlaceholder}}" [options]="searchOptions"></ng-select>
+          </div>
+          <div class="form-field">
+            <input placeholder="Search" *ngIf="searchType === 'input'" formControlName="search" type="text">
+          </div>
+          <div class="form-field">
+            <button type="submit">Search</button>
+          </div>
+        
+        </form> -->
+      </div>
+      <div *ngIf="loader && followUpType!='dashbaordList'" class="follow-search">
+        <img src="/assets/images/loader.gif" style="width:30px;height:30px;display: block;margin: 0 auto;"
+          alt="LUMINOUS" />
+      </div>
+
+      <div *ngIf="!noRecords && !loader && followUpType!='dashbaordList'">
+        <div class="table-wrapper total-sides" style="max-height:100%;" *ngIf="followUpListingLength">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  Lead ID
+                </th>
+                <th>
+                  Project ID
+                </th>
+                <th>
+                  Customer Name
+                </th>
+                <th>
+                  Remarks
+                </th>
+                <th>
+                  Last Interaction Date
+                </th>
+                <th>
+                  Scheduled Date
+                </th>
+                <th>
+                  Location
+                </th>
+                <th>
+                  Customer Mobile No.
+                </th>
+                <th>
+                  Customer Email-ID
+                </th> 
+                <th>
+                  Lead Entry Date
+                </th>
+                <th>
+                  <!-- Funnel Stage -->
+                  Lead Status
+                </th>
+               <th>
+                  Proposed DC Capacity (kWp)
+                </th>
+              <th>
+                  Expected Closure
+                </th>
+                <th>
+                  Project Cost (incl GST)
+                </th>
+                <th>
+                  Survey Date
+                </th>
+                <th>
+                  Proposal Date
+                </th>
+                <th>
+                  Project Status
+                </th>
+                <th>
+                  Customer Type
+                </th>
+                <th>
+                  SS Name
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)=viewCustomerDetails(item,false) *ngFor="let item of followUpListing; let i = index">
+                <td>{{item.lead_id}}</td>
+                <td>{{item.project_code}}</td>
+                <td>{{item.customer_name}}</td>
+                <td>{{(item.remarks ? item.remarks : '')}} </td>
+                <td>{{item.fup_updated_at | slice:0:10}}</td>
+                <td>{{item.fup_call_scheduled_time | slice:0:10}}</td>
+                <td>{{item.cceld_address1}}</td>
+                <td>{{item.cceld_mobileno_full}}</td>
+                <td style="text-transform: none;">{{item.cceld_email}}</td>
+                <td>{{item.fup_created_at | slice:0:10}}</td>
+                <td>{{item.flsm_status}} </td>
+                <td>{{(item.proposal_dc_capacity/1000)}} </td>
+                <td>{{(item.expected_closure ? (item.expected_closure | date: 'dd/MM/yyyy') : '')}}</td>
+                 <td>
+                  <ng-template [ngIf]="item.proposal_project_value_gold && item.proposal_project_value_gold !=0">
+                    Gold-{{item.proposal_project_value_gold|number}}
+                  </ng-template>
+                  <ng-template [ngIf]="item.proposal_project_value_silver && item.proposal_project_value_silver!=0">
+                    Silver-{{item.proposal_project_value_silver|number}}
+                  </ng-template>
+                </td>
+                <td>{{item.project_survey_visited| slice:0:10}}</td>
+                <td>{{item.proposal_created_on | slice:0:10}}</td>
+                <td>{{item.pmstate_name}}</td>
+                <td>{{item.cceld_sitetype}} </td>
+                <td>{{item.surveyor}} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- <style>
+        </style> -->
+        <ul *ngIf="showPagination && (totalRecords > 10)" style="white-space:nowrap;">
+          <li>
+            <div class="custom-pagination">
+              <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('A')">
+                <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}">
+                <button type="submit" class="btn btn-blue btn-md">Go</button>
+                <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must be
+                  less than or
+                  equal to {{pageCount}}</span>
+              </form>
+            </div>
+          </li>
+          <li>Total records: <strong>{{totalRecords}}</strong></li>
+        </ul>
+      </div>
+      <!-- <div class="follow-search" *ngIf="noRecords">
+        No Records Found!
+      </div> -->
+      <div class="follow-search" *ngIf="!followUpListingLength && !loader && followUpType!='dashbaordList'">
+        No Records Found!
+      </div>
+
+      <div *ngIf="loader && followUpType!='dashbaordList'" class="follow-search">
+        <h2>Non-Actionable</h2>
+        <img src="/assets/images/loader.gif" style="width:30px;height:30px;display: block;margin: 0 auto;"
+          alt="LUMINOUS" />
+      </div>
+
+      <div id="totalFunnelLeads" *ngIf="!noRecords && !loader && followUpType!='dashbaordList'">
+        <h2 style="margin-top: 55px;">Non-Actionable</h2>
+        <div class="table-wrapper total-sides" style="max-height:100%;" *ngIf="followUpListingNonActionLength">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  Lead ID
+                </th>
+                <th>
+                  Project ID
+                </th>
+                <th>
+                  Customer Name
+                </th>
+                <th>
+                  Remarks
+                </th>
+                <th>
+                  Scheduled Date
+                 </th>
+                 <th>
+                  Last Interaction Date
+                 </th>
+                <th>
+                  Location
+                </th>
+                <th>
+                  Customer Mobile No.
+                </th>
+                <th>
+                  Customer Email-ID
+                </th>
+                <!-- <th>
+                 Lead Source
+                </th> -->
+                <!-- <th>
+                  Project Type
+                 </th> -->
+                <th>
+                  Lead Entry Date
+                </th>
+                <th>
+                  <!-- Funnel Stage -->
+                  Lead Status
+                </th>
+                <!-- <th>
+                  Estimated DC Capacity (kWp)
+                </th> -->
+                <th>
+                  Proposed DC Capacity (kWp)
+                </th>
+                <!-- <th>
+                  Projected Order (kWp)
+                </th> -->
+                <th>
+                  Expected Closure
+                </th>
+                <!-- <th>
+                  Quarter
+                </th> -->
+                <th>
+                  Project Cost (incl GST)
+                </th>
+                <th>
+                  Survey Date
+                </th>
+                <th>
+                  Proposal Date
+                </th>
+                <th>
+                  Project Status
+                </th>
+                <th>
+                  Customer Type
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr (click)=viewCustomerDetails(item,true) *ngFor="let item of followUpListingNonAction; let i = index">
+                <td>{{item.lead_id}}</td>
+                <td>{{item.project_code}}</td>
+                <td>{{item.customer_name}}</td>
+                <td>{{(item.remarks ? item.remarks : '')}} </td>
+                <td>{{item.fup_call_scheduled_time | slice:0:10}}</td>
+                <td>{{item.fup_updated_at | slice:0:10}}</td>
+                <td>{{item.cceld_address1}}</td>
+                <td>{{item.cceld_mobileno_full}}</td>
+                <td style="text-transform: none;">{{item.cceld_email}}</td>
+                <!-- <td>{{item.source_master_name}}</td> -->
+                <!-- <td>{{item.sf_project_type}}</td> -->
+                <td>{{item.fup_created_at | slice:0:10}}</td>
+                <td>{{item.flsm_status}} </td>
+                <!-- <td>{{(item.estimated_dc_capacity)}} </td> -->
+                <td>{{(item.proposal_dc_capacity/1000)}} </td>
+                <!-- <td></td> -->
+                <td>{{(item.expected_closure ? (item.expected_closure | date: 'dd/MM/yyyy') : '')}}</td>
+                <!-- <td>{{(item.expected_closure ? 'Q'+item.quarter : '')}}</td> -->
+                <td>
+                  <ng-template [ngIf]="item.proposal_project_value_gold && item.proposal_project_value_gold !=0">
+                    Gold-{{item.proposal_project_value_gold|number}}
+                  </ng-template>
+                  <ng-template [ngIf]="item.proposal_project_value_silver && item.proposal_project_value_silver!=0">
+                    Silver-{{item.proposal_project_value_silver|number}}
+                  </ng-template>
+                </td>
+                <td>{{item.project_survey_visited | slice:0:10}}</td>
+                <td>{{item.proposal_created_on | slice:0:10}}</td>
+                <td>{{item.pmstate_name}}</td>
+                <td>{{item.cceld_sitetype}} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul *ngIf="showPagination && totalRecordsNonAction > 10" style="white-space:nowrap;">
+          <li>
+            <div class="custom-pagination">
+              <form [formGroup]="paginationSubmitFormNonAction" (ngSubmit)="pageSubmit('NA')">
+                <input type="number" formControlName="page_number" class="form-text" min="0"
+                  max="{{pageCountNonAction}}">
+                <button type="submit" class="btn btn-blue btn-md">Go</button>
+                <span class="error" *ngIf="paginationSubmitFormNonAction.controls?.page_number?.errors?.max">Page number
+                  must be less than or
+                  equal to {{pageCountNonAction}}</span>
+              </form>
+            </div>
+          </li>
+          <li>Total records: <strong>{{totalRecordsNonAction}}</strong></li>
+        </ul>
+      </div>
+
+      <!-- <div class="follow-search" *ngIf="noRecords">
+        No Records Found!
+      </div> -->
+      <div class="follow-search" *ngIf="!followUpListingNonActionLength && !loader && followUpType!='dashbaordList'">
+        No Records Found!
+      </div>
+      <!-- start dashbaord tab by mayank 26/10/21 -->
+      <div *ngIf="followUpType=='dashbaordList'">
+        <div class="container">
+          <div class="search-field-label">Order placed period</div>
+          <div class="search-feild dashboard-search-field">
+            <form class="dashboard-form" [formGroup]='dashboardFormFroup'>
+              <div class="form-group">
+                <div class="left form-field">
+                  <!-- <p-calendar class="form-text" formControlName="dashboardStartDate" dateFormat="mm/y" [monthNavigator]="true" [yearNavigator]="true" yearRange="2018:2030"
+                     [showIcon]="true"></p-calendar>  -->
+                          <select formControlName="month" (change)="setLifetimeMonth()">
+                              <option value = "">Lifetime</option>
+                              <option value="01">Jan</option>
+                              <option value="02">Feb</option>
+                              <option value="03">Mar</option>
+                              <option value="04">Apr</option>
+                              <option value="05">May</option>
+                              <option value="06">Jun</option>
+                              <option value="07">Jul</option>
+                              <option value="08">Aug</option>
+                              <option value="09">Sep</option>
+                              <option value="10">Oct</option>
+                              <option value="11">Nov</option>
+                              <option value="12">Dec</option>
+                             </select>
+                                <select class="mandate-field" formControlName="year" (change)="setLifetimeYear()">
+                                      <option value= "">Lifetime</option>
+                                      <option value="2018">2018</option>
+                                      <option value="2019">2019</option>
+                                      <option value="2020">2020</option>
+                                      <option value="2021">2021</option>
+                                      <option value="2022">2022</option>
+                                      <option value="2023">2023</option>
+                                      <option value="2024">2024</option>
+                                      <option value="2025">2025</option>
+                                     </select>
+                                     </div>
+               <div class="form-group search-cancel">
+                  <input type="submit" (click)="submitDashboard()" class="searchButton" value="Search" />
+                </div>
+              </div>
+            </form> 
+
+            <div>
+              <div class="d-inline-block">
+                <div class="form-field">
+                  <select tabindex="-1" name="ssName" ngModel (change)="selectSSName($event.target.value,ssList)"
+                    required>
+                    <option selected value="">Select SS Name </option>
+                    <option *ngFor="let cause of dropDownList" value="{{ cause.surveyor }}">
+                      {{ cause.surveyor }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="d-inline-block">
+                <div class="form-field">
+                  <select name="ssCount" #ssCountId (change)="selectSSCount($event.target.value)" required>
+                    <option *ngFor="let cc of ssCount; let i = index" [selected]="i == 0" value="{{ cc.id }}">
+                      {{ cc.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="d-inline-block">
+                <input type="button" *ngIf="actionexport" (click)="ExportCSVForDashboard('export')"
+                  class="exportData btn btn-yellow btn-md" value="Export" id="exportData">
+                <span *ngIf="!actionexport" class="btn btn-blue" style="float: right;">
+                  <img src="/assets/images/loader.gif" style="width: 30px; height:30px;display: block;margin: 0 auto;"
+                    alt="Export" />
+                </span>
+              </div>
+            </div>
+
+
+            
+          </div>
+        </div>
+        <div class="table-wrapper total-sides">
+          <table class="underline">
+            <thead>
+              <tr>
+                <th>Sales Manager Name</th>
+                <th id="1" class="underline-th" (click)="submitDb($event, '1','')">S0-Prospect</th>
+                <th id="2" class="underline-th" (click)="submitDb($event, '2', '')">S1-Contacted</th>
+                <th id="3" class="underline-th" (click)="submitDb($event, '3', '')">S2-Qualified</th>
+                <th id="6" class="underline-th" (click)="submitDb($event, '6', '')">S3-Proposed</th>
+                <th id="7" class="underline-th" (click)="submitDb($event,'7', '')">S4-Negotiation</th>
+                <th id="5" class="underline-th" (click)="submitDb($event, '5', '')">
+                  <div>S5-Order Placed</div>
+                  <div *ngIf="selectedMonthYear">({{ selectedMonthYear | date:'MMM yy' }})</div>
+                  <div *ngIf="selectedYear">({{ selectedYear }})</div>
+                  <div *ngIf="!selectedYear && !selectedMonthYear">({{ 'Lifetime' }})</div>
+                </th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of siteServyList; let i = index">
+                <td id="{{item.project_surveyor}},ssName" (click)="submitDb($event, '', item.project_surveyor)">{{item.surveyor}}</td>
+                <td id="{{item.project_surveyor}},1" (click)="submitDb($event, '1', item.project_surveyor, item.s0)">{{item.s0||0 |number : '1.2-2' }}</td>
+                <td id="{{item.project_surveyor}},2" (click)="submitDb($event, '2', item.project_surveyor, item.s1)">{{item.s1||0 |number: '1.2-2' }}</td>
+                <td id="{{item.project_surveyor}},3" (click)="submitDb($event, '3', item.project_surveyor, item.s2)">{{item.s2 ||0 |number: '1.2-2'}}</td>
+                <td id="{{item.project_surveyor}},6" (click)="submitDb($event, '6', item.project_surveyor, item.s3)">{{item.s3||0 |number: '1.2-2' }}</td>
+                <td id="{{item.project_surveyor}},7" (click)="submitDb($event, '7', item.project_surveyor, item.s4)">{{item.s4||0 |number: '1.2-2' }}</td>
+                <td id="{{item.project_surveyor}},5" (click)="submitDb($event, '5', item.project_surveyor, item.s5)">{{item.s5||0 |number: '1.2-2'}}</td>
+                <td>{{item.total |number: '1.2-2'}}</td>
+              </tr>
+              <tr id="total" *ngIf="this.notfilterdata">
+                <td>Total</td>
+                <td>{{this.overallobj.s0 |number: '1.2-2'}}</td>
+                <td>{{this.overallobj.s1 |number: '1.2-2'}}</td>
+                <td>{{this.overallobj.s2 |number: '1.2-2'}}</td>
+                <td>{{this.overallobj.s3 |number: '1.2-2'}}</td>
+                <td>{{this.overallobj.s4 |number: '1.2-2'}}</td>
+                <td>{{this.overallobj.s5 |number: '1.2-2'}}</td>
+                <td>{{this.overallobj.total|number: '1.2-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- end dashboard tab by mayank -->
+      </div>
+    </div>
+
+    <div class="sendBox" [ngClass]="{hideAside:openDeleteConfirmation,showAside:!openDeleteConfirmation}">
+      <div class="box-wrapper cash-box">
+        <div class="tableBoxx">
+          <div class="cellBoxx">
+            <div class="sendWrapper">
+              <h4>Confirmation </h4>
+              <div class="field-wrapper">
+                <p style="margin: 10px;">
+                  <label for="">Are you sure you want to move this lead to project management?
+                  </label>
+                </p>
+              </div>
+              <div class="field-wrapper">
+                <div class="form-field save-btn">
+                  <button type="button" (click)="cancel()" class="btn btn-blue btn-md">Cancel</button>
+                  <button type="submit" (click)="submitCustomerinteractionForm()"
+                    class="btn btn-blue btn-md">Confirm</button>
+                </div>
+              </div>
+              <a href="javascript:void(0)" class="menu example5"
+                (click)="openDeleteConfirmation=!openDeleteConfirmation">
+                <span>x</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sendBox" [ngClass]="{hideAside:openContactDeleteConfirmation,showAside:!openContactDeleteConfirmation}">
+      <div class="box-wrapper cash-box">
+        <div class="tableBoxx">
+          <div class="cellBoxx">
+            <div class="sendWrapper">
+              <h4>Confirmation </h4>
+              <div class="field-wrapper">
+                <p style="margin: 10px;">
+                  <label for="">Are you sure you want to delete this contact
+                  </label>
+                </p>
+              </div>
+              <div class="field-wrapper">
+                <div class="form-field save-btn">
+                  <button type="button" (click)="cancel()" class="btn btn-blue btn-md">Cancel</button>
+                  <button type="submit" (click)="submitDeleteContact()" class="btn btn-blue btn-md">Confirm</button>
+                </div>
+              </div>
+              <a href="javascript:void(0)" class="menu example5"
+                (click)="openDeleteConfirmation=!openDeleteConfirmation">
+                <span>x</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <style>
+      
+    </style> -->
+  </div>
+</div>

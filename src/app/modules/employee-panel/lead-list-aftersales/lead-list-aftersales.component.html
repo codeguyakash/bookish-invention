@@ -1,0 +1,249 @@
+<div class="main-container">
+    <aside class="sidebar">
+        <!-- <div class="brand-logo-wrapper">
+            <a class="brand-logo">
+                <img src="/assets/images/logo.png" alt="LUMINOUS" title="Home" />
+            </a>
+        </div> -->
+        <div class="employee-info">
+            <div class="pic">
+                <i class="fa fa-user-circle" aria-hidden="true"></i>
+            </div>
+            <div class="detail">
+                <span>After Sales</span>
+            </div>
+        </div>
+        <nav class="sidebar-tabs">
+            <a [routerLink]="['/employee-panel/lead-list-soldesign']">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>LEAD PANEL</span>
+            </a>
+        </nav>
+        <nav class="sidebar-tabs" *ngIf="isListing == false">
+            <a (click)="getLeadListDetails()">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>SHOW LEAD LISTING</span>
+            </a>
+        </nav>
+
+    </aside>
+    <div class="container dashboard-container" *ngIf="isListing == true">
+        <div class="dashboard-inner">
+            <h2>After Sales Lead-List</h2>
+            <div class="box">
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>
+                                Customer ID
+                            </th>
+                            <th>
+                                Project ID
+                            </th>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>
+                                Contact No.
+                            </th>
+                            <th>
+                                Address
+                            </th>
+                            <th>
+                                Surveyor Name
+                            </th>
+                            <th>
+                                Project Status
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of leadData; let i = index">
+                            <td>{{data?.cceld_consumerid}}</td>
+                            <td>{{data?.project_id}}</td>
+                            <td>{{data?.cceld_firstname}} {{data?.cceld_middlename}} {{data?.cceld_lastname}}</td>
+                            <td>{{data?.cceld_mobileno}}</td>
+                            <td>{{data?.cceld_address1}}</td>
+                            <!-- <td>{{data?.cceld_scheduledate}}</td> -->
+                            <td>{{data?.cceld_surveyerid}}</td>
+                            <!--|||||||||||||||||||||||-->
+                            <td *ngIf="data.project_state==7">
+                                New Project Lead
+                            </td>
+                            <td *ngIf="data.project_state==9">
+                                Prelim Rejected by You
+                            </td>
+                            <td *ngIf="data.project_state==10">
+                                Prelim to be Accepted or Rejected by Consumer
+                            </td>
+                            <td *ngIf="data.project_state==11">
+                                Prelim Accepted by Consumer
+                            </td>
+                            <td *ngIf="data.project_state==12">
+                                Prelim Rejected by Consumer
+                            </td>
+                            <td *ngIf="data.project_state==13">
+                                Work Order to be accepted or Rejected by Partner
+                            </td>
+                            <td *ngIf="data.project_state==14">
+                                Work Order accepted by Partner
+                            </td>
+                            <td *ngIf="data.project_state==15">
+                                Work Order Rejected by Partner
+                            </td>
+                            <td *ngIf="data.project_state==16">
+                                Advance Pay Request to be accepted or Rejected by Finance
+                            </td>
+                            <td *ngIf="data.project_state==17">
+                                Advance Pay Request Accepted by Finance
+                            </td>
+                            <td *ngIf="data.project_state==18">
+                                Advance Pay Request Rejected by Finance
+                            </td>
+                            <td *ngIf="data.project_state==19">
+                                Final Proposal to be Accepted or rejected by Ops Head
+                            </td>
+                            <td *ngIf="data.project_state==20">
+                                Final Proposal Accepted by Ops Head
+                            </td>
+                            <td *ngIf="data.project_state==21">
+                                Final Proposal Rejected by Ops Head
+                            </td>
+                            <td *ngIf="data.project_state==22">
+                                Final Proposal to be Accepted or rejected by Consumer
+                            </td>
+                            <td *ngIf="data.project_state==23">
+                                Final Proposal Accepted by Consumer
+                            </td>
+                            <td *ngIf="data.project_state==24">
+                                Final Proposal Rejected by Consumer
+                            </td>
+                            <td *ngIf="data.project_state==25">
+                                Partner Payment Done By Finance Dept.
+                            </td>
+                            <td *ngIf="data.project_state==26">
+                                Partner Done Netmetering
+                            </td>
+                            <td *ngIf="data.project_state==27">
+                                Material Delivered By Partner
+                            </td>
+                            <td *ngIf="data.project_state==28">
+                                Material Audit By Surveyor
+                            </td>
+                            <td *ngIf="data.project_state==29">
+                                Material Audit Failed By Surveyor
+                            </td>
+                            <td *ngIf="data.project_state==30">
+                                Installation Done
+                            </td>
+                            <td *ngIf="data.project_state==31">
+                                Final Audit Done By Surveyor
+                            </td>
+                            <td *ngIf="data.project_state==32">
+                                Final Audit Failed By Surveyor
+                            </td>
+                            <td *ngIf="data.project_state==33">
+                                Project Declared Complete by after Sales
+                            </td>
+                            <td *ngIf="data.project_state==34">
+                                Project Handovered by after Sales
+                            </td>
+                            <!--|||||||||||||||||||||||-->
+                            <td>
+                                <a *ngIf="data.project_state==31" (click)="openProjectChecklistDetails(data?.project_id)">Open</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="survey-page-right" *ngIf="isListing == false">
+        <div class="dashboard-inner">
+            <h2>Project Checklists Details</h2>
+            <form id="surveyor_checklist_submit" [formGroup]="checklistSubmitForm" (ngSubmit)="changeProjectStatus()">
+                <div class="col-md-6">
+                    <div class="form-field">
+                        <div class="field-addon">
+                            <span class="field-icon"></span>
+                            <ng-select [options]="ChecklistItems" formControlName="checklist_name" placeholder="Select Checklist" (selected)="checkIfRemarkable($event.value)"></ng-select>
+                        </div>
+                        <div class="error" *ngIf="checklistSubmitForm.controls?.checklist_name?.errors?.required && isSubmitChecklist">
+                            This Is Required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-field">
+                        <h3>Checklist Status</h3>
+                        <div class="field-addon">
+                            <span>
+                                <label for="">
+                                    <input type="radio" value="0" name="checklist_status" formControlName="checklist_status"> No</label>
+                            </span>
+                            <span>
+                                <label for="">
+                                    <input type="radio" value="1" name="checklist_status" formControlName="checklist_status"> Yes</label>
+                            </span>
+                        </div>
+                        <div class="error" *ngIf="checklistSubmitForm.controls?.checklist_status?.errors?.required && isSubmitChecklist">
+                            This Is Required
+                        </div>
+                    </div>
+                    <div *ngIf="isRemarkable">
+                        <textarea name="remarks" formControlName="remarks" placeholder="Enter Remarks.."></textarea>
+                    </div>
+                </div>
+    
+                <div class="actions text-center">
+                    <input type="submit" class="btn btn-green btn-md" value="Submit">
+                </div>
+            </form>
+    
+        </div>
+        <div class="dashboard-inner" *ngIf="isListing == false">
+            <h3>Uploaded Documents</h3>
+            <div *ngFor="let docs of projectDocuments">
+                <div *ngIf="docs.pdoc_filename.indexOf('.png')!=-1 || docs.pdoc_filename.indexOf('.jpg')!=-1 || docs.pdoc_filename.indexOf('.jpeg')!=-1">
+                    <a href="{{baseurl}}{{docs.pdoc_filename}}" target="_blank">
+                        <img width="200px" src="{{baseurl}}{{docs.pdoc_filename}}">
+                    </a>
+                    <div>{{docs.pdoc_type}}</div>
+                </div>
+                <div *ngIf="docs.pdoc_filename.indexOf('.pdf')!=-1">
+                    <a href="{{baseurl}}{{docs.pdoc_filename}}" target="_blank">
+                        <img width="200px" src="/assets/images/pdf_image.png">
+                    </a>
+                    <div>{{docs.pdoc_type}}</div>
+                </div>
+                <div *ngIf="docs.pdoc_filename.indexOf('.doc')!=-1 || docs.pdoc_filename.indexOf('.docs')!=-1">
+                    <a href="{{baseurl}}{{docs.pdoc_filename}}" target="_blank">
+                        <img width="200px" src="/assets/images/docx.png">
+                    </a>
+                    <div>{{docs.pdoc_type}}</div>
+                </div>
+                <div *ngIf="docs.pdoc_filename.indexOf('.xlsx') != -1 || docs.pdoc_filename.indexOf('.xls') != -1 || docs.pdoc_filename.indexOf('.csv')
+                                                            != -1">
+                    <a href="{{baseurl}}{{docs.pdoc_filename}}" target="_blank">
+                        <img width="200px" src="/assets/images/xls.png">
+                    </a>
+                    <div>{{docs.pdoc_type}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div *ngIf="isLoginEmp == true" style="margin: 30px; padding: 30px; background-color: #fff; font-size: 32px; text-align: center;">
+    <p>Unauthorised Access. Please login to access.</p>
+</div>
+
+<div class="loader-wrapper" [style.display]="!userData ? 'block' : 'none'">
+    <div class="loader"></div>
+</div>

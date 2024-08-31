@@ -1,0 +1,109 @@
+<style>
+.login-signup-links .active{color: #04357f!important;display: block!important;background: #fff;}
+.login-signup-links a{padding: 15px 5px;}
+ header .brand-logo-wrapper{background: none!important;}
+.dabBoard .nav-links.rolesNames{width: 80%}
+.dabBoard .nav-links.rolesNames li{display: inline-block;margin-left: 0px}
+.logyyName{width: 15%;}
+.logyyName li.pName{width: 60%;float:left;color: white;padding: 15px 0;}
+.logyyName li.outLog{width: 40%;float:left;}
+.send-pay-button { width:80% }
+.dbContain aside.sidebar{overflow: auto;}
+.navbar-toggler{display: none}
+a.openPanel{display: none}
+.menu-overlay{display: none;}
+.table-wrapper table td {word-wrap: break-word;}
+table th{text-transform: capitalize;}
+table td{text-transform: capitalize;}
+header .nav-primary .login-signup-links .nav-link {font-size: 14px;}
+@media screen and (max-width: 1199px){
+        .dabBoard .nav-links.rolesNames li{margin-left: 0;}
+
+
+    }
+@media screen and (max-width: 1024px){
+
+    /* .dabBoard .nav-links.rolesNames li{display: inline-block;margin-left: 10px} */
+    .logyyName{width: 30%;}
+    .logyyName li.pName,.logyyName li.outLog{width: auto;float:none;display: inline-block;}
+    .logyyName{text-align: right;}
+    .logyyName li:last-child{margin-left: 15px;}
+    .header.dabBoard{padding: 0 15px;}
+    .cc-container{padding-top: 85px;}
+    .dbContain aside.sidebar{padding-top: 50px;}
+    .dbContain .sidebar{width: 140px;}
+    .dbContain .sidebar .sidebar-tabs a{font-size: 12px;}
+    .dbContain .employee-info{flex-direction: column;margin: 15px 0;}
+    .sidebar .employee-info .pic,.sidebar .employee-info .detail{flex: 0;}
+
+
+
+    .navbar-toggler{display: inline-block!important; background-color: transparent;  border: none;  text-align: center;  position: relative;  padding: 0 15px;  margin-left: -15px;  z-index: 99; line-height: 28px;flex: 0}
+    .navbar-toggler span {display: inline-block; vertical-align: middle; width: 18px; height: 2px; background-color: #fff; position: relative;}
+    .navbar-toggler span:before { top: 6px;}
+    .navbar-toggler span:after, .navbar-toggler span:before { content: ""; width: 100%; position: absolute; left: 0; height: 2px; background-color: #fff;}
+    .navbar-toggler span:after { top: -6px;}
+    header .brand-logo-wrapper{flex: 3}
+    .logyyName{flex: 8;}
+    .dabBoard .nav-links.rolesNames{width: 200px;position: fixed;top: 52px;left: -300px;z-index: 99;background: #fff;overflow: auto;border-top: 1px solid #fff;height: 100%;transition: all 0.2s ease}
+    .dabBoard .nav-links.rolesNames.hideaside{left: 0;transition: all 0.2s ease}
+    .dabBoard .nav-links.rolesNames li{display: block;margin: 0!important;padding: 0!important;line-height: 24px!important;text-align: left}
+    .dabBoard .nav-links.rolesNames li a.active{    background: #04347f; color: #fff!important;}
+    .dabBoard .nav-links.rolesNames li a{ color: #04347f!important;}
+    .header .login-signup-links {margin-bottom: 0px!important;}
+    .dbContain .sidebar{width: 200px;left: -300px;transition: all 0.2s ease;}
+    .dbContain.hidePanel .sidebar{left: 0px;transition: all 0.2s ease;z-index: 99;}
+    .dbContain .container{width: 100%;padding: 15px;}
+    .dbContain.main-container{padding:85px 0 0 0;}
+    .dbContain{padding-top: 52px;}
+    .openPanel{position: fixed;   z-index: 99; top: 57px;    left: 10px;    width: 35px;    height: 35px;    overflow: hidden;    border-radius: 100%;display: inline-block;transition: all 0.2s ease;}
+    .dbContain.hidePanel .openPanel{transform: rotate(180deg);left: 164px;transition: all 0.2s ease;z-index: 99;}
+    a.openPanel{display: block;}
+    .header .nav-links li{line-height: initial!important}
+    .hideaside .menu-overlay{position: fixed; width: 100%; top: 52px; left: 200px; height: 100%; background: rgba(0,0,0,0.5); z-index: -1;opacity: 1;transition: all 0.2s ease}
+    .menu-overlay{opacity: 0;transition: all 0.2s ease;display: block;}
+}
+</style>
+
+<header class="header dabBoard">
+    <!-- Navigation and Logo -->
+    <nav class="nav-primary">
+
+            <button class="navbar-toggler" type="button" (click)="toggleAside=!toggleAside">
+                <span class="toggler-icon"></span>
+            </button>
+
+        <!-- Brand Logo -->
+        <div class="brand-logo-wrapper">
+            <a class="brand-logo">
+                <img src="/assets/images/logo.png" alt="LUMINOUS" title="Home" />
+            </a>
+        </div>
+        <!-- Navigation Links -->
+        <ul class="nav-links no-bullets rolesNames" [ngClass]="{hideaside:toggleAside,showaside:!toggleAside}">
+            <li *ngFor="let role of allRoles;let i=index" class="login-signup-links" (click)="toggleAside=!toggleAside">
+                <a class="nav-link" (click)="checkRoleExists(role)"  [ngClass]="{'active': roletab == role}">
+                    {{roleNameArray[role]}}
+                </a>
+            </li>
+            <div class="menu-overlay" (click)="toggleAside=!toggleAside"></div>
+        </ul>
+        <!-- Navigation Links -->
+        <ul class="nav-links no-bullets logyyName">
+            <li class="login-signup-links pName" >
+                {{userData.emp_firstname}}
+            </li>
+            <li *ngIf="isLogged" class="login-signup-links outLog">
+                <a class="nav-link" (click)="logout()">
+                    <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> LOGOUT</a>
+            </li>
+        </ul>
+
+    </nav>
+
+</header>
+<div class="main-container dbContain" [ngClass]="{hidePanel:togglePanel,showPanel:!togglePanel}">
+        <router-outlet></router-outlet>
+        <!-- <app-popup-message></app-popup-message> -->
+        <a href="javascript:void(0)" class="openPanel" (click)="togglePanel=!togglePanel"> <img src="/assets/images/arrowss.png" alt="LUMINOUS" title="Home" /></a>
+</div>

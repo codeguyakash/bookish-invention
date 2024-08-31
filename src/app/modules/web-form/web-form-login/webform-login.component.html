@@ -1,0 +1,81 @@
+<style>
+  .navbar-toggler{display: none}
+   @media screen and (max-width: 1024px){
+       .employee-login-wrapper{max-width: 750px!important;}
+       .banner img{height: 100%;}
+
+}
+
+   @media screen and (max-width: 767px){
+       .employee-login-wrapper{width: 100%!important;padding: 0 15px;}
+       .employee-login-wrapper > section.banner{display: none;}
+       .employee-login-wrapper > section{width: 100%;}
+       .employee-login-wrapper > section.employee-login-form{width: 100%!important;}
+   }
+
+</style>
+
+
+
+<div class="register-pane">
+ <div class="employee-login-wrapper">
+       <section class="banner">
+           <img src="/assets/images/banner-employee-login.png" alt="">
+       </section>
+       <section class="employee-login-form">
+         <div *ngIf="employeeLogin">
+           <h1>My <strong>Account</strong></h1>
+           <app-inline-message></app-inline-message>
+           <form [formGroup]="loginEmployee" (ngSubmit)="loginEmployeeSubmit()">
+               <div class="row">
+                  <!-- Phone Number -->
+                   <div class="col-md-12">
+                       <div class="form-field">
+                           <div class="field-addon">
+                               <span class="field-icon icon_message">
+                                       <svg
+                                       xmlns="http://www.w3.org/2000/svg"
+                                       xmlns:xlink="http://www.w3.org/1999/xlink"
+                                       width="12px" height="15px">
+                                      <path fill-rule="evenodd"  fill="rgb(106, 108, 111)"
+                                       d="M10.699,10.722 L8.207,9.528 C7.972,9.416 7.826,9.189 7.826,8.937 L7.826,8.092 C7.886,8.022 7.949,7.942 8.014,7.854 C8.337,7.417 8.596,6.929 8.785,6.404 C9.152,6.242 9.391,5.894 9.391,5.500 L9.391,4.500 C9.391,4.259 9.298,4.026 9.130,3.844 L9.130,2.514 C9.145,2.376 9.203,1.558 8.585,0.883 C8.049,0.297 7.179,0.000 6.000,0.000 C4.821,0.000 3.951,0.297 3.415,0.882 C2.797,1.558 2.855,2.376 2.869,2.514 L2.869,3.844 C2.703,4.026 2.609,4.259 2.609,4.500 L2.609,5.500 C2.609,5.804 2.753,6.088 2.999,6.277 C3.238,7.184 3.738,7.867 3.913,8.087 L3.913,8.914 C3.913,9.156 3.775,9.378 3.554,9.494 L1.227,10.710 C0.470,11.106 -0.000,11.864 -0.000,12.691 L-0.000,13.500 C-0.000,14.687 3.925,15.000 6.000,15.000 C8.075,15.000 12.000,14.687 12.000,13.500 L12.000,12.739 C12.000,11.880 11.501,11.107 10.699,10.722 Z"/>
+                                      </svg>
+                               </span>
+                               <input class="form-text" type="text" formControlName="consumer_mobileno" placeholder="Enter Phone">
+                               <div class="error" *ngIf="loginEmployee.controls?.consumer_mobileno?.errors?.required && isSubmittedLogin">Phone number is required.</div>
+                           </div>
+                       </div>
+                   </div>
+                   <!-- OTP -->
+                   <div *ngIf="isOtpGenerated" class="col-md-12">
+                       <div class="form-field">
+                           <div class="field-addon">
+                               <span class="field-icon icon_message">
+                                       <svg
+                                       xmlns="http://www.w3.org/2000/svg"
+                                       xmlns:xlink="http://www.w3.org/1999/xlink"
+                                       width="20px" height="11px">
+                                      <path fill-rule="evenodd"  fill="rgb(106, 108, 111)"
+                                       d="M18.139,8.839 C17.294,9.733 16.172,10.225 14.979,10.225 C13.172,10.225 11.552,9.085 10.853,7.322 C10.812,7.215 10.713,7.147 10.604,7.147 L9.255,7.147 C9.183,7.147 9.113,7.178 9.063,7.231 L8.233,8.111 L7.402,7.231 C7.352,7.178 7.282,7.147 7.211,7.147 L6.749,7.147 C6.676,7.147 6.607,7.178 6.557,7.231 L5.726,8.110 L5.711,8.094 L5.710,8.094 L5.504,7.907 L4.866,7.231 C4.815,7.176 4.746,7.147 4.674,7.147 L4.211,7.147 C4.140,7.147 4.070,7.178 4.019,7.231 L3.189,8.110 L2.359,7.231 C2.308,7.176 2.239,7.147 2.168,7.147 L2.108,7.147 C1.249,7.147 0.550,6.408 0.550,5.501 C0.550,4.593 1.249,3.854 2.108,3.853 L10.604,3.854 C10.713,3.854 10.812,3.784 10.854,3.677 C11.552,1.914 13.171,0.775 14.979,0.775 C17.444,0.775 19.450,2.895 19.450,5.500 C19.451,6.761 18.985,7.946 18.139,8.839 ZM16.802,4.088 C16.066,4.088 15.466,4.722 15.466,5.501 C15.467,6.279 16.066,6.912 16.803,6.912 C17.539,6.912 18.139,6.279 18.139,5.501 C18.139,4.722 17.539,4.088 16.802,4.088 ZM16.803,6.339 C16.365,6.339 16.008,5.963 16.008,5.501 C16.008,5.037 16.365,4.661 16.802,4.661 C17.241,4.661 17.597,5.037 17.597,5.500 C17.597,5.963 17.241,6.339 16.803,6.339 Z"/>
+                                      </svg>
+                               </span>
+                               <input class="form-text" type="text" formControlName="consumer_otp" placeholder="Enter OTP">
+                               <div class="error" *ngIf="loginEmployee.controls?.consumer_otp?.errors?.required && isSubmittedLogin">Password is required.</div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="actions">
+                   <div>
+                       <input type="submit" class="button" [value]="isOtpGenerated ? 'LOGIN': 'GENERATE OTP'">
+                   </div>
+               </div>
+           </form>
+         </div>
+       </section>
+   </div>
+
+</div>
+<div class="loader-wrapper" [style.display]="isLoading == true ? 'block' : 'none'">
+       <div class="loader"></div>
+</div>

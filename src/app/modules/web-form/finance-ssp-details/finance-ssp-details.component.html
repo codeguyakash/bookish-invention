@@ -1,0 +1,239 @@
+<div class="loader-container" *ngIf="loader">
+  <img
+    src="/assets/images/loader.gif"
+    style="
+      width: 35%;
+    "
+  />
+</div>
+
+<div class="main">
+
+  <div class="container">
+
+    <!-- <button [routerLink]="['/webform/opshead-approval']">opshead</button>
+    <button [routerLink]="['/webform/ssp-payment-approval']">commercial</button>
+    <button [routerLink]="['/webform/finance-task-details']">finance</button> -->
+
+    <aside class="sidebar">
+      <div class="employee-info">
+          <div class="pic">
+              <i class="fa fa-user-circle" aria-hidden="true"></i>
+          </div>
+          <div class="detail">
+              <span>Finance Approval</span>
+          </div>
+      </div>
+      <nav class="sidebar-tabs">
+          <a (click)="smartSearchFormData=null;getPayRequest(1); showIsApproved = false;"
+              [ngClass]="{'active':(Listing == 'FinancePayment')}">
+              <i class="fa fa-address-card" aria-hidden="true"></i>
+              <span>Payments To Approve</span>
+          </a>
+      </nav>
+      <nav class="sidebar-tabs">
+          <a (click)="smartSearchFormData=null;getApprovedPayments(); showIsApproved = true;" [ngClass]="{'active':(Listing == 'FinanceApprovedPayment')}">
+              <i class="fa fa-address-card" aria-hidden="true"></i>
+              <span>Approved Payments</span>
+          </a>
+      </nav>
+
+  </aside>
+
+    <div class="page-heading">
+      <h2 *ngIf="Listing == 'FinancePayment'">Submit Finance Details</h2>
+      <h2 *ngIf="Listing == 'FinanceApprovedPayment'">Approved Payments</h2>
+      <a class="exportData btn export-btn" (click)="exportToCsv()">Export Data</a>
+    </div>
+
+    <div *ngIf="!showIsApproved">
+      <smart-search (SearchResults)="smartSearchResults($event)"></smart-search>
+    </div>
+
+    <div *ngIf="showIsApproved">
+      <smart-search (SearchResults)="smartSearchResultsApproved($event)"></smart-search>
+    </div>
+
+      <h3>{{ lastApprovedMessage }}</h3>
+
+      <div *ngIf="paymentRequestList.length && !showIsApproved" class="table-wrapper">
+          <table>
+              <thead>
+                  <tr>
+                      <th>
+                          S.No.
+                      </th>
+                      <th>
+                          Project ID
+                      </th>
+                      <th>
+                          SSP Name
+                      </th>
+                      <th>
+                        SSP Code
+                        </th>
+                      <th>
+                        BoS Amount Payable
+                      </th>
+                      <th>
+                        Amount Paid
+                      </th>
+
+                      <th>
+                        Amount Requested
+                      </th>
+                      <th>
+                        Request Date
+                      </th>
+                      <th>
+                        Payment Tranche
+                      </th>
+                      <th>
+                        Date of Approval
+                      </th>
+                      <th style="width: 160px;">
+                          <span style="display: inline-block;width: 70px;">Released</span>
+                          <input
+                            id="approveAll"
+                            class="checkBoxInput-x"
+                            type="checkbox"
+                            (change)="approveAll($event)"
+                            />
+                            <label for="approveAll"></label>
+                      </th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  <tr *ngFor="let payment of paymentRequestList; let i = index">
+                      <td>{{((+currentpage - 1) * 20) + i + 1}}</td>
+                      <td (click)="getPaymentHistory(payment.ptask_id)">{{payment.project_code}}</td>
+                      <td>{{payment.Partner_name}}</td>
+                      <td>{{payment.SspCode}}</td>
+                      <td>{{ payment.ptask_bos }}</td>
+                      <td>{{ payment.ssp_total_paid }}</td>
+                      <td>{{ payment.amount }}</td>
+                      <td>{{ payment.ptask_created_on | date: 'y-MM-dd' }}</td>
+                      <td>
+                        <span *ngIf="payment.ptask_ttid == 5">P1</span>
+                        <span *ngIf="payment.ptask_ttid == 11">P2</span>
+                        <span *ngIf="payment.ptask_ttid == 40">P3</span>
+                      </td>
+                      <td>{{ payment.ptask_ssp_approved_date | date: 'y-MM-dd' }}</td>
+                      <!-- <td><a href="javascript:void(0)" (click)="openTaskFrom(payment)"
+                              class="btn btn-blue mt-0 pt-2">Submit Detail</a></td> -->
+                      <td>
+                        <input
+                        [id]="'approvePayment'+i"
+                        class="checkBoxInput-x"
+                        type="checkbox"
+                        data-md-icheck
+                        (change)="approvePayment($event, payment)"
+                        [checked]="payment.is_released_by_finance == '1'"
+                        [disabled]="payment.is_released_by_finance == '1'"
+                        />
+                        <label [for]="'approvePayment'+i"></label>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+      <div *ngIf="paymentHistory?.length && showIsApproved" class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>S.No.</th>
+              <th>Project ID</th>
+              <th>Customer Name</th>
+              <th>Project Cost</th>
+              <th style="width: 150px;">Payment Received from Customer</th>
+              <th>SSP Name</th>
+              <th>SSP Code</th>
+              <th>BoS Amount Payable</th>
+              <th>Amount Paid</th>
+              <th>Amount Requested</th>
+              <th>Remark</th>
+              <th>Request Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let payment of paymentHistory; let i = index" [ngClass]="{'highlight-row': payment?.ptask_outlier_status == 1}">
+              <td>{{ ((+currentpage - 1) * 20) + i + 1 }}</td>
+              <td (click)="getPaymentHistory(payment.ptask_id)">
+                <span style="color:#04357f">{{ payment.project_id }}</span>
+              </td>
+              <td>
+                {{ payment.customer_name }}
+              </td>
+              <td>{{ payment.project_cost }}</td>
+              <td>{{ payment.payment_recieved_from_customer }}</td>
+              <td>{{ payment.ssp_name }}</td>
+              <td>{{ payment.ssp_code }}</td>
+              <td>{{ payment.bos_payable }}</td>
+              <td>{{ payment.amount_paid }}</td>
+              <td>{{ payment.amount_requested }}</td>
+              <td>{{ payment.remark }}</td>
+              <td>{{ payment.request_date | date: 'y-MM-dd' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <form [formGroup]="paginationSubmitForm">
+        <div class="row">
+            <input type="number" formControlName="page_number" class="form-text" min="0"
+                max="{{pageCount}}" (keypress)=_keyPresspagination($event)>
+            &nbsp;&nbsp;<button type="submit" class="btn btn-blue btn-md" (click)="pageSubmit()">Go</button>
+            <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page
+                number
+                must be less than or
+                equal to {{pageCount}}</span>
+        </div>
+    </form>
+
+            <!-- Payment History Popup -->
+            <p-dialog header="Payment History" [(visible)]="isShowPaymentHistory" [closable]="false">
+
+                <button class="btn button-blue btn-md" type="button" (click)="isShowPaymentHistory = false;">Close</button>
+
+                <div class="table-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Bank Reference</th>
+                        <th>SAP Number</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of paymentHistoryData">
+                        <td>{{ item.ptlog_bank_drawn | date: 'y-MM-dd' }}</td>
+                        <td>{{ item.ptlog_amount }}</td>
+                        <td>{{ item.ptlog_bank_reference_number }}</td>
+                        <td>{{ item.ptlog_sap_number }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+
+              </p-dialog>
+
+      <h3 *ngIf="!paymentRequestList.length && !showIsApproved">No Payments Available</h3>
+
+      <!-- Cancel and Submit -->
+      <div *ngIf="paymentRequestList?.length && !showIsApproved" class="text-center">
+        <button class="btn button-blue btn-md" type="button" (click)="onCancel()">Cancel</button>
+        <button class="btn btn-green btn-md" type="button" (click)="submitApproval()">Submit</button>
+      </div>
+
+      <!-- No No payments available -->
+    <div *ngIf="!paymentRequestList?.length && !showIsApproved">
+    <h3 class="text-center no-payment">No payments available to approve</h3>
+    </div>
+
+  </div>
+</div>

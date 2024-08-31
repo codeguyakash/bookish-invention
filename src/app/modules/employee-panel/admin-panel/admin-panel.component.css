@@ -1,0 +1,14 @@
+.tiles-box li{list-style: none;padding: 15px;min-width: 300px;max-width: 300px;text-align: center;}
+.tiles-box{flex-wrap: nowrap;display: flex;}
+.tiles-box li:nth-child(4n + 1) a{background: #fca928}
+.tiles-box li:nth-child(4n + 2) a{background: #76bf43}
+.tiles-box li:nth-child(4n + 3) a{background: #0a52a2}
+.tiles-box li:nth-child(4n + 4) a{background: #de67e2}
+.tiles-box li a{color: #fff;font-size: 20px;line-height: 26px;padding: 20px;display: block;}
+.btn.edt-del{margin:0 0 10px;  height: 30px;  line-height: 30px; padding: 0 15px;}
+.edit-td .btn:last-child{margin: 0}
+.table-wrapper table td:last-child { text-align: center; width: 200px; }
+.btn-list {margin-top: 0px !important;}
+ .normaltxt td {
+    text-transform: none!important;
+}

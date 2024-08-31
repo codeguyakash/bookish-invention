@@ -1,0 +1,593 @@
+
+.equipment-subOptions textarea {
+    margin: 10px 0px 6px 0px;
+}
+
+.equipment-subOptions input[type="text"] {
+    margin: 0px 0px 16px 0px;
+}
+
+input[type="number"], select, textarea {
+    height: 36px;
+    padding: 5px 10px;
+    border: 1px solid #e1e1e1;
+    border-radius: 3px;
+    font-size: 16px;
+    color: #585858;
+    width: 100%;
+}
+
+.error.equipment-error {
+    margin: 15px 0px;
+}
+
+.field-wrapper .form-field {
+    width: calc(100% - 240px);
+}
+
+.sidebar-tabs a.active {
+    background: #053395;
+    color: #fff;
+}
+
+.select-bg {
+    background: #ddd
+}
+
+.downLoad {
+    background: #09357f;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.gbgBtn {
+    background: #018000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.nbtn.btn.btn-blue.btn-md {
+    margin: 0 0 15px 27px;
+}
+
+.serchFild.field-wrapper .form-field {
+    margin-left: auto;
+}
+
+.sidebar-tabs a.active {
+    background: #053395;
+    color: #fff;
+}
+
+.select-bg {
+    background: #ddd
+}
+
+.downLoad {
+    background: #09357f;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.sendBox {
+    position: fixed;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    top: -100%;
+    left: 0;
+    opacity: 0
+}
+
+.sendBox.hideAside {
+    top: 0;
+    opacity: 1;
+}
+
+.box-wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.tableBoxx {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.cellBoxx {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.sendWrapper {
+    width: 100%;
+    float: left;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative
+}
+
+.menu.example5 {
+    position: absolute;
+    color: #fff;
+    background: #000;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    line-height: 30px;
+    text-align: center;
+    font-size: 17px;
+    padding: 0;
+    vertical-align: middle;
+    right: -16px;
+    top: -16px;
+}
+
+.nbtn.btn.btn-blue.btn-md {
+    margin: 0 0 15px 27px;
+}
+
+.field-wrapper .form-field {
+    margin-left: auto;
+}
+
+.gbgBtn {
+    background: #018000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+table tr td {
+    word-wrap: break-word;
+}
+
+@media screen and (max-width: 1024px) {
+
+    .survey-page-container {
+        flex-direction: column
+    }
+
+
+
+    .survey-page-right {
+        width: 100%;
+        margin: 15px 0 0;
+    }
+}
+
+.survey-page-left {
+    width: 100%;
+}
+
+.sendBox {
+    position: fixed;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    top: -100%;
+    left: 0;
+    opacity: 0
+}
+
+.sendBox.hideAside {
+    top: 0;
+    opacity: 1;
+}
+
+.box-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.tableBoxx {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.cellBoxx {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.sendWrapper {
+    width: 100%;
+    float: left;
+    background: #fff;
+    padding: 0px;
+    border-radius: 5px;
+    position: relative
+}
+
+.menu.example5 {
+    position: absolute;
+    color: #fff;
+    background: #000;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    line-height: 30px;
+    text-align: center;
+    font-size: 17px;
+    padding: 0;
+    vertical-align: middle;
+    right: -16px;
+    top: -16px;
+}
+
+.sendWrapper h4 {
+    padding: 20px;
+    margin-bottom: 0;
+    background: #09357f;
+    color: #fff;
+}
+
+.sendWrapper form .field-wrapper {
+    flex-direction: column;
+}
+
+.sendWrapper form .field-wrapper label {
+    padding: 0;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.sendWrapper form .field-wrapper .form-field {
+    width: 100%;
+}
+
+.sendWrapper form {
+    padding: 20px;
+}
+
+.sendWrapper .btn-blue {
+    margin-top: 0
+}
+
+.coldData .btn.btn-blue {
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.sendWrapper textarea {
+    border: 1px solid #706f6f;
+}
+
+.table-border {
+    border: 1px solid #000000
+}
+
+.mail-wraper {
+    position: relative;
+    max-height: 390px;
+    overflow: auto;
+}
+
+.mail-wraper .field-wrapper {
+    padding: 15px;
+}
+
+.mail-wraper .field-wrapper .table-border {
+    padding: 5px;
+}
+
+.sendbox-wrapper {
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+.pricing_card {
+    height: 240px;
+    max-width: 240px;
+}
+
+.pricing_card .right {
+    float: right;
+}
+
+.silver_wrapper {
+    width: 48%;
+    float: right;
+    margin-left: 2%;
+}
+
+.gold_wrapper .field-wrapper {
+    align-items: flex-start;
+    width: 100%;
+}
+
+.gold_wrapper .field-wrapper .section {
+    width: calc(100% - 240px);
+}
+
+.gold_wrapper .field-wrapper .section .item .numberField {
+    width: 100%
+}
+
+.one_wrapper .field-wrapper .section {
+    width: calc(100% - 240px);
+}
+
+.one_wrapper .field-wrapper label {
+    width: 240px;
+}
+
+.one_wrapper .field-wrapper .section .item {
+    width: 100%;
+    margin-left: 0px;
+    display: inline-block;
+}
+
+.one_wrapper .field-wrapper .section .item.label,
+.gold_wrapper .field-wrapper .section .item.label {
+    font-size: 16px;
+    color: #282828;
+    font-weight: 700;
+}
+
+.one_wrapper .field-wrapper .section .item:nth-child(1) {
+    margin-right: 0px;
+}
+
+.gold_wrapper .field-wrapper .section .item {
+    width: 47%;
+    margin-left: 0px;
+    display: inline-block;
+}
+
+.gold_wrapper .field-wrapper .section .item:nth-child(1) {
+    margin-right: 20px;
+}
+
+.gold_wrapper .field-wrapper label {
+    width: 240px;
+}
+
+
+.equip {
+    padding: 10px;
+    color: white;
+}
+
+/* to hide the checkbox itself */
+input[type=checkbox]+label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+}
+
+input[type=checkbox]+label {
+    position: absolute;
+    top: 70px;
+}
+
+input[type=checkbox]+label:before {
+    content: "\f096";
+    font-size: 30px;
+}
+
+/* unchecked icon */
+input[type=checkbox]+label:before {
+    letter-spacing: 10px;
+}
+
+/* space between checkbox and label */
+
+input[type=checkbox]:checked+label:before {
+    content: "\f046";
+    font-size: 30px;
+}
+
+/* checked icon */
+input[type=checkbox]:checked+label:before {
+    letter-spacing: 5px;
+}
+
+/* allow space for check mark */
+.checkBoxInput-x+label {
+    display: inline !important;
+    position: initial !important;
+}
+
+.checkBoxInput-x {
+    display: none;
+}
+
+.bigcheckBox {
+    font-size: 16px;
+}
+
+.proposal-email-table tr th {
+    padding: 10px 15px !important;
+    border: 1px solid #000000;
+    color: #ffffff
+}
+
+.proposal-email-table tr td {
+    padding: 10px 15px !important;
+    border: 1px solid #000000;
+    color: #000000
+}
+
+.proposal-email-table tr td.bg_gery {
+    background: #e8e8e8;
+}
+
+.proposal-email-table tr .bg_blue {
+    background: #003f95;
+}
+
+.proposal-email-table tr .bg_black {
+    background: #000000;
+}
+
+.border_left_white {
+    border-left: 2px solid #ffffff !important;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.bg_yellow {
+    background: #ffbf27;
+}
+
+.bg_green {
+    background: #c4dfb3;
+}
+
+.bg_light_blue {
+    background: #dde9f6;
+}
+
+.text-blue {
+    color: #003f95;
+}
+
+.schedule-call-back .field-wrapper {
+    align-items: flex-start;
+}
+
+.highlight-row {
+    font-weight: bold;
+    color: green;
+}
+
+img {
+    width: 100%;
+}
+
+.wraperDelete {
+    width: 400px;
+    margin: 200px 500px;
+    padding: 20px;
+}
+
+.padding {
+    padding: 20px 10px;
+}
+
+.button-norm {
+    width: 100px;
+    margin: 0px 15px 0px 0px;
+    height: 40px;
+    border-radius: 0px !important;
+}
+
+.alignRight {
+    text-align: right;
+    margin-top: 50px;
+}
+
+.checkoff {
+    padding: 25px 0px;
+    position: relative;
+}
+
+/*.checkoff>.fa-remove{
+opacity:0;
+}*/
+
+.checkoff:hover img {
+    opacity: 0.3;
+}
+
+.checkoff:hover i {
+    opacity: 1;
+}
+
+.documentType {
+    color: black;
+    text-align: justify;
+    /* position: absolute;
+    bottom: 6px;
+    right: 0px; */
+}
+
+.fa-remove {
+    font-size: 24px;
+    float: right;
+    color: red;
+}
+
+.confirmRemove {
+    position: relative;
+    z-index: 20;
+    cursor: grabbing;
+    top: 30px;
+    right: 0px;
+    margin: 10px;
+}
+.form-field input[type=ng-select] {
+    width: max-content;
+}
+
+#shipping-label {
+    font-size: 18px;
+    margin-bottom: 20px;
+    width: 394px;
+}
+
+.box-content {
+    padding: 25px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-80 {
+  margin-top: 80px;
+}
+
+ng-select {
+    max-width: 330px;
+}
+
+.loader-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 9999;
+}
+
+.ui-confirmdialog {
+    z-index: 99999 !important;
+}
+
+.button-blue {
+    background-color: #04357f;
+}
+
+textarea {
+    height: unset;
+}
+
+.highlighted {
+    border-color: blue;
+    border-width: 3px;
+}
+
+.bom-heading {
+    margin-top: 40px;
+    font-size: 16px !important;
+    margin-bottom: 20px
+}

@@ -1,0 +1,21 @@
+<ng-container *ngFor="let message of popupMessageCollection; let i = index">
+    <div class="notify notify-{{ message.type }} notify-with-icon notify-theme-default" [@slideAnimation]="message.status">
+        <div class="notify-body-wrapper">
+            <div class="notify-body">
+                <div class="notification-body-icon">
+                    <i *ngIf="message.type == 'error'" class="fa fa-warning"></i>
+                    <i *ngIf="message.type == 'success'" class="fa fa-check"></i>
+                    <i *ngIf="message.type == 'info'" class="fa fa-info"></i>
+                </div>
+                <div class="notify-main-content">
+                    <div class="notify-body-title">{{ message.type }}</div>
+                    <div class="notify-body-text">{{ message.message }}</div>
+                </div>
+            </div>
+            <div class="notify-action-buttons"><a class="notify-square-button notify-close-button" (click)="removeMessage(i)"></a></div>
+        </div>
+    </div>
+</ng-container>
+<!--<div class="aside">
+    <button (click)="addMessage(true, 'info', 'Test', 'test')">Push</button>
+</div>-->

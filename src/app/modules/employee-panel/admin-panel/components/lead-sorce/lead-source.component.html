@@ -1,0 +1,138 @@
+<smart-search
+  (SearchResults)="smartSearchResult($event)"
+  *ngIf="showSmartSearchComponent"
+></smart-search>
+
+<!-- Consumer all leads -->
+<div class="container" *ngIf="isListing == 'all_leads_project'">
+  <h2>Edit Lead</h2>
+  <br />
+  <div class="table-wrapper" *ngIf="!loading && allLeadData.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Lead Id</th>
+          <th>Project Id</th>
+          <th>Source</th>
+
+          <th>Surveyor</th>
+          <th>Lead Updated On</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="allLeadData">
+          <tr
+            *ngFor="let data of allLeadData; let i = index"
+            class="highlight-row"
+          >
+            <td>{{ (pages - 1) * itemPerPage + (i + 1) }}</td>
+            <td>{{ data?.lead_id }}</td>
+            <td>{{ data?.project_code }}</td>
+            <td>
+              <div *ngIf="data?.source_master_name" class="td-edit-item-container">
+                {{ data?.source_master_name }} <i class="fa fa-edit edit-ic" (click)="showLeadSouceEditPopup(data, i)"></i>
+              </div>
+              </td>
+
+
+            <td>
+              <div *ngIf="data?.surveyor" class="td-edit-item-container">
+                {{ data?.surveyor }} <i class="fa fa-edit edit-ic" (click)="showSurveySourceEditPopup(data, i)"></i>
+              </div>
+            </td>
+            <td>{{ data?.lead_modifiedon | date: format:mediumDate }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <!-- Update lead source popup -->
+    <p-dialog header="Edit Lead Source" [(visible)]="fullScreenSidebar" [contentStyle]="{'height':'500px', 'width': '500px'}">
+      <form [formGroup]="leadSourceForm">
+        <h2>Lead Id - {{ leadId }}</h2>
+        <div class="field-wrapper">
+          <ng-select *ngIf="leadSoucreData" [options]="leadSoucreData"
+          formControlName="sourceId" placeholder="Select Source"></ng-select>
+        </div>
+        <div class="form-actions">
+          <input class="button button-grey" type="button" value="Cancel" (click)="fullScreenSidebar = false">
+          <input class="button button-blue" type="submit" value="Submit" (click)="updateLeadSource()">
+      </div>
+      </form>
+    </p-dialog>
+    <!-- Update site surveyor popup -->
+    <p-dialog header="Edit Site Surveyor" [(visible)]="editSiteSurvey" [contentStyle]="{'height':'500px', 'width': '500px'}">
+      <form [formGroup]="editSiteSurveyForm">
+        <h2>Lead Id - {{ leadId }}</h2>
+        <div class="field-wrapper">
+          <ng-select *ngIf="siteSurveyData" [options]="siteSurveyData"
+          formControlName="surveyId" placeholder="Select site surveyor"></ng-select>
+        </div>
+        <div class="form-actions">
+          <input class="button button-grey" type="button" value="Cancel" (click)="editSiteSurvey = false">
+          <input class="button button-blue" type="submit" value="Submit" (click)="updateSiteSurveyor()">
+      </div>
+      </form>
+    </p-dialog>
+    <style>
+      ul {
+        overflow: hidden;
+      }
+
+      li {
+        display: inline-block;
+      }
+    </style>
+    <ul *ngIf="allLeadData" style="white-space: nowrap">
+      <li>
+        <a>Page {{ pages }} of {{ pageCount }}</a>
+      </li>
+      <li>
+        <div class="custom-pagination">
+          <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+            <input
+              type="number"
+              formControlName="page_number"
+              class="form-text"
+              min="0"
+              max="{{ pageCount }}"
+              (keypress)="_keyPress($event)"
+            />
+            <button type="submit" class="btn btn-blue btn-md">Go</button>
+            <span
+              class="error"
+              *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max"
+              >Page number must be less than or equal to {{ pageCount }}</span
+            >
+          </form>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div
+    class="table-wrapper"
+    style="padding: 15px"
+    *ngIf="!loading && allLeadData.length <= 0"
+  >
+    No Data
+  </div>
+  <img
+    *ngIf="loading"
+    src="/assets/images/loader.gif"
+    style="width: 100px; height: 100px"
+    alt="LUMINOUS"
+  />
+</div>
+<!--End List All Project and List-->
+<style>
+  .positionUpLeft {
+    position: absolute;
+    top: 2%;
+    margin-left: 10%;
+  }
+
+  .positionUpRight {
+    position: absolute;
+    top: 2%;
+  }
+</style>

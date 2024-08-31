@@ -1,0 +1,3015 @@
+<style>
+    .sidebar-tabs a.active {
+          background: #053395;
+          color: #fff;
+      }
+   .sendBox{    position: fixed; z-index: 9999; background: rgba(0,0,0,0.5);  width: 100%;   height: 100%;  top: -100%; left: 0;opacity: 0}
+  .sendBox.hideAside{   top:0;opacity: 1;}
+  .box-wrapper{    max-width: 500px;  margin: 0 auto;  height: 100%;}
+  .tableBoxx{display: table;  width: 100%;  height: 100%;}
+  .cellBoxx{    display: table-cell;  vertical-align: middle;}
+  .sendWrapper {    width: 100%; float: left; background: #fff; padding: 0px; border-radius: 5px;position: relative}
+  .menu.example5{position: absolute; color: #fff; background: #000; width: 30px; height: 30px;border-radius: 100%;line-height: 30px;text-align: center;font-size: 17px;padding: 0;vertical-align: middle;right: -16px;    top: -16px;}
+  .sendWrapper h4{padding: 20px;margin-bottom: 0;background: #09357f;color: #fff;}
+  .sendWrapper form .field-wrapper{flex-direction: column;}
+  .cash-box .sendWrapper form .field-wrapper{display: block;width: 100%;float: left;}
+  .sendWrapper form .field-wrapper label{padding: 0;margin-bottom: 10px;width: 100%;}
+  .cash-box .sendWrapper form .field-wrapper label{    width: 160px;float: left}
+  .cash-box .sendWrapper form .field-wrapper .form-field{width: calc(100% - 160px);float: left}
+  .cash-box .sendWrapper form .field-wrapper .form-field.save-btn{float: right;}
+  .cash-box .error{width: calc(100% - 160px);float: right }
+  .cash-box .sendWrapper form .field-wrapper .form-field input{width: 100%;}
+  .sendWrapper form .field-wrapper .form-field{width: 100%;}
+  .sendWrapper form{padding: 20px;}
+  .sendWrapper .btn-blue{margin-top: 0}
+  .coldData .btn.btn-blue{font-size: 14px;text-transform: capitalize;}
+  .sendWrapper textarea{ border: 1px solid #706f6f;}
+  </style>
+  <style>
+    ul {
+      overflow: hidden;
+    }
+
+    li {
+      display: inline-block;
+    }
+
+    .custom-pagination input {
+      margin: 10px;
+      width: 70px;
+      padding: 0 5px;
+    }
+
+    .btn-blue {
+      background-color: #04357f;
+      box-shadow: 0 4px 5.87px 0.13px rgba(32, 111, 230, .35);
+      border-radius: 27px;
+      color: #fff;
+      text-align: center;
+      font-size: 18px;
+      border: none;
+    }
+    .anchor_link {
+      cursor: pointer;
+      display: inline-block;
+      text-align: center;
+      padding: 10px;
+      border-radius: 0px;
+      margin: 5px;
+    }
+  </style>
+  <div class="main-container cc-container">
+    <aside class="sidebar">
+      <div class="employee-info">
+        <div class="pic">
+          <i class="fa fa-user-circle" aria-hidden="true"></i>
+        </div>
+        <div class="detail">
+          <span>Admin</span>
+        </div>
+      </div>
+      <nav class="sidebar-tabs">
+        <a (click)="Dashboard()" [ngClass]="{'active':(mainDiv == 'showDashboard')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Dashboard</span>
+        </a>
+      </nav>
+
+
+
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'LeadManagementSideBar'">
+        <a (click)="ShowLeadManagementOptions()" [ngClass]="{'active':(ShowSidebarTab == 'LeadManagementSideBar')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Lead Source Master Management For Bulk-Upload</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'LocalityMasterSidebar'">
+        <a (click)="ShowLocalityMasterOptions()" [ngClass]="{'active':(ShowSidebarTab == 'LocalityMasterSidebar')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Locality Master Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowOffGridOptions' || ShowSidebarTab == 'ShowOffGridPanelOptions' || ShowSidebarTab == 'ShowOffGridInverterOptions' || ShowSidebarTab == 'ShowAhOptions'">
+        <a (click)="ShowOffGridOptions()" [ngClass]="{'active':(ShowSidebarTab == 'ShowOffGridOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>OFF Grid Panel And Inverter Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowOffGridPanelOptions'">
+        <a (click)="ShowOffGridPanelOptions()" [ngClass]="{'active':(ShowSidebarTab == 'ShowOffGridPanelOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>OFF Grid Panels Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowOffGridInverterOptions'">
+        <a (click)="ShowOffGridInverterOptions()" [ngClass]="{'active':(ShowSidebarTab == 'ShowOffGridInverterOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>OFF Grid Inverters Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowAhOptions'">
+        <a (click)="changeCalculatorOptions('Level3','ShowAhOptions')" [ngClass]="{'active':(ShowSidebarTab == 'ShowAhOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Ah Reference Management(Batteries)</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowOnGridOptions'|| ShowSidebarTab == 'ShowOnGridPanelOptions' || ShowSidebarTab == 'ShowOnGridInverterOptions'">
+        <a (click)="ShowOnGridOptions()" [ngClass]="{'active':(ShowSidebarTab == 'ShowOnGridOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>ON Grid Panel And Inverter Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowOnGridPanelOptions'">
+        <a (click)="ShowOnGridPanelOptions()" [ngClass]="{'active':(ShowSidebarTab == 'ShowOnGridPanelOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>On Grid Panels Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowOnGridInverterOptions'">
+        <a (click)="ShowOnGridInverterOptions()" [ngClass]="{'active':(ShowSidebarTab == 'ShowOnGridInverterOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>On Grid Inverters Management</span>
+        </a>
+      </nav>
+
+
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowCalculatorOptions' || ShowSidebarTab == 'ShowDutyTaxesOptions' || ShowSidebarTab == 'ShowFixedLookupOptions' || ShowSidebarTab == 'ShowGbiLookupOptions' || ShowSidebarTab == 'ShowVarLookupOptions'">
+        <a (click)="changeCalculatorOptions('Level2','ShowCalculatorOptions')" [ngClass]="{'active':(ShowSidebarTab == 'ShowCalculatorOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Calculator Variables Master Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowDutyTaxesOptions'">
+        <a (click)="changeCalculatorOptions('Level3','ShowDutyTaxesOptions')" [ngClass]="{'active':(ShowSidebarTab == 'ShowDutyTaxesOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Duty Taxes Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowFixedLookupOptions'">
+        <a (click)="changeCalculatorOptions('Level3','ShowFixedLookupOptions')" [ngClass]="{'active':(ShowSidebarTab == 'ShowFixedLookupOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Fixed Lookup Master Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowGbiLookupOptions'">
+        <a (click)="changeCalculatorOptions('Level3','ShowGbiLookupOptions')" [ngClass]="{'active':(ShowSidebarTab == 'ShowGbiLookupOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Gbi Lookup Master Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowVarLookupOptions'">
+        <a (click)="changeCalculatorOptions('Level3','ShowVarLookupOptions')" [ngClass]="{'active':(ShowSidebarTab == 'ShowVarLookupOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Var Lookup Master Management</span>
+        </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowFollowUpOptions'">
+          <a (click)="changeFollowUpOptions('Level2','ShowFollowUpOptions')" [ngClass]="{'active':(ShowSidebarTab == 'ShowFollowUpOptions')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Follow Up SMS/Email Management</span>
+          </a>
+      </nav>
+      <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowEmployeeMasterOptions'">
+        <a (click)="changeEmployeeMasterOptions('Level2','ShowEmployeeMasterOptions')" [ngClass]="{'active':(ShowSidebarTab == 'ShowEmployeeMasterOptions')}">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+          <span>Employee Management</span>
+        </a>
+    </nav>
+    <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowEmployeeMasterOptions'">
+      <a (click)="ShowEmployeeListing(1)" [ngClass]="{'active':(Level4Option == 'ShowEmployeeListing')}">
+        <i class="fa fa-address-card" aria-hidden="true"></i>
+        <span>Employee List</span>
+      </a>
+  </nav>
+
+  <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ReferenceListing'">
+      <a (click)="refrenceListing()" [ngClass]="{'active':(Level4Option == 'ShowRefrenceListing')}">
+        <i class="fa fa-address-card" aria-hidden="true"></i>
+        <span>Reference List</span>
+      </a>
+  </nav>
+
+  <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ReferenceListing'">
+      <a (click)="AddRefrence()" [ngClass]="{'active':(Level4Option == 'AddRefrence')}">
+        <i class="fa fa-address-card" aria-hidden="true"></i>
+        <span>Add Reference</span>
+      </a>
+  </nav>
+
+  <nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowInsolationOption'">
+    <a (click)="insolationListing()" [ngClass]="{'active':(Level4Option == 'ShowInsolationListing')}">
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span>Insolation List</span>
+    </a>
+</nav>
+
+<nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowInsolationOption'">
+    <a (click)="AddInsolation()" [ngClass]="{'active':(Level4Option == 'Addinsolation')}">
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span>Add Insolation</span>
+    </a>
+</nav>
+
+
+<nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowFunnelManagement'">
+  <a (click)="showFunnelManagenmentListing(1)" [ngClass]="{'active':(Level4Option == 'FunnelManagementList')}">
+    <i class="fa fa-address-card" aria-hidden="true"></i>
+    <span>Funnel Management List</span>
+  </a>
+</nav>
+
+<nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowFunnelManagement'">
+  <a (click)="addFunnelManagement()" [ngClass]="{'active':(Level4Option == 'AddFunnelManagement')}">
+    <i class="fa fa-address-card" aria-hidden="true"></i>
+    <span>Add Funnel Management</span>
+  </a>
+</nav>
+
+<nav class="sidebar-tabs" *ngIf="ShowSidebarTab == 'ShowFunnelManagement'">
+  <a (click)="addSurveyor(1)" [ngClass]="{'active':(Level4Option == 'AddFunnelManagement')}">
+    <i class="fa fa-address-card" aria-hidden="true"></i>
+    <span>Add Surveyor</span>
+  </a>
+</nav>
+
+<ng-container *ngIf="['productListingOnGird', 'productListingOffGird', 'productListingHybrid', 'productListingBattery', 'productListingPanel', 'addNewProduct'].includes(ShowSidebarTab)">
+  <nav class="sidebar-tabs">
+    <a (click)="showProductsListingOngrid()" [ngClass]="{'active':(ShowSidebarTab == 'productListingOnGird')}">
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span>Ongrid Products</span>
+    </a>
+  </nav>
+
+  <nav class="sidebar-tabs">
+    <a (click)="showProductsListingOffGrid()" [ngClass]="{'active':(ShowSidebarTab == 'productListingOffGird')}">
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span>Offgrid Products</span>
+    </a>
+  </nav>
+
+  <nav class="sidebar-tabs">
+    <a (click)="showProductsListingHybrid()" [ngClass]="{'active':(ShowSidebarTab == 'productListingHybrid')}">
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span>Hybrid Products</span>
+    </a>
+  </nav>
+
+  <nav class="sidebar-tabs">
+    <a (click)="showProductsListingBattery()" [ngClass]="{'active':(ShowSidebarTab == 'productListingBattery')}">
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span>Battery Products</span>
+    </a>
+  </nav>
+
+  <nav class="sidebar-tabs">
+    <a (click)="showProductsListingPanel()" [ngClass]="{'active':(ShowSidebarTab == 'productListingPanel')}">
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span>Panel Products</span>
+    </a>
+  </nav>
+
+  <nav class="sidebar-tabs">
+    <a (click)="addNewProduct()" [ngClass]="{'active':(ShowSidebarTab == 'addNewProduct')}">
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span>Add Product</span>
+    </a>
+  </nav>
+
+
+
+</ng-container>
+
+
+
+    </aside>
+
+    <div class="container wrapper-main-dashboard-tiles">
+      <div class="all-dashboard-tiles" *ngIf="mainDiv == 'showDashboard'">
+        <!-- All options for the admin come here  -->
+        <ul class="tiles-box">
+          <li>
+            <a (click)="ShowLeadManagementOptions()">
+              <i class="fa fa-address-card" aria-hidden="true"></i>
+              <span>Lead Source Master Management For Bulk-Upload</span>
+            </a>
+          </li>
+          <li>
+            <a (click)="ShowLocalityMasterOptions()">
+              <i class="fa fa-address-card" aria-hidden="true"></i>
+              <span>Locality Master Management</span>
+            </a>
+          </li>
+          <li>
+            <a (click)="ShowOffGridOptions()">
+              <i class="fa fa-address-card" aria-hidden="true"></i>
+              <span>OFF Grid Panel And Inverter Management</span>
+            </a>
+          </li>
+          <li>
+            <a (click)="ShowOnGridOptions()">
+              <i class="fa fa-address-card" aria-hidden="true"></i>
+              <span>ON Grid Panel And Inverter Management</span>
+            </a>
+          </li>
+        </ul>
+
+        <ul class="tiles-box">
+          <li>
+            <a (click)="changeCalculatorOptions('Level2','ShowCalculatorOptions')">
+              <i class="fa fa-address-card" aria-hidden="true"></i>
+              <span>Calculator Variables Master Management</span>
+            </a>
+          </li>
+          <li>
+              <a (click)="changeFollowUpOptions('Level2','ShowFollowUpOptions')">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Follow Up SMS/Email Management</span>
+              </a>
+            </li>
+            <li>
+              <a (click)="changeEmployeeMasterOptions('Level2','ShowEmployeeMasterOptions')">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span> Employee Master Management</span>
+              </a>
+            </li>
+            <li>
+              <a (click)="changeEmployeeMasterOptions('Level2','ReferenceListing')">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span> Lead Reference Management</span>
+              </a>
+            </li>
+
+        </ul>
+
+        <ul class="tiles-box">
+            <li>
+              <a (click)="changeInsolationoption('Level2','ShowInsolationOption')">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Insolation Management</span>
+              </a>
+            </li>
+
+            <li>
+              <a (click)="onClickFunnelManagement('Level2','ShowFunnelManagement')">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Funnel Management</span>
+              </a>
+            </li>
+
+            <li>
+              <a (click)="onClickAddAnnouncement('Level2','ShowAddAnnouncement')">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Add Announcement</span>
+              </a>
+            </li>
+            <li>
+              <a (click)="ShowAddProductsOptions()">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Product management</span>
+              </a>
+            </li>
+          </ul>
+          <ul class="tiles-box">
+            <li>
+              <a (click)="changeLeadSourceOptions('Level4','ShowLeadSourceListing')">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Lead Management</span>
+              </a>
+            </li>
+          </ul>
+      </div>
+
+
+
+      <div *ngIf="mainDiv == 'Level2'">
+        <!-- Similar div's can be added for all the other options from the admin dashboard -->
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'showLeadManagement'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowLeadMasterListing()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Lead Source Master Listing For Bulk-Upload</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addNewLeadSource()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add Lead Source Master For Bulk-Upload</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Add products -->
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'addProducts'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="showProductsListingOngrid()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Ongrid Products Listing</span>
+                </a>
+                </li>
+
+                <li>
+                  <a (click)="showProductsListingOffGrid()">
+                    <i class="fa fa-address-card" aria-hidden="true"></i>
+                    <span>Offgrid Products Listing</span>
+                  </a>
+                </li>
+                <li>
+                  <a (click)="showProductsListingHybrid()">
+                    <i class="fa fa-address-card" aria-hidden="true"></i>
+                    <span>Hybrid Products Listing</span>
+                  </a>
+                </li>
+                <li>
+                  <a (click)="showProductsListingBattery()">
+                    <i class="fa fa-address-card" aria-hidden="true"></i>
+                    <span>Battery Products Listing</span>
+                  </a>
+                </li>
+
+            </ul>
+            <ul class="tiles-box">
+              <li>
+                <a (click)="showProductsListingPanel()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Panel Products Listing</span>
+                </a>
+              </li>
+            <li>
+              <a (click)="addNewProduct()">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Add Products</span>
+              </a>
+            </li>
+            </ul>
+          </div>
+        </div>
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'showLocalityManagement'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowPincodeMasterListing()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Pincode Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addNewPincodeSource()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add New Pincode</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowFunnelManagement'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="showFunnelManagenmentListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Funnel Management Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addFunnelManagement()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add New Funnel Management</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addSurveyor(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add/Remove Surveyor</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Announcement -->
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowAddAnnouncement'">
+          <div class="box fill-form mb-30">
+            <h2 class="box-title">{{addAnnouncement}}</h2>
+            <section class="box-content">
+              <form [formGroup]="AnnouncementForm" (ngSubmit)="submitAnnouncementForm()">
+                <div class="field-wrapper">
+                  <label>Enter Announcemet Text</label>
+                  <div class="form-field">
+                    <textarea name="" id="" cols="30" rows="10" placeholder="Enter Announcement Text" formControlName="announcement"></textarea>
+                    <div class="error" *ngIf="(AnnouncementForm.controls?.announcement?.errors?.required) && isSubmittedLocality">Mandatory
+                      Field</div>
+                  </div>
+                </div>
+                <div class="field-wrapper">
+                <label>Enable Announcement</label>
+                <div class="form-field">
+                  <input
+                  id="announcement"
+                  type="checkbox"
+
+                  (change)="toggleVisibility($event)"
+                  [checked]="AnnouncementForm.controls?.isAnnouncementEnabled?.value === '1'"
+                />
+                <label for="announcement"></label>
+                </div>
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-blue">Submit</button>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowOffGridOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowOffGridPanelOptions()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Off Grid Panels Management</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="ShowOffGridInverterOptions()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Off Grid Inverters Management</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="changeCalculatorOptions('Level3','ShowAhOptions')">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Ah Reference Management(Batteries)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowOnGridOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowOnGridPanelOptions()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>On Grid Panels Management</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="ShowOnGridInverterOptions()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>On Grid Inverters Management</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowCalculatorOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="changeCalculatorOptions('Level3','ShowDutyTaxesOptions')">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Duty Taxes Management</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="changeCalculatorOptions('Level3','ShowFixedLookupOptions')">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Fixed Lookup Master Management</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="changeCalculatorOptions('Level3','ShowGbiLookupOptions')">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Gbi Lookup Master Management</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="changeCalculatorOptions('Level3','ShowVarLookupOptions')">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Var Lookup Master Management</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Start for the FollowUp Sms/Email-->
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowFollowUpOptions'">
+            <div class="lead-management-options">
+              <!-- All Follow Up management options come here -->
+
+              <ul class="tiles-box">
+                  <li>
+                    <a (click)="ShowFollowUpSmsEmailListing(1)">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                      <span>Follow Up SMS/Email Listing</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a (click)="addFollowUpSmsEmail()">
+                      <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                      <span>Add Follow Up SMS/Email</span>
+                    </a>
+                  </li>
+                </ul>
+            </div>
+          </div>
+          <!-- Start for the FollowUp Sms/Email-->
+           <!-- Start for the Employee Master-->
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowEmployeeMasterOptions'">
+          <div class="lead-management-options">
+            <!-- All Follow Up management options come here -->
+
+            <ul class="tiles-box">
+                <li>
+                  <a (click)="ShowEmployeeListing(1)">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span>Employee Listing</span>
+                  </a>
+                </li>
+                <li>
+                  <a (click)="showAddEmployeeForm()">
+                    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                    <span>Add Employee</span>
+                  </a>
+                </li>
+              </ul>
+          </div>
+        </div>
+      <!-- End for the Employee Master--->
+
+      <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ReferenceListing'">
+          <div class="lead-management-options">
+            <ul class="tiles-box">
+                <li>
+                  <a (click)="refrenceListing()">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span>Lead Reference Listing</span>
+                  </a>
+                </li>
+                <li>
+                  <a (click)="AddRefrence()">
+                    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                    <span>Add Reference</span>
+                  </a>
+                </li>
+              </ul>
+          </div>
+        </div>
+
+        <!-- Lead source listing -->
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'LeadSourceListing'">
+          <div class="lead-management-options">
+            <ul class="tiles-box">
+                <li>
+                  <a (click)="leadSourceListing()">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span>Lead Listing</span>
+                  </a>
+                </li>
+              </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowInsolationOption'">
+            <div class="lead-management-options">
+              <ul class="tiles-box">
+                  <li>
+                    <a (click)="insolationListing()">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                      <span>Insolation Listing</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a (click)="AddInsolation()">
+                      <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                      <span>Add Insolation</span>
+                    </a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+      </div>
+
+      <div *ngIf="mainDiv == 'Level3'">
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowOffGridPanelOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowOffGridPanelListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Off Grid Panels Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addOffGridPanel()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add Off Grid Panel</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowOffGridInverterOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowOffGridInverterListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Off Grid Inverter Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addOffGridInverter()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add Off Grid Inverter</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowOnGridPanelOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowOnGridPanelListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>On Grid Panels Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addOnGridPanel()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add On Grid Panel</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowOnGridInverterOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowOnGridInverterListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>On Grid Inverter Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addOnGridInverter()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add On Grid Inverter</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowDutyTaxesOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowDutyTaxesListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Duty Taxes Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addDutyTax()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add Duty Tax</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowFixedLookupOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowFixedLookupListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Fixed Lookup Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addFixedLookup()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add Fixed Lookup</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowVarLookupOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowVarLookupListing(true)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Var Lookup Listing</span>
+                </a>
+              </li>
+              <!-- <li>
+                <a (click)="addVarLookup()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add Var Lookup</span>
+                </a>
+              </li> -->
+            </ul>
+          </div>
+        </div>
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowGbiLookupOptions'">
+          <div class="lead-management-options">
+            <!-- All lead management options come here -->
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowGbiLookupListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Gbi Lookup Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addGbiLookup()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add Gbi Lookup</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+        <div class="lead-management-tile" *ngIf="MainDashboardOptions === 'ShowAhOptions'">
+          <div class="lead-management-options">
+
+            <ul class="tiles-box">
+              <li>
+                <a (click)="ShowAhListing(1)">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Ah Reference Listing</span>
+                </a>
+              </li>
+              <li>
+                <a (click)="addAh()">
+                  <i class="fa fa-address-card" aria-hidden="true"></i>
+                  <span>Add Ah Reference</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="mainDiv == 'Level4'">
+        <!-- A particular lead management option is shown here -->
+        <div *ngIf="Level4Option == 'leadSourceListing' || Level4Option == 'AddLeadSourceForm'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'leadSourceListing'">
+            <h2>Lead Source Master For Bulk Upload</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Source Name</th>
+                    <th>Created On</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of leadList; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{data.source_master_name}}</td>
+                    <td>{{data.source_master_createdon}}</td>
+                    <td class="edit-td">
+                      <button (click)="editLead(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.source_master_id, 'LEADS')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'AddLeadSourceForm'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">{{editSource}}</h2>
+              <h2 class="box-title" *ngIf="!editFlag">{{addSource}}</h2>
+              <section class="box-content">
+                <form [formGroup]="LeadForm" (ngSubmit)="submitLeadSourceForm()">
+                  <div class="field-wrapper">
+                    <label>Source Master Name</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="30" formControlName="source_master_name"
+                        placeholder="Source Master Name(max. limit 30 characters)">
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+
+
+        <!--  -->
+
+        <!-- Product Listing -->
+          <div class="show-lead-source-listing" *ngIf="['productListingOnGird', 'productListingOffGird', 'productListingHybrid', 'productListingBattery', 'productListingPanel'].includes(Level4Option)">
+            <h2 *ngIf="Level4Option == 'productListingOnGird'">Ongrid Products</h2>
+            <h2 *ngIf="Level4Option == 'productListingOffGird'">Offgrid Products</h2>
+            <h2 *ngIf="Level4Option == 'productListingHybrid'">Hybrid Products</h2>
+            <h2 *ngIf="Level4Option == 'productListingBattery'">Battery Products</h2>
+            <h2 *ngIf="Level4Option == 'productListingPanel'">Panel Products</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Product Label</th>
+                    <th>Product Value</th>
+                    <th>Created On</th>
+                    <th>Updated On</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of invertOptions; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{data.product_label}}</td>
+                    <td>{{data.product_value}}</td>
+                    <td>{{ data.created_at }}</td>
+                    <td>{{ data.modified_at }}</td>
+                    <td class="edit-td">
+                      <button (click)="editProduct(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.product_id, 'PRODUCT')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addNewProduct'">
+            <div class="box fill-form mb-30">
+              <h2 *ngIf="!editFlag" class="box-title">Add Product</h2>
+              <h2 *ngIf="editFlag" class="box-title">Edit Product</h2>
+              <section class="box-content">
+                <form [formGroup]="ProductForm">
+                  <!-- Type -->
+                  <div class="field-wrapper">
+                    <label>Product type</label>
+                    <div class="form-field">
+                      <ng-select [options]="productTypes" formControlName="type" placeholder="Product Type"></ng-select>
+                      <div class="error" *ngIf="submit && ProductForm?.controls?.type?.errors?.required">
+                        Type is Required*
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-container *ngIf="['1','2','3'].includes(ProductForm.controls.type.value)">
+                    <div class="field-wrapper">
+                      <!-- lablel -->
+                      <label>Inverter label</label>
+                      <div class="form-field">
+                        <input type="text" class="text-caps" maxlength="256" formControlName="label" placeholder="Label">
+                        <div class="error" *ngIf="submit && ProductForm?.controls?.label?.errors?.required">
+                          Label is Required*
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Value -->
+                    <div class="field-wrapper">
+                      <label>Inverter Value</label>
+                      <div class="form-field">
+                        <input type="text" class="text-caps" maxlength="256" formControlName="value" placeholder="Value">
+                        <div class="error" *ngIf="submit && ProductForm?.controls?.value?.errors?.required">
+                          Value is Required*
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="ProductForm.controls.type.value == '4'">
+
+                    <!-- Value -->
+                    <div class="field-wrapper">
+                      <label>Battery Value</label>
+                      <div class="form-field">
+                        <input type="text" class="text-caps" maxlength="256" formControlName="value" placeholder="Value" (blur)="ProductForm.controls.label.patchValue(ProductForm.controls.value.value)" />
+                        <div class="error" *ngIf="submit && ProductForm?.controls?.value?.errors?.required">
+                          Value is Required*
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- lablel -->
+                    <div class="field-wrapper">
+                      <label>Battery label</label>
+                      <div class="form-field">
+                        <input type="text" class="text-caps" maxlength="256" formControlName="label" placeholder="Label" disabled>
+                        <div class="error" *ngIf="submit && ProductForm?.controls?.label?.errors?.required">
+                          Label is Required*
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="ProductForm.controls.type.value == '5'">
+
+                    <!-- Value -->
+                    <div class="field-wrapper">
+
+                      <label>Panel Value</label>
+                      <div class="form-field">
+                        <input type="text" class="text-caps" maxlength="256" formControlName="value" placeholder="Value" (blur)="ProductForm.controls.label.patchValue(ProductForm.controls.value.value + ' Wp')" />
+                        <div class="error" *ngIf="submit && ProductForm?.controls?.value?.errors?.required">
+                          Value is Required*
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- lablel -->
+                    <div class="field-wrapper">
+
+                      <label>Panel label</label>
+                      <div class="form-field">
+                        <input type="text" class="text-caps" maxlength="256" formControlName="label" placeholder="Label" disabled>
+                        <div class="error" *ngIf="submit && ProductForm?.controls?.label?.errors?.required">
+                          Label is Required*
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+
+                  <div>
+                    <button type="submit" class="btn btn-blue" (click)="submitAddProductForm()">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+
+
+
+        <!--  -->
+
+
+
+        <!--  -->
+        <div *ngIf="Level4Option == 'FunnelManagementList' || Level4Option == 'AddFunnelManagement'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'FunnelManagementList'">
+            <!-- <smart-search (SearchResults)="submitSmartSearch($event)"></smart-search> -->
+            <h2>AddFunnelManagementListing</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Stage</th>
+                    <th>Number Of Days Min</th>
+                    <th>Number Of Days Max</th>
+                    <th>Percentage</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of funnelManagementList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <!-- <td>{{i+1}}</td> -->
+                    <td>{{(data?.stage =="6" ?"S3-Proposed":data?.stage=="7"?"S4-Negotiation":null)}}</td>
+                    <td>{{data?.noofdaysmin}}</td>
+                    <td>{{data?.noofdaysmax}}</td>
+                    <td>{{data?.percentage}}</td>
+                    <td class="edit-td">
+                      <!-- <button (click)="editFixedLookup(data)" class="btn edt-del btn-blue">Edit</button> -->
+                      <button (click)="editFunnelManagement(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'FUNNEL_MANAGMENT')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="openDeleteConfirmationPopup(data.id, 'FIXED_LOOKUP')" class="btn edt-del btn-blue">Delete</button> -->
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!--  -->
+            <ul *ngIf="funnelManagementList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('funnelManagement')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="1" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+            <!--  -->
+          </div>
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'AddFunnelManagement'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" >{{headerText}}</h2>
+              <section class="box-content">
+                <form [formGroup]="FunnelManagenmetForm" (ngSubmit)="submitFunnelManagementForm()">
+                  <div class="field-wrapper">
+                    <label>Funnel Stage</label>
+                    <div class="form-field">
+                        <ng-select [options]="funnelStage" formControlName="stage" placeholder="Select Funnel Stage"></ng-select>
+                        <div class="error" *ngIf="FunnelManagenmetForm?.controls?.stage?.errors?.required">
+                          Funnel Stage is Required*
+                          </div>
+                    </div>
+                  </div>
+
+                  <h3>Enter Number Of Days Range:</h3>
+                  <div class="field-wrapper row">
+                    <label>Min </label>
+                  <div class="form-field ">
+                      <input type="text" style="width: inherit" formControlName="noofdaysmin" placeholder="Min" (keypress)="isNumberKey($event)"/>
+                      <div class="error" *ngIf="FunnelManagenmetForm?.controls?.noofdaysmin?.errors?.required ">
+                        Number Of Min Days Required*
+                        </div>
+                        <div class="error" *ngIf="FunnelManagenmetForm?.errors?.range">
+                          Min Cannot Be Greater Than Max*
+                          </div>
+
+                  </div>
+                  <label>Max </label>
+                  <div class="form-field ">
+                      <input type="text" style="width: inherit" formControlName="noofdaysmax" placeholder="Max" (keypress)="isNumberKey($event)"/>
+                          <div class="error" *ngIf="FunnelManagenmetForm?.controls?.noofdaysmax?.errors?.required">
+                            Number Of Max Days Required*
+                            </div>
+                    </div>
+                  </div>
+
+                  <div class="field-wrapper">
+                    <label>Conversion Percentage</label>
+                    <div class="form-field">
+                        <input type="text" formControlName="percentage" placeholder="Enter Conversion Percentage" (keypress)="isNumberKey($event)" />
+                        <div class="error" *ngIf="FunnelManagenmetForm?.controls?.percentage?.errors?.limitMax">
+                          Conversion Percentage Cannot Be Greater Than 100
+                          </div>
+
+                          <div class="error" *ngIf="FunnelManagenmetForm?.controls?.percentage?.errors?.required">
+                            Conversion Percentage is Required*
+                            </div>
+
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+                <button style="display: none;" (click)="scriptmovetofunnel()" class="btn btn-green btn-sm p-0">Execute Script</button>
+              </section>
+            </div>
+          </div>
+        </div>
+
+
+        <div *ngIf="Level4Option == 'pincodeListing' || Level4Option == 'addnewPincode'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'pincodeListing'">
+            <smart-search (SearchResults)="submitSmartSearch($event)"></smart-search>
+            <h2>Locality Master Listing</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial Number</th>
+                    <th>Locality ID</th>
+                    <th>Locality Name</th>
+                    <th>Locality District</th>
+                    <th>Locality State</th>
+                    <th>Pincode</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of localityList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.locality_id}}</td>
+                    <td>{{data.locality_name}}</td>
+                    <td>{{data.district_name}}</td>
+                    <td>{{data.state_name}}</td>
+                    <td>{{data.locality_pincode}}</td>
+                    <td class="edit-td">
+                      <button (click)="editLocality(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.locality_id, 'LOCALITY')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="localityList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('locality')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'addnewPincode'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">{{editLocalityHeading}}</h2>
+              <h2 class="box-title" *ngIf="!editFlag">{{addLocality}}</h2>
+              <section class="box-content">
+                <form [formGroup]="LocalityForm" (ngSubmit)="submitLocalityForm()">
+                  <div class="field-wrapper">
+                    <label>Locality Name</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="30" formControlName="locality_name" placeholder="Locality Name">
+                      <div class="error" *ngIf="(LocalityForm.controls?.locality_name?.errors?.required) && isSubmittedLocality">Mandatory
+                        Field</div>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Locality Pincode</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" formControlName="locality_pincode" maxlength="6" (keypress)=_keyPress($event)
+                        placeholder="Locality Pincode">
+                      <div class="error" *ngIf="(LocalityForm.controls?.locality_pincode?.errors?.required) && isSubmittedLocality">Mandatory
+                        Field</div>
+                      <div class="error" *ngIf="(LocalityForm.controls?.locality_pincode?.errors?.pattern) && isSubmittedLocality">Enter
+                        Valid Pincode</div>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Locality District</label>
+                    <div class="form-field">
+                      <ng-select [options]="districts" formControlName="locality_district" placeholder="Select District"></ng-select>
+                      <div class="error" *ngIf="(LocalityForm.controls?.locality_district?.errors?.required) && isSubmittedLocality">Mandatory
+                        Field</div>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!--Off Grid Panels -->
+        <div *ngIf="Level4Option == 'offPanelListing' || Level4Option == 'addOffPanelForm'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'offPanelListing'">
+            <h2>Off Grid Panel Master</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Panel Size(KW)</th>
+                    <th>Panel Price(Rs)</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of offGridPanelList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.panel_size}}</td>
+                    <td>{{data.panel_price}}</td>
+                    <td class="edit-td">
+                      <button (click)="editOffGridPanel(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'OFF_PANEL')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="offGridPanelList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('offPanel')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addOffPanelForm'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">Edit Off Grid Panel</h2>
+              <h2 class="box-title" *ngIf="!editFlag">Add Off Grid Panel</h2>
+              <section class="box-content">
+
+                <form [formGroup]="gridPanelForm" (ngSubmit)="submitPanelForm('off')">
+                  <div class="field-wrapper">
+                    <label>Panel Size*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="panel_size" placeholder="Enter Panel Size" (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Panel Price*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="panel_price" placeholder="Enter Panel Price" (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+                <div>
+                    <form *ngIf="!editFlag" >
+                      <h2 class="box-title" >Off Grid Panel bulk upload</h2>
+                        <div class="row">
+                            <p> Select your file having first heading <b>panelsize</b> and second as <b>panelprice</b> only.
+                            </p>
+                               <div class="form-group">
+                                    <input #bulkupload type="file" name="bulkUploadFile" (change)="bulkuploadgridpanel($event,'off')" />
+                                </div>
+                        </div>
+                    </form>
+
+                    <div *ngIf="actionLoader=='upload_loader'">
+                        <img src="/assets/images/loader1.gif" alt="LUMINOUS" />
+                    </div>
+                 </div>
+
+              </section>
+            </div>
+          </div>
+
+        </div>
+
+        <!--On Grid Panels -->
+        <div *ngIf="Level4Option == 'onPanelListing' || Level4Option == 'addOnPanelForm'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'onPanelListing'">
+            <h2>On Grid Panel Master</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Panel Size(KW)</th>
+                    <th>Panel Price(Rs)</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of onGridPanelList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.panel_size}}</td>
+                    <td>{{data.panel_price}}</td>
+                    <td class="edit-td">
+                      <button (click)="editOnGridPanel(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'ON_PANEL')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="onGridPanelList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('onPanel')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addOnPanelForm'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">Edit On Grid Panel</h2>
+              <h2 class="box-title" *ngIf="!editFlag">Add On Grid Panel</h2>
+              <section class="box-content">
+                <form [formGroup]="gridPanelForm" (ngSubmit)="submitPanelForm('on')">
+                  <div class="field-wrapper">
+                    <label>Panel Size*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="panel_size" placeholder="Enter Panel Size"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Panel Price*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="panel_price" placeholder="Enter Panel Price"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+
+                <div>&nbsp;</div>
+                <div>
+                    <form *ngIf="!editFlag" >
+                      <h2 class="box-title" >On Grid Panel bulk upload</h2>
+                        <div class="row">
+                          <p> Select your file having first heading <b>panelsize</b> and second as <b>panelprice</b> only.
+                          </p>
+                               <div class="form-group">
+                                    <input #bulkupload type="file" name="bulkUploadFile" (change)="bulkuploadgridpanel($event,'on')" />
+                                </div>
+                        </div>
+                    </form>
+
+                    <div *ngIf="actionLoader=='upload_loader'">
+                        <img src="/assets/images/loader1.gif" alt="LUMINOUS" />
+                    </div>
+                 </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!--Off Grid Inverter -->
+        <div *ngIf="Level4Option == 'offInverterListing' || Level4Option == 'addOffInverterForm'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'offInverterListing'">
+            <h2>Off Grid Inverter Master</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Inverter Name</th>
+                    <th>Voltage</th>
+                    <th>Max Panel</th>
+                    <th>Watt</th>
+                    <th>Price</th>
+                    <th>Rate Per Watt(Rs/watt)</th>
+                    <th>Billing</th>
+                    <th>Actual Ratio</th>
+                    <th>No. Of Batteries</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of offGridInverterList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.inverters}}</td>
+                    <td>{{data.voltage}}</td>
+                    <td>{{data.max_panel}}</td>
+                    <td>{{data.watt}}</td>
+                    <td>{{data.price}}</td>
+                    <td>{{data.rs_per_watt}}</td>
+                    <td>{{data.billing}}</td>
+                    <td>{{data.actual_ratio}}</td>
+                    <td>{{data.no_of_batteries}}</td>
+                    <td class="edit-td">
+                      <button (click)="editOffGridInverter(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'OFF_INV')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="offGridInverterList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('offInv')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addOffInverterForm'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">Edit Off Grid Inverter</h2>
+              <h2 class="box-title" *ngIf="!editFlag">Add Off Grid Inverter</h2>
+              <section class="box-content">
+                <form [formGroup]="gridInverterForm" (ngSubmit)="submitInverterForm('off')">
+                  <div class="field-wrapper">
+                    <label>Inverter Name*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="30" formControlName="inverters" placeholder="Enter Inverter Name">
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Voltage*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="5" formControlName="voltage" placeholder="Enter Voltage"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Max Panel*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="max_panel" placeholder="Enter Max Panel"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Watt*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="watt" placeholder="Enter Watt"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Price*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="price" placeholder="Enter Price"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Rate Per Watt(Rs/watt)*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="5" formControlName="rs_per_watt" placeholder="Enter Rate Per Watt(Rs/watt)"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Billing*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="billing" placeholder="Enter Billing"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Actual Ratio*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="actual_ratio" placeholder="Enter Actual Ratio"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>No. Of Batteries*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="5" formControlName="no_of_batteries" placeholder="Enter No. Of Batteries"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!--On Grid Inverter -->
+        <div *ngIf="Level4Option == 'onInverterListing' || Level4Option == 'addOnInverterForm'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'onInverterListing'">
+            <h2>On Grid Inverter Master</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Inverter Name</th>
+                    <th>Phase</th>
+                    <th>Max Panel</th>
+                    <th>Watt</th>
+                    <th>Price</th>
+                    <th>Rate Per Watt(Rs/watt)</th>
+                    <th>Billing</th>
+                    <th>Actual Ratio</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of onGridInverterList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.inverters}}</td>
+                    <td>{{data.phase}}</td>
+                    <td>{{data.max_panel}}</td>
+                    <td>{{data.watt}}</td>
+                    <td>{{data.price}}</td>
+                    <td>{{data.rs_per_watt}}</td>
+                    <td>{{data.billing}}</td>
+                    <td>{{data.actual_ratio}}</td>
+                    <td class="edit-td">
+                      <button (click)="editOnGridInverter(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'ON_INV')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="offGridInverterList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('onInv')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addOnInverterForm'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">Edit On Grid Inverter</h2>
+              <h2 class="box-title" *ngIf="!editFlag">Add On Grid Inverter</h2>
+              <section class="box-content">
+                <form [formGroup]="gridInverterForm" (ngSubmit)="submitInverterForm('on')">
+                  <div class="field-wrapper">
+                    <label>Inverter Name*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="30" formControlName="inverters" placeholder="Enter Inverter Name">
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Phase*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="3" formControlName="phase" placeholder="Enter Phase"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Max Panel*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="max_panel" placeholder="Enter Max Panel"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Watt*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="watt" placeholder="Enter Watt"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Price*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="price" placeholder="Enter Price"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Rate Per Watt(Rs/watt)*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="5" formControlName="rs_per_watt" placeholder="Enter Rate Per Watt(Rs/watt)"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Billing*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="billing" placeholder="Enter Billing"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Actual Ratio*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="actual_ratio" placeholder="Enter Actual Ratio"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!--Duty Taxes -->
+        <div *ngIf="Level4Option == 'ShowDutyTaxesListing' || Level4Option == 'addDutyTax'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowDutyTaxesListing'">
+            <h2>Duty Taxes Master</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>State Name</th>
+                    <th>Duty Per Unit</th>
+                    <th>Duty On Fixed</th>
+                    <th>Duty On Variable</th>
+                    <th>Tax Per Unit</th>
+                    <th>Tax On Fixed</th>
+                    <th>Tax On Variable</th>
+                    <th>Tax Per Unit Duty</th>
+                    <th>Tax Fix Duty</th>
+                    <th>Tax Var Duty</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of dutyTaxesList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.state_name}}</td>
+                    <td>{{data.duty_per_unit}}</td>
+                    <td>{{data.duty_on_fixed}}</td>
+                    <td>{{data.duty_on_variable}}</td>
+                    <td>{{data.tax_per_unit}}</td>
+                    <td>{{data.tax_on_fixed}}</td>
+                    <td>{{data.tax_on_variable}}</td>
+                    <td>{{data.tax_per_unit_duty}}</td>
+                    <td>{{data.tax_fix_duty}}</td>
+                    <td>{{data.tax_var_duty}}</td>
+                    <td class="edit-td">
+                      <button (click)="editDutyTax(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'DUTY_TAX')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="dutyTaxesList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('dutyTaxes')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addDutyTax'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">Edit Duty Tax</h2>
+              <h2 class="box-title" *ngIf="!editFlag">Add Duty Tax</h2>
+              <section class="box-content">
+                <form [formGroup]="dutyTaxesForm" (ngSubmit)="submitDutyTaxesForm()">
+                  <div class="field-wrapper">
+                    <label>State Name*</label>
+                    <div class="form-field">
+                      <ng-select [options]="states" formControlName="state_id" placeholder="Select State"></ng-select>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Duty Per Unit*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="5" formControlName="duty_per_unit" placeholder="Enter Duty Per Unit"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Duty On Fixed*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="duty_on_fixed" placeholder="Enter Duty On Fixed"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Duty On Variable*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="duty_on_variable" placeholder="Enter Duty On Variable"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Tax Per Unit*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="tax_per_unit" placeholder="Enter Tax Per Unit"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Tax On Fixed*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="5" formControlName="tax_on_fixed" placeholder="Enter Tax On Fixed"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Tax On Variable*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="tax_on_variable" placeholder="Enter Tax On Variable"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Tax Per Unit Duty*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="tax_per_unit_duty" placeholder="Enter Tax Per Unit Duty"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Tax Fixed Duty*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="tax_fix_duty" placeholder="Enter Tax Fixed Duty"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Tax Var Duty*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="tax_var_duty" placeholder="Enter Tax Var Duty"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!--Fixed LookUp -->
+        <div *ngIf="Level4Option == 'ShowFixedLookupListing' || Level4Option == 'addFixedLookup'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowFixedLookupListing'">
+            <h2>Fixed Lookup Master</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>State Name</th>
+                    <th>Category</th>
+                    <th>kw(Low)</th>
+                    <th>kw(High)</th>
+                    <th>Fixed</th>
+                    <th>Per kw fc</th>
+
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of fixedLookupList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.state_name}}</td>
+                    <td>{{cats[data.category_id]}}</td>
+                    <td>{{data.kw_l}}</td>
+                    <td>{{data.kw_h}}</td>
+                    <td>{{data.fixed}}</td>
+                    <td>{{data.per_kw_fc}}</td>
+                    <td class="edit-td">
+                      <button (click)="editFixedLookup(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'FIXED_LOOKUP')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="fixedLookupList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('fixedLookup')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addFixedLookup'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">Edit Fixed Lookup</h2>
+              <h2 class="box-title" *ngIf="!editFlag">Add Fixed Lookup</h2>
+              <section class="box-content">
+                <form [formGroup]="fixedLookupForm" (ngSubmit)="submitFixedLookupForm()">
+                  <div class="field-wrapper">
+                    <label>State Name*</label>
+                    <div class="form-field">
+                      <ng-select [options]="states" formControlName="state_id" placeholder="Select State"></ng-select>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Category*</label>
+                    <div class="form-field">
+                      <ng-select [options]="categories" formControlName="category_id" placeholder="Select Category"></ng-select>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>kw(Low)*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="kw_l" placeholder="Enter kw(Low)"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>kw(High)*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="kw_h" placeholder="Enter kw(Hihg)"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Fixed*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="fixed" placeholder="Enter Fixed"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Per kw fc*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="5" formControlName="per_kw_fc" placeholder="Enter Per kw fc"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!--GBI LookUp -->
+        <div *ngIf="Level4Option == 'ShowGbiLookupListing' || Level4Option == 'addGbiLookup'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowGbiLookupListing'">
+            <h2>Gbi Lookup Master</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>State Name</th>
+                    <th>Gbi</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of gbiLookupList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.state_name}}</td>
+                    <td>{{data.gbi}}</td>
+                    <td class="edit-td">
+                      <button (click)="editGbiLookup(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'GBI_LOOKUP')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="gbiLookupList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('gbiLookup')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addGbiLookup'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">Edit Gbi Lookup</h2>
+              <h2 class="box-title" *ngIf="!editFlag">Add Gbi Lookup</h2>
+              <section class="box-content">
+                <form [formGroup]="gbiLookupForm" (ngSubmit)="submitGbiLookupForm()">
+                  <div class="field-wrapper">
+                    <label>State Name*</label>
+                    <div class="form-field">
+                      <ng-select [options]="states" formControlName="state_id" placeholder="Select State"></ng-select>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>GBI*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="3" formControlName="gbi" placeholder="Enter Gbi"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!--Ah Reference -->
+        <div *ngIf="Level4Option == 'ShowAhListing' || Level4Option == 'addAh'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowAhListing'">
+            <h2>Ah Reference Master</h2>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Serial No.</th>
+                    <th>Ah</th>
+                    <th>Price Taken</th>
+                    <th>Battery Option(in Ah)</th>
+                    <th>No. of Batteries</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of ahList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.ah}}</td>
+                    <td>{{data.price_taken}}</td>
+                    <td>{{data.battery_opt}}</td>
+                    <td>{{data.no_of_batteries}}</td>
+                    <td class="edit-td">
+                      <button (click)="editAh(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.id, 'AH')" class="btn edt-del btn-blue">Delete</button>
+                      <!-- <button (click)="deleteLead(data)" class="btn edt-del btn-blue">Delete</button> -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="ahList" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('ah')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addAh'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag"> Edit Ah Reference </h2>
+              <h2 class="box-title" *ngIf="!editFlag"> Add Ah Reference </h2>
+              <section class="box-content">
+                <form [formGroup]="ahForm" (ngSubmit)="submitAhForm()">
+                  <div class="field-wrapper">
+                    <label>Ah*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="4" formControlName="ah" placeholder="Enter Ah"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Price Taken*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="10" formControlName="price_taken" placeholder="Enter Price Taken"
+                        (keypress)=_keyPressAh($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>Battery Option(in Ah)*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="4" formControlName="battery_opt" placeholder="Enter Battery Option(in Ah)"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>No. of Batteries*</label>
+                    <div class="form-field">
+                      <input type="text" class="text-caps" maxlength="3" formControlName="no_of_batteries" placeholder="Enter No. of Batteries"
+                        (keypress)=_keyPress($event)>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!--Var LookUp -->
+        <div *ngIf="Level4Option == 'ShowVarLookupListing' || Level4Option == 'editVarLookup'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowVarLookupListing'">
+            <h2>Var Lookup Master</h2>
+            <div class="add-lead-source-form" *ngIf="Level4Option == 'ShowVarLookupListing'">
+              <div class="search-feild smart-box">
+                <form [formGroup]="varListingForm" (ngSubmit)="ShowVarLookupListing()">
+                  <div class="form-group">
+                    <div class="form-field">
+                      <ng-select [options]="states" formControlName="state_id" placeholder="Select State"></ng-select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="form-field">
+                      <ng-select [options]="categories" formControlName="category_id" placeholder="Select Category"></ng-select>
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="btn btn-blue btn-list">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="varLookupList">
+              <div class="form-field">
+                <span><b>FSA => </b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span>{{varLookupList[0]?.fsa}}</span>
+              </div>
+            </div>
+            <div *ngIf="varLookupList">
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Serial No.</th>
+                      <th>Slab Low</th>
+                      <th>Slab High</th>
+                      <th>kw Low</th>
+                      <th>kw High</th>
+                      <th>Rs. Per kwh</th>
+                      <th>Rs. Per kwh(including FSA)</th>
+                      <th>Previous Bill Sum High</th>
+                      <th>Bill Sum Low</th>
+                      <th>Bill Sum High</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of varLookupList; let i = index">
+                      <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                      <td>{{data.slab_low}}</td>
+                      <td>{{data.slab_high}}</td>
+                      <td>{{data.kw_low}}</td>
+                      <td>{{data.kw_high}}</td>
+                      <td>{{data.rs_per_kwh}}</td>
+                      <td>{{data.rs_per_kwh_inc_fsa}}</td>
+                      <td>{{data.prev_bill_sum_high}}</td>
+                      <td>{{data.bill_sum_low}}</td>
+                      <td>{{data.bill_sum_high}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <button type="button" class="btn btn-blue" (click)="editVarLookup()">Edit</button>
+              </div>
+            </div>
+            <div *ngIf="!varLookupList">
+              <p>No Records Available.</p>
+            </div>
+            <div *ngIf="!varLookupList" style="margin-top: 160px;">
+              <button type="button" class="btn btn-blue" (click)="addVarLookup()">Add VarLookup Records</button>
+            </div>
+          </div>
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'editVarLookup'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" style="text-transform: capitalize;" *ngIf="editFlag">Edit Var Lookup For State "{{varLookupList[0]?.state_name}}"" and Category "{{cats[varLookupList[0]?.category_id]}}".</h2>
+              <h2 class="box-title" style="text-transform: capitalize;" *ngIf="!editFlag">Add Var Lookup For State "{{selectedState}}" and Category "{{selectedCategory}}".</h2>
+              <section class="box-content">
+                <form [formGroup]="varLookupForm" (ngSubmit)="submitVarLookupForm()">
+                  <div class="form-group">
+                    <div class="form-field">
+                      <span><b>FSA => </b></span>
+                      <input type="text" class="text-caps" maxlength="7" formControlName="fsa" placeholder="Enter Fsa" (keypress)=_keyPressVar($event) (focusin)="clickInput($event)"/>
+                    </div>
+                  </div>
+
+                    <div class="formFull table-wrapper">
+                      <table cellpadding="0" cellspacing="0">
+                        <thead>
+                          <tr>
+                            <th>Serial No.</th>
+                            <th>Slab Low</th>
+                            <th>Slab High</th>
+                            <th>kw Low</th>
+                            <th>kw High</th>
+                            <th>Rs. Per kwh</th>
+                            <th>Rs. Per kwh(including FSA)</th>
+                            <th>Previous Bill Sum High</th>
+                            <th>Bill Sum Low</th>
+                            <th>Bill Sum High</th>
+                          </tr>
+                        </thead>
+                        <tbody formArrayName="vars" *ngFor="let vars of varLookupForm.get('vars').controls; let i = index">
+                            <tr [formGroupName]="i">
+                              <td>
+                                <strong>{{i+1}}</strong>
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" maxlength="7" formControlName="slab_low" placeholder="Enter Slab Low" (keypress)=_keyPress($event) (focusin)="clickInput()"/>
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" maxlength="7" formControlName="slab_high" placeholder="Enter Slab High" (keypress)=_keyPress($event) (focusin)="clickInput()">
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" maxlength="7" formControlName="kw_low" placeholder="Enter kw High" (keypress)=_keyPressVar($event) (focusin)="clickInput($event)">
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" maxlength="7" formControlName="kw_high" placeholder="Enter kw High" (keypress)=_keyPressVar($event) (focusin)="clickInput($event)">
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" maxlength="7" formControlName="rs_per_kwh" placeholder="Enter Rs. Per kwh" (keypress)=_keyPressVar($event) (focusin)="clickInput($event)">
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" maxlength="7" formControlName="rs_per_kwh_inc_fsa" placeholder="Enter Rs. Per kwh(including FSA)"
+                                  (keypress)=_keyPress($event) disabled>
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" formControlName="prev_bill_sum_high" placeholder="Enter Previous Bill Sum High"
+                                  (keypress)=_keyPress($event) disabled>
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" formControlName="bill_sum_low" placeholder="Enter Bill Sum Low"
+                                  (keypress)=_keyPress($event) disabled>
+                              </td>
+                              <td>
+                                <input type="text" class="text-caps" formControlName="bill_sum_high" placeholder="Enter Bill Sum High"
+                                  (keypress)=_keyPress($event) disabled>
+                              </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                  <button *ngIf="isVarItems" type="button" class="btn btn-blue" (click) = "removeLastRow()">
+                    <strong> - </strong> Remove Last
+                  </button>
+                  <button type="button" class="btn btn-blue" (click) = "addVarItem(true)">
+                    <strong> + </strong> Add More
+                  </button>
+                  <div *ngIf="!clickedInput">
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                  <div *ngIf="clickedInput">
+                    <button type="button" class="btn btn-blue" (click)="validateVarLookupForm()">Validate</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+        <!--Start Follow Up SMS/Email -->
+        <div *ngIf="Level4Option == 'ShowFollowUpSmsEmailListing' || Level4Option == 'addFollowUpSmsEmail'">
+            <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowFollowUpSmsEmailListing'">
+              <h2>Follow Up SMS/Email Master</h2>
+              <div class="table-wrapper">
+                <table class="normaltxt">
+                  <thead>
+                    <tr>
+                      <th>Serial No.</th>
+                      <th>Title</th>
+                      <th>Email Content</th>
+                      <th>SMS Content</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of followUpList; let i = index">
+                      <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                      <td>{{data.fues_title}}</td>
+                      <td><p [innerHTML] = "data.fues_email_content | safeHtml"></p></td>
+                      <td>{{data.fues_sms_content}}</td>
+                      <td class="edit-td">
+                        <button (click)="editFollowUpSmsEmail(data)" class="btn edt-del btn-blue">Edit</button>
+                        <button (click)="openDeleteConfirmationPopup(data.fues_id, 'FOLLOW_UP_SMS_EMAIL')" class="btn edt-del btn-blue">Delete</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <ul *ngIf="followUpList" style="white-space:nowrap;">
+                &nbsp; &nbsp;
+                <li>
+                  <a>Page {{pages}} of {{pageCount}}</a>
+                </li>
+                &nbsp; &nbsp;
+                <li>
+                  <div class="custom-pagination">
+                    <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('followUp')">
+                      <input type="number" min="1" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                        (keypress)=_keyPress($event)>
+                      <button type="submit" class="btn btn-blue btn-md">Go</button>
+                      <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                        be less than or
+                        equal to {{pageCount}}</span>
+                    </form>
+
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="add-lead-source-form" *ngIf="Level4Option == 'addFollowUpSmsEmail'">
+              <div class="box fill-form mb-30">
+                <h2 class="box-title" *ngIf="editFlag">Edit Follow UP SMS/Email</h2>
+                <h2 class="box-title" *ngIf="!editFlag">Add Follow UP SMS/Email</h2>
+                <section class="box-content">
+                  <form [formGroup]="followUpForm" (ngSubmit)="submitFollowUpSmsEmailForm()">
+                    <div class="field-wrapper">
+                      <label>Title*</label>
+                      <div class="form-field">
+                          <input type="text" class="text-caps" maxlength="50" minlength="5" formControlName="fues_title" placeholder="Enter FollowUp Title" />
+                          <small id="fues_title" class="form-text text-muted">Min Character Length 5 & Max Length 50 Character  </small>
+                          <div class="error" *ngIf="followUpForm.controls?.fues_title?.errors?.maxlength">
+                            Exceed Max Length
+                          </div>
+                      </div>
+                    </div>
+                    <div class="field-wrapper">
+                      <label>Email Content*</label>
+                      <div class="form-field">
+                         <!-- <textarea class="text-caps" formControlName="fues_email_content" placeholder="Enter Email Content"></textarea> -->
+                         <app-ngx-editor [spellcheck]="true" formControlName="fues_email_content"></app-ngx-editor>
+                      </div>
+                    </div>
+                    <div class="field-wrapper">
+                      <label>SMS Content*</label>
+                      <div class="form-field">
+                          <textarea class="text-caps" minlength="5" formControlName="fues_sms_content" placeholder="Enter SMS Content"></textarea>
+                          <small id="fues_sms_content" class="form-text text-muted">Min Character Length 5</small>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button type="submit" class="btn btn-blue">Submit</button>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </div>
+        </div>
+         <!--End Follow Up SMS/Email -->
+
+        <!--Start Employee Master -->
+        <div *ngIf="Level4Option == 'ShowEmployeeListing' || Level4Option == 'addEmployee' || Level4Option == 'showEmployeeRoleManageForm' || Level4Option == 'addSurveyor'">
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowEmployeeListing'">
+            <smart-search (SearchResults)="submitSmartSearch($event)" ></smart-search>
+            <h2>Employee Master</h2>
+            <div class="table-wrapper" *ngIf="employeeList.length>0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sr. No.</th>
+                    <th>Name</th>
+                    <th>Mobile No.</th>
+                    <th>Email</th>
+                    <th>Primary Role</th>
+                    <th>State</th>
+                    <th>District</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of employeeList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.emp_firstname}} {{ data.emp_lastname }}</td>
+                    <td>{{data.emp_mobileno}}</td>
+                    <td style="text-transform: none">{{data.emp_email}}</td>
+                    <td>{{data.skill_level_designation}}</td>
+                    <td>{{data.state_name}}</td>
+                    <td>{{data.district_name}}</td>
+                    <td class="edit-td">
+                      <button (click)="getEmployeeRoleManageForm(data)" class="btn edt-del btn-blue">Manage Role</button>
+                      <button (click)="editEmployee(data)" class="btn edt-del btn-blue">Edit</button>
+                      <button (click)="openDeleteConfirmationPopup(data.emp_id, 'EMPLOYEE_MASTER')" class="btn edt-del btn-blue">Delete</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="employeeList.length>0" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('employee')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+            <div class="table-wrapper" *ngIf="employeeList.length<=0">
+                No Records Found
+            </div>
+
+          </div>
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'addSurveyor'">
+            <smart-search (SearchResults)="submitSmartSearch($event)" ></smart-search>
+            <h2>Add/Remove Surveyor</h2>
+            <div class="table-wrapper" *ngIf="employeeList.length>0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sr. No.</th>
+                    <th>Name</th>
+                    <th>Mobile No.</th>
+                    <th>Email</th>
+                    <th>Primary Role</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of employeeList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.emp_firstname}} {{ data.emp_lastname }}</td>
+                    <td>{{data.emp_mobileno}}</td>
+                    <td style="text-transform: none">{{data.emp_email}}</td>
+                    <td>{{data.skill_level_designation}}</td>
+                    <td>
+                      <input type="checkbox" name="" id="" [checked]="data.emp_indash_surveyor === '1'" (change)="onChangeSurveyor($event, data.emp_id)">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul *ngIf="employeeList.length>0" style="white-space:nowrap;">
+              &nbsp; &nbsp;
+              <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+              </li>
+              &nbsp; &nbsp;
+              <li>
+                <div class="custom-pagination">
+                  <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit('surveyor')">
+                    <input type="number" min="1" formControlName="page_number" class="form-text" max="{{pageCount}}"
+                      (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                      be less than or
+                      equal to {{pageCount}}</span>
+                  </form>
+
+                </div>
+              </li>
+            </ul>
+            <div class="table-wrapper" *ngIf="employeeList.length<=0">
+                No Records Found
+            </div>
+
+          </div>
+          <!--Start Employee Add Master -->
+          <div class="add-lead-source-form" *ngIf="Level4Option == 'addEmployee'">
+            <div class="box fill-form mb-30">
+              <h2 class="box-title" *ngIf="editFlag">Edit Employee</h2>
+              <h2 class="box-title" *ngIf="!editFlag">Add Employee</h2>
+              <section class="box-content">
+                <form [formGroup]="employeeForm" (ngSubmit)="submitEmployeeForm()">
+                  <div class="field-wrapper">
+                    <label>Primary Role*</label>
+                    <div class="form-field">
+                      <ng-select [options]="skillList" formControlName="erm_skill_id" id="user_skill" placeholder="Select User Skill Role" ></ng-select>
+                    </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.erm_skill_id?.errors?.required && submitEmpForm">
+                    Select a Role Skill is required.
+                  </div>
+                  <div class="field-wrapper" *ngIf="employeeForm.controls.erm_role_id.value == '5'">
+                    <label>Lead Priority</label>
+                    <div class="form-field">
+                      <ng-select [options]="leadPriorityList" formControlName="emp_lead_priority"  placeholder="Set CCE lead priority" ></ng-select>
+                    </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>{{this.fnamelabel}} Name*</label>
+                    <div class="form-field">
+                        <input type="text" class="text-caps" formControlName="emp_firstname" id="emp_firstname" placeholder="Enter {{this.fnamelabel}} Name" />
+                      </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_firstname?.errors?.required && submitEmpForm">
+                    {{this.fnamelabel}} Name is required.
+                  </div>
+
+                  <div class="field-wrapper">
+                    <label>Middle Name</label>
+                    <div class="form-field">
+                        <input type="text" class="text-caps" formControlName="emp_middlename" placeholder="Enter Middle Name" />
+                      </div>
+                  </div>
+                  <div class="field-wrapper">
+                    <label>{{this.lnamelabel}} Name*</label>
+                    <div class="form-field">
+                        <input type="text" class="text-caps"  formControlName="emp_lastname" placeholder="Enter {{this.lnamelabel}} Name" />
+                    </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_lastname?.errors?.required  && submitEmpForm">
+                    {{this.lnamelabel}}  Name is required.
+                  </div>
+
+                  <div class="field-wrapper">
+                    <label>Email*</label>
+                    <div class="form-field">
+                        <input type="text"  class="text-caps" formControlName="emp_email" id="emp_email" placeholder="Enter Email"/>
+                    </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_email?.errors?.required && submitEmpForm">
+                    Email is required.
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_email?.errors?.email && submitEmpForm">
+                    Email is invalid.
+                  </div>
+
+                  <div class="field-wrapper">
+                    <label>Contact No.*</label>
+                    <div class="form-field">
+                        <input type="text" class="text-caps"  formControlName="emp_mobileno" id="emp_mobileno" placeholder="Enter Contact No." />
+                    </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_mobileno?.errors?.required && submitEmpForm">
+                    Mobile Number is required.
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_mobileno?.errors?.pattern && submitEmpForm">
+                    Mobile Number is invalid.
+                  </div>
+
+
+                  <div class="field-wrapper">
+                    <label>Address *</label>
+                    <div class="form-field">
+                        <textarea class="text-caps"  maxlength="140" minlength="5" formControlName="emp_address1" id="emp_address1" placeholder="Enter Address Part 1"></textarea>
+                        <small id="emp_address1" class="form-text text-muted">Min Character Length 5 & Max Character Length 140 </small>
+                    </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_address1?.errors?.required && submitEmpForm">
+                    Address is required.
+                  </div>
+
+                  <div class="field-wrapper">
+                    <label>Address (Secondary)</label>
+                    <div class="form-field">
+                        <textarea class="text-caps"  maxlength="140" minlength="5" formControlName="emp_address2" placeholder="Enter Address Part 2"></textarea>
+                        <small id="emp_address2" class="form-text text-muted">Min Character Length 5 & Max Character Length 140 </small>
+                    </div>
+                  </div>
+
+                  <div class="field-wrapper">
+                      <label>State*</label>
+                      <div class="form-field">
+                          <ng-select [options]="states" formControlName="emp_state" id="emp_state" placeholder="Select State" (selected)="setState()"></ng-select>
+                      </div>
+                    </div>
+                    <div class="error" *ngIf="employeeForm.controls?.emp_state?.errors?.required && submitEmpForm !=''">
+                      Select a State is required.
+                    </div>
+
+                  <div class="field-wrapper">
+                    <label>District*</label>
+                    <div class="form-field">
+                        <ng-select [options]="districts" formControlName="emp_city" id="emp_city" placeholder="Select District"></ng-select>
+                    </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_city?.errors?.required && submitEmpForm">
+                    Select a District is required.
+                  </div>
+
+
+                  <div class="field-wrapper" *ngIf="employeeForm.controls?.erm_skill_id?.value == 53">
+                    <label>GST*</label>
+                    <div class="form-field">
+                        <input type="text" class="text-caps"  formControlName="emp_gst" placeholder="Enter GST" />
+                    </div>
+                  </div>
+
+                  <div class="error" *ngIf="employeeForm.controls?.emp_gst?.errors?.required && submitEmpForm">
+                    GST is required for Partner role.
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_gst?.errors?.pattern && submitEmpForm">
+                    GST is invalid.
+                  </div>
+                  <div class="field-wrapper" *ngIf="employeeForm.controls?.erm_skill_id?.value == 53">
+                    <label>SSP code*</label>
+                    <div class="form-field">
+                        <input type="text" class="text-caps"  formControlName="emp_code" placeholder="Enter SSP code" />
+                    </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_code?.errors?.required && submitEmpForm">
+                    SSP code is required for Partner role.
+                  </div>
+                  <div class="field-wrapper" *ngIf="employeeForm.controls?.erm_skill_id?.value == 53">
+                    <label>PAN*</label>
+                    <div class="form-field">
+                        <input type="text" class="text-caps"  formControlName="emp_pan" placeholder="Enter PAN" />
+                    </div>
+                  </div>
+
+                  <div class="error" *ngIf="employeeForm.controls?.emp_pan?.errors?.required && submitEmpForm">
+                    PAN is required for Partner role.
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_pan?.errors?.pattern && submitEmpForm">
+                    PAN is invalid.
+                  </div>
+                  <div class="field-wrapper" *ngIf="!editFlag">
+                      <label>Password*</label>
+                      <div class="form-field">
+                          <input type="password" class="text-caps"  formControlName="emp_password" id="emp_password" placeholder="Enter Password" autocomplete="off"/>
+                      </div>
+                  </div>
+                  <div class="error" *ngIf="employeeForm.controls?.emp_password?.errors?.required && submitEmpForm">
+                      Password is Required
+                    </div>
+
+                  <div>
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+          <!--End Employee Add Master -->
+
+
+        </div>
+        <!--End Employee Master -->
+
+        <!--Employee Role Management-->
+        <div class="add-lead-source-form" *ngIf="Level4Option == 'showEmployeeRoleManageForm'">
+          <div class="box fill-form mb-30">
+            <h2 class="box-title">Manage Employee Role</h2>
+            <div class="table-wrapper" *ngIf="employeeList.length>0">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Mobile No.</th>
+                      <th>Email</th>
+                      <th>Primary Role</th>
+                      <th>State</th>
+                      <th>District</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{role_emp_data.emp_firstname}} {{ role_emp_data.emp_lastname}}</td>
+                      <td>{{role_emp_data.emp_mobileno}}</td>
+                      <td>{{role_emp_data.emp_email}}</td>
+                      <td>{{role_emp_data.skill_level_designation}}</td>
+                      <td>{{role_emp_data.state_name}}</td>
+                      <td>{{role_emp_data.district_name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            <section class="box-content">
+              <form [formGroup]="employeeRoleManageForm" (ngSubmit)="submitemployeeRoleManageForm()">
+                <div class="field-wrapper table-wrapper">
+                    <table>
+                        <thead>
+                          <tr>
+                            <th>Sr. No.</th>
+                            <th>Skill</th>
+                            <th>Role</th>
+                            <th>Select</th>
+                          </tr>
+                        </thead>
+                        <tbody *ngIf="allSkills">
+                           <tr *ngFor="let skill of employeeRoleManageForm.controls['roles'].controls; let i=index" formArrayName="roles" >
+                                <td>{{i+1}}</td>
+                                <td>{{allSkills[i].skill_level_designation}}</td>
+                                <td>{{columnRoleList[allSkills[i].skill_level_roleid]}}</td>
+                                <td><input type="checkbox" formControlName="{{i}}"></td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  <input type="hidden" formControlName="erm_role_id">
+                  <input type="hidden" formControlName="emp_id">
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-blue">Submit</button>
+                </div>
+                </form>
+                </section>
+          </div>
+          </div>
+        <!--End Employee Role Management-->
+
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowRefrenceListing'">
+              <h2>Reference Listing</h2>
+              <div class="table-wrapper" *ngIf="refrenceList.length>0">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Sr. No</th>
+                      <th>Name</th>
+                      <th>Created By</th>
+                      <th>Created On</th>
+                      <th>Action</th>
+                      <!--th>Delete</th-->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of refrenceList; let i=index">
+                        <td>{{i+1}}</td>
+                        <td>{{data.lr_name}}</td>
+                        <td>{{data.emp_firstname}} {{data.emp_lastname}}</td>
+                        <td>{{data.lr_created_on | date:'yyyy-MM-dd'}}</td>
+                        <td><a class="btn-blue anchor_link" (click)="updateRefrence(data.lr_id,data.lr_name)">Edit</a>
+                            <a class="btn-blue anchor_link" (click)="confirmDeletLeadRefrence(data.lr_id)">Delete</a>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-wrapper" *ngIf="refrenceList.length<=0">
+                  <p>No Records Found</p>
+              </div>
+          </div>
+
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'ShowLeadSourceListing'">
+              <app-lead-source [leadSoucreData]="leadList"></app-lead-source>
+          </div>
+
+
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'UpdateRefrence' || Level4Option == 'AddRefrence'">
+            <h2>{{headerText}}</h2>
+            <form [formGroup]="leadRefrenceForm" (ngSubmit)="submitLeadRefrenceFrom()">
+
+                <input type="hidden" formControlName="type">
+                <input type="hidden" formControlName="id">
+                <div class="field-wrapper">
+                    <label>Reference Name</label>
+                    <div class="form-field">
+                      <input type="text" maxlength="25" placeholder="Reference Name" formControlName="name">
+                      <div class="error" *ngIf="leadRefrenceForm.controls?.name?.errors?.pattern ">Please Enter Valid Reference Name</div>
+                      <div class="error" *ngIf="leadRefrenceForm.controls?.name?.errors?.required ">Please Enter Reference Name</div>
+                      <div class="error" *ngIf="leadRefrenceForm.controls?.name?.errors?.max ">Enter Reference Name less than 25 characters</div>
+                    </div>
+              </div>
+
+              <div class="field-wrapper">
+                  <label>&nbsp;</label>
+                  <div class="form-field">
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+            </div>
+            </form>
+
+          </div>
+          <!--End refrence -->
+
+          <!--Insolation Start-->
+          <div *ngIf="Level4Option == 'ShowInsolationListing'">
+              <div class="show-lead-source-listing">
+                  <smart-search (SearchResults)="submitSmartSearch($event)" ></smart-search>
+                  <h2>Insolation Cities</h2>
+                  <div class="table-wrapper">
+                      <table>
+                          <thead>
+                            <tr>
+                              <th>Sr. No</th>
+                              <th>Insolation City Name</th>
+                              <th>Yield Value</th>
+                              <th>Created By</th>
+                              <th>Created On</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let data of insolationList; let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{data.insolationCity.ins_location}}</td>
+                                <td>{{data.insolationCity.ins_yeild_value}}</td>
+                                <td>{{data.emp_firstname}} {{data.emp_lastname}}</td>
+                                <td>{{data.insolationCity.ins_created_on | date:'yyyy-MM-dd'}}</td>
+                                <td><a class="btn-blue anchor_link" (click)="updateInsolation(data.insolationCity)">Edit</a>
+                                    <a class="btn-blue anchor_link" (click)="confirmDeletInsolation(data.insolationCity.ins_id)">Delete</a>
+                                </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="table-wrapper" *ngIf="insolationList.length<=0">
+                          <p>No Records Found</p>
+                      </div>
+              </div>
+
+          </div>
+
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'Addinsolation' || Level4Option == 'Updateinsolation'">
+            <h2>{{headerText}}</h2>
+            <form [formGroup]="insolationForm" (ngSubmit)="submitInsolaionFrom()">
+
+                <input type="hidden" formControlName="type">
+                <input type="hidden" formControlName="id">
+                <div class="field-wrapper">
+                    <label>Insolation City Name</label>
+                    <div class="form-field">
+                      <input type="text" maxlength="25" placeholder="Insolation City Name" formControlName="location_name">
+                      <div class="error" *ngIf="insolationForm.controls?.location_name?.errors?.pattern ">Please Enter Valid Name</div>
+                      <div class="error" *ngIf="insolationForm.controls?.location_name?.errors?.required ">Please Enter Insolation City Name</div>
+                      <div class="error" *ngIf="insolationForm.controls?.location_name?.errors?.max ">Enter Name less than 25 characters</div>
+                    </div>
+              </div>
+
+              <div class="field-wrapper">
+                <label>Yield Value</label>
+                <div class="form-field">
+                  <input type="text" maxlength="10" placeholder="Yield Value" formControlName="yeild_value">
+                  <div class="error" *ngIf="insolationForm.controls?.yeild_value?.errors?.pattern ">Please Enter Valid value</div>
+                  <div class="error" *ngIf="insolationForm.controls?.yeild_value?.errors?.required ">Please Enter Yield</div>
+                  <div class="error" *ngIf="insolationForm.controls?.yeild_value?.errors?.min ">Enter Minimum 1</div>
+                  <div class="error" *ngIf="insolationForm.controls?.yeild_value?.errors?.max ">Max value 10 integer</div>
+                </div>
+          </div>
+
+              <div class="field-wrapper">
+                  <label>&nbsp;</label>
+                  <div class="form-field">
+                    <button type="submit" class="btn btn-blue">Submit</button>
+                  </div>
+            </div>
+            </form>
+
+          </div>
+
+          <div class="show-lead-source-listing" *ngIf="Level4Option == 'insolation_bulk_upload'">
+            <div>
+                <h2>Insolation bulk upload</h2>
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+                <div>
+                    <form [formGroup]="insolationBulkUploadForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                Choose File
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="file" formControlName="bulkUploadFile" (change)="bulkuploadgridpanel($event)" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- File dropalble directive by @ctrl/ngx-droppable@1.2.2  @developer: Roshan-->
+                    <div droppable (filesDropped)="handleFilesDropped($event)" style="height:150px; width:40%; border:1px dotted grey">Drop Your File Here</div>
+                    <!--Ends dropable-->
+
+                    <div *ngIf="actionLoader=='upload_loader'">
+                        <img src="/assets/images/loader1.gif" alt="LUMINOUS" />
+                    </div>
+                </div>
+            </div>
+        </div>
+      <!---Insolation Ends-->
+
+
+<!--------------div added by maneesh----------!-->
+<div class="sendBox" [ngClass]="{hideAside:openDeleteConfirmation,showAside:!openDeleteConfirmation}">
+  <div class="box-wrapper cash-box">
+    <div class="tableBoxx">
+      <div class="cellBoxx">
+        <div class="sendWrapper">
+          <h4>Delete Confirmation </h4>
+          <div class="field-wrapper">
+            <p style="margin: 10px;"><label for=""> Are you sure want to delete this record ?. </label></p>
+
+          </div>
+          <div class="field-wrapper">
+            <div class="form-field save-btn">
+              <button type="submit" (click)="cancelDelete()" class="btn btn-blue btn-md">Cancel</button>
+              <button type="submit" (click)="confirmDelete()" class="btn btn-blue btn-md">Ok</button>
+
+            </div>
+          </div>
+          <a href="javascript:void(0)" class="menu example5" (click)="openDeleteConfirmation=!openDeleteConfirmation">
+            <span>x</span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+</div>
+
+      </div>
+</div>

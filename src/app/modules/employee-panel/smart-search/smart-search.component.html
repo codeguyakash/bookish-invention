@@ -1,0 +1,1129 @@
+<div class="container">
+  <div class="search-feild smart-box" *ngIf="visible === 'search-feilds'">
+    <form [formGroup]="localityPinSearchForm" *ngIf="currentSearchForm === 'LocalityMasterListing'">
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">State</span> -->
+          <!-- <input type="search" formControlName="state" /> -->
+          <ng-select [options]="stateList" formControlName="state" placeholder="Select State" (selected)="ifStateIfCity('state')" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">District</span> -->
+          <ng-select [options]="cityList" formControlName="district" placeholder="Select District" (selected)="ifStateIfCity('city')" [allowClear]="true"></ng-select>
+          <!-- <input type="search" formControlName="district" /> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Pincode</span> -->
+          <input type="text" formControlName="pincode" placeholder="Pincode"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Locality</span> -->
+          <input type="text" formControlName="locality" placeholder="Locality"/>
+        </div>
+      </div>
+      <div class="form-group search-cancel">
+        <div class="form-field">
+          <input type="submit" (click)="submitLocalitySearchForm()" class="btn btn-blue" value="Search" />
+        </div>
+        <!-- <div class="form-field">
+          <input type="button" (click)="disableSmartSearch()" class="btn btn-blue" value="Cancel" />
+        </div> -->
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+    </form>
+
+
+    <form [formGroup]="searchForm" *ngIf="currentSearchForm === 'leadListPartnerListing' || currentSearchForm === 'solutionDesignerLeadListing' || currentSearchForm === 'opsheadProjectStatus' || this.currentSearchForm === 'opsheadLeadListing' || currentSearchForm === 'followupListing' || currentSearchForm === 'sitesurveyorLeadList' || currentSearchForm === 'surveyorRejected' || currentSearchForm === 'sitesurveyorSurveyList' || currentSearchForm === 'sitesurveyorClarificationListing' || currentSearchForm === 'sitesurveyorProjectStatusListing' || currentSearchForm === 'followupRejected'">
+      <div class="form-group" *ngIf="currentSearchForm != 'surveyorRejected' && currentSearchForm != 'followupRejected'">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer ID</span> -->
+          <input type="text" formControlName="consumer_code" placeholder="Customer ID"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Project ID</span> -->
+          <input type="text" formControlName="project_code" placeholder="Project ID"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Contact No.</span> -->
+          <input type="text" formControlName="cceld_mobileno" placeholder="Contact No." maxlength="10" (keypress)=_keyPress($event) />
+        </div>
+      </div>
+      <div class="form-group" *ngIf="currentSearchForm != 'surveyorRejected' && currentSearchForm != 'followupRejected'">
+        <div class="form-field">
+          <!-- <span class="field-icon">Address</span> -->
+          <input type="text" formControlName="cceld_address1" placeholder="Address"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Firstname</span> -->
+          <input type="text" formControlName="cceld_firstname" placeholder="Firstname"/>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="currentSearchForm != 'surveyorRejected'">
+        <div class="form-field">
+          <!-- <span class="field-icon">Middlename</span> -->
+          <input type="text" formControlName="cceld_middlename" placeholder="Middlename"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Lastname</span> -->
+          <input type="text" formControlName="cceld_lastname" placeholder="Lastname"/>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'sitesurveyorSurveyList'">
+        <div class="form-field">
+          <!-- <span class="field-icon">Payment Status</span> -->
+          <select formControlName="payment_status">
+            <option value="">Select Payment Status</option>
+            <option value="3">Paid</option>
+            <option value="0">Not Paid</option>
+          </select>
+          <!-- <input type="text" formControlName="payment_status" /> -->
+        </div>
+      </div>
+      <div class="form-group" [ngClass]="{'projct-status':(emp_role == '17' || emp_role == '8' || currentSearchForm == 'surveyorRejected')}">
+        <div class="form-field" *ngIf="emp_role == '17' || emp_role == '8' || emp_role == '22' || currentSearchForm == 'surveyorRejected'">
+          <!-- <span class="field-icon">Project Status</span> -->
+          <ng-select [options]="projectStatusList" placeholder="Select Project Status" formControlName="pmstate_name" [allowClear]="true"></ng-select>
+        </div>
+        <div class="form-field" *ngIf="emp_role == '8' || (emp_role == '17' && currentSearchForm != 'opsheadProjectStatus') || currentSearchForm == 'surveyorRejected' || currentSearchForm == 'followupRejected'">
+          <!-- <span class="field-icon">Site Surveyors</span> -->
+          <ng-select  placeholder="Select Site Surveyor" formControlName="site_surveyor" [options]="siteSurveyorsList" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+      <div class="form-field field-date-time" *ngIf="currentSearchForm === 'sitesurveyorLeadList' || currentSearchForm === 'sitesurveyorSurveyList' || currentSearchForm == 'surveyorRejected' || currentSearchForm === 'followupRejected'">
+        <div class="field-date">
+          <p-calendar class="form-text" formControlName="from_date" [(ngModel)]="fromDate" (onSelect)="checkDatesTo()" [maxDate]="maxDateFromAfter2Days" [minDate]="minDateFrom"  dateFormat="dd/mm/y" placeholder="From Date"
+          [showIcon]="true"></p-calendar>
+        </div>
+        <div class="field-date">
+          <p-calendar class="form-text" formControlName="to_date" [(ngModel)]="dateAfter2Days" (onSelect)="checkDatesFrom()" [minDate]="minDateTo" [maxDate]="dateAfter2DaysFixed" dateFormat="dd/mm/y" placeholder="To Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group search-cancel">
+        <div class="form-field">
+          <input type="submit" (click)="submitSiteSurveyorSearchForm()" class="btn btn-blue" value="Search" />
+        </div>
+        <!-- <div class="form-field">
+          <input type="button" (click)="disableSmartSearch()" class="btn btn-blue" value="Cancel" />
+        </div> -->
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+    </form>
+
+    <form [formGroup]="searchForm" *ngIf="currentSearchForm === 'supplyOrder'">
+      <!-- Project ID -->
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="project_code" placeholder="Project ID"/>
+        </div>
+      </div>
+      <!-- Firstname -->
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="cceld_firstname" placeholder="Firstname"/>
+        </div>
+      </div>
+      <!-- Lastname -->
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="cceld_lastname" placeholder="Lastname"/>
+        </div>
+      </div>
+      <!-- Contact -->
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="cceld_mobileno" placeholder="Contact No." maxlength="10" (keypress)=_keyPress($event) />
+        </div>
+      </div>
+      <!-- Address -->
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="cceld_address1" placeholder="Address"/>
+        </div>
+      </div>
+
+
+      <div class="form-group search-cancel">
+        <div class="form-field">
+          <input type="submit" (click)="submitSupplyOrderSearchForm()" class="btn btn-blue" value="Search" />
+        </div>
+        <!-- <div class="form-field">
+          <input type="button" (click)="disableSmartSearch()" class="btn btn-blue" value="Cancel" />
+        </div> -->
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+    </form>
+
+
+
+    <!--@descriptiton: form for coldbuckect leads and projects filter
+        @developer: Roshan
+      -->
+    <form [formGroup]="coldbucketLeadsProjects" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <input type="text" formControlName="lead_id" placeholder="Lead Id"/>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <input type="text" formControlName="consumer_id" placeholder="Consumer Id"/>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <input type="text" formControlName="fname" placeholder="First Name"/>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <input type="text" formControlName="lname" placeholder="Last Name"/>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <!--input type="text" formControlName="lead_status" placeholder="Lead Status"/-->
+          <ng-select formControlName="lead_status" placeholder="Lead status" [options]="leadsStatusFilter" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <!--input type="text" formControlName="project_status" placeholder="Project Status"/-->
+          <ng-select formControlName="project_status" placeholder="Project Reject status" [options]="rejectionRemarksFilter" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+          <div class="form-field">
+            <input type="text" formControlName="rejected_by" placeholder="Rejected By"/>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <input type="text" formControlName="mobile" placeholder="Mobile"/>
+      </div>
+    </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <p-calendar class="form-text" formControlName="from_date" (onSelect)="checkDatesFrom(); setSelectedYear($event)" [minDate]="minDateTo" [maxDate]="dateAfter2DaysFixed" dateFormat="dd/mm/y" placeholder="From Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <p-calendar class="form-text" formControlName="to_date" (onSelect)="checkDatesFrom(); setSelectedYear($event)" [minDate]="minDateTo" [maxDate]="dateAfter2DaysFixed" dateFormat="dd/mm/y" placeholder="From Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="currentSearchForm === 'coldbucketLeadsProjects'">
+        <div class="form-field">
+          <ng-select formControlName="selected_year" placeholder="Selected Year" [options]="selected_year_options" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+
+      <div class="form-group search-cancel">
+        <div class="form-field">
+          <input type="submit" (click)="SubmitColdbucketLeadsProjects()" class="btn btn-blue" value="Search" />
+        </div>
+
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+
+    </form>
+
+
+    <form [formGroup]="consumerLeadsListForm" *ngIf="currentSearchForm === 'paid' || currentSearchForm === 'unpaid' || currentSearchForm === 'cbucket' || currentSearchForm === 'both'">
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Firstname</span> -->
+          <input type="text" formControlName="lead_fname" placeholder="Firstname"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Middlename</span> -->
+          <input type="text" formControlName="lead_mname" placeholder="Middlename"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Lastname</span> -->
+          <input type="text" formControlName="lead_lname" placeholder="Lastname"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Lastname</span> -->
+          <input type="text" formControlName="lead_mobile" placeholder="Customer Contact" maxlength="10" (keypress)=_keyPress($event) />
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Address</span> -->
+          <input type="text" formControlName="lead_address1" placeholder="Address"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Lead ID</span> -->
+          <input type="text" formControlName="lead_id" placeholder="Lead ID"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <ng-select formControlName="lead_queuestatus" placeholder="Select Lead Queue Status" [options]="lockedStatus" [allowClear]="true"></ng-select>
+          <!-- <span class="field-icon">Lead Status</span> -->
+          <!-- <input type="text" formControlName="lead_status" placeholder="Lead Status"/> -->
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">CCE Mobile</span> -->
+          <input type="text" formControlName="cce_mobile" placeholder="CCE Mobile" maxlength="10" (keypress)=_keyPress($event) />
+
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">CCE Email</span> -->
+          <input type="text" formControlName="cce_email" placeholder="CCE Email"/>
+
+        </div>
+      </div>
+      <div class="form-group projct-status">
+        <div class="form-field">
+          <!-- <span class="field-icon">Queue Status</span> -->
+          <ng-select formControlName="lead_status" placeholder="Select Lead Status" [options]="leadListStatus" [allowClear]="true"></ng-select>
+        </div>
+        <div class="form-field">
+          <!-- <span class="field-icon">Locked By</span> -->
+          <ng-select formControlName="lead_lockedby" placeholder="Select Lead Locked By" [options]="siteSurveyorsList" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">CCE ID</span> -->
+          <input type="text" formControlName="cce_id" placeholder="CCE ID"/>
+        </div>
+      </div>
+      <div class="form-field field-date-time">
+        <div class="field-date">
+          <p-calendar class="form-text" formControlName="from_date" [(ngModel)]="fromDate" (onSelect)="checkDatesTo()" (input)="checkDatesTo()" [maxDate]="maxDateFrom"  dateFormat="dd/mm/y" placeholder="From Date"
+          [showIcon]="true"></p-calendar>
+        </div>
+        <div class="field-date">
+          <p-calendar class="form-text" formControlName="to_date" [(ngModel)]="toDate" (onSelect)="checkDatesFrom('puc')" (input)="checkDatesFrom('puc')" [minDate]="minDateTo"  [maxDate]="toDateFixed" dateFormat="dd/mm/y" placeholder="To Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group search-cancel">
+        <div class="form-field">
+          <input type="submit" (click)="submitConsumerLeadsForm()" class="btn btn-blue" value="Search" />
+        </div>
+        <!-- <div class="form-field">
+          <input type="button" (click)="disableSmartSearch()" class="btn btn-blue" value="Cancel" />
+        </div> -->
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+    </form>
+    <!--Start for the followup Search-->
+    <form [formGroup]="followUpForm" *ngIf="currentSearchForm === 'total' || currentSearchForm === 'today'  || currentSearchForm === 'AllUsersLead'">
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="lead_id" placeholder="Lead Id"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Firstname</span> -->
+          <input type="text" formControlName="project_code" placeholder="Project Id"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer First Name</span> -->
+          <input type="text" formControlName="customer_firstname" placeholder="Customer First Name"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer Last Name</span> -->
+          <input type="text" formControlName="customer_lastname" placeholder="Customer Last Name"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer Mobile No</span> -->
+          <input type="text" formControlName="cceld_mobileno" placeholder="Customer Mobile No"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field field-date">
+          <p-calendar class="form-text" formControlName="fup_call_scheduled_time" [(ngModel)]="fup_call_scheduled_time" (onSelect)="checkDatesFrom('puc')" (input)="checkDatesFrom('puc')" [minDate]="minDateTo"  dateFormat="dd/mm/y" placeholder="Scheduled Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <ng-select [options]="reassignEmployees" formControlName="assignedTo" placeholder="Select Assigned To"   [allowClear]="true"></ng-select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Firstname</span> -->
+          <!-- <ng-select  [options]="projectStatus" formControlName="fui_new_follow_up_project_status" placeholder="Select Project Status" [allowClear]="true"></ng-select> -->
+          <ng-select  [options]="projectStatusList" formControlName="fui_new_follow_up_project_status" placeholder="Select Project Status" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <ng-select formControlName="flsm_status" placeholder="Select Lead Status"  [options]="leadStatus" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="cceld_email" placeholder="Email"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer First Name</span> -->
+          <!-- <input type="text" formControlName="city" placeholder="City"/> -->
+          <ng-select  [options]="cityList" formControlName="city" placeholder="City" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer First Name</span> -->
+          <!-- <input type="text" formControlName="lead_entry_date" placeholder="Lead Entry Date"/> -->
+          <p-calendar class="form-text" formControlName="lead_entry_date" dateFormat="dd/mm/y" placeholder="Lead Entry Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer First Name</span> -->
+          <input type="text" formControlName="remarks" placeholder="Remarks"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer First Name</span> -->
+          <!-- <input type="text" formControlName="customerType" placeholder="Customer Type"/> -->
+          <ng-select  [options]="customerType" formControlName="customerType" placeholder="Customer Type" [allowClear]="true"></ng-select>
+        </div>
+      </div>
+
+
+      <div class="form-group search-cancel">
+        <div class="form-field">
+            <input type="submit" (click)="submitFollowUpForm()" class="btn btn-blue" value="Search" />
+        </div>
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+    </form>
+    <!--End-->
+
+    <!--Start for the Missed Call Logs Search-->
+    <form [formGroup]="missedCallLogsSearchForm" *ngIf="currentSearchForm === 'missedCallLogsSearchForm'">
+        <div class="form-group">
+          <div class="form-field">
+            <input type="text" formControlName="customer_number" placeholder="Customer Number"/>
+          </div>
+        </div>
+        <!--div class="form-group">
+          <div class="form-field">
+            <input type="text" formControlName="agent_number" placeholder="Agent Number"/>
+          </div>
+        </div-->
+
+        <!--div class="form-group">
+          <div class="form-field">
+            <input type="text" formControlName="url" placeholder="Request URL"/>
+          </div>
+        </div-->
+
+        <div class="form-group">
+          <div class="form-field">
+            <ng-select [options]="departmentList" formControlName="department" placeholder="Option Selected "></ng-select>
+          </div>
+        </div>
+
+        <!--div class="form-group">
+          <div class="form-field">
+            <ng-select [options]="existing_type" formControlName="existingtype" placeholder="Exist Type"></ng-select>
+          </div>
+        </div-->
+
+        <div class="form-group">
+          <div class="form-field field-date">
+              <p-calendar class="form-text" formControlName="from_date" [(ngModel)]="fromDate" (onSelect)="checkDatesTo()" [maxDate]="toDateFixed" [minDate]="minDateFrom"  dateFormat="dd/mm/y" placeholder="Call From Date"
+              [showIcon]="true"></p-calendar>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-field field-date">
+                <p-calendar class="form-text" formControlName="to_date" [(ngModel)]="to_date" (onSelect)="checkDatesFrom()" [minDate]="minDateTo" [maxDate]="toDateFixed" dateFormat="dd/mm/y" placeholder="Call To Date" [showIcon]="true"></p-calendar>
+           </div>
+        </div>
+
+        <div class="form-group search-cancel">
+          <div class="form-field">
+              <input type="submit" (click)="submitMissedCallLogsSearchForm()" class="btn btn-blue" value="Search" />
+          </div>
+          <div class="form-field">
+            <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+          </div>
+        </div>
+      </form>
+      <!--End-->
+
+    <!--@descriptiton: form for All Leads and Projects Filter
+    @developer: Roshan
+    -->
+    <form [formGroup]="allLeadsProjects" *ngIf="currentSearchForm === 'allLeadsProjects'">
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="lead_id" placeholder="Lead Id"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="project_id" placeholder="Project Id"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="consumer_id" placeholder="Consumer Id"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="fname" placeholder="First Name"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="lname" placeholder="Last Name"/>
+        </div>
+      </div>
+
+      <div class="form-group" >
+        <div class="form-field">
+          <input type="text" formControlName="mobile" placeholder="Mobile"/>
+      </div>
+    </div>
+
+        <div class="form-group" >
+          <div class="form-field">
+
+          <ng-select formControlName="source" placeholder="Lead Source" [options]="sourceList" [allowClear]="true"></ng-select>
+        </div>
+        </div>
+
+        <div class="form-group" >
+          <div class="form-field">
+            <ng-select formControlName="lead_updated_by" placeholder="Lead Updated By" [options]="leadEmployeeFilter" [allowClear]="true"></ng-select>
+        </div>
+        </div>
+
+        <div class="form-group" >
+        <div class="form-field">
+          <ng-select formControlName="project_created_by" placeholder="Project Created By" [options]="projEmployeeFilter" [allowClear]="true"></ng-select>
+        </div>
+        </div>
+
+        <div class="form-group" >
+          <div class="form-field">
+            <ng-select formControlName="lead_status" placeholder="Lead status" [options]="leadStatusFilter" [allowClear]="true"></ng-select>
+          </div>
+        </div>
+
+        <div class="form-group" >
+          <div class="form-field">
+            <ng-select formControlName="project_status" placeholder="Project Status" [options]="projectStatusFilter" [allowClear]="true"></ng-select>
+          </div>
+        </div>
+
+      <div class="form-group" >
+        <div class="form-field">
+          <p-calendar class="form-text" formControlName="from_date" [utc]="true" (onSelect)="checkDatesFrom()" [minDate]="minDateTo"  dateFormat="yy-mm-dd" placeholder="From Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group" >
+        <div class="form-field">
+          <p-calendar class="form-text" formControlName="to_date" [utc]="true" (onSelect)="checkDatesTo()" [minDate]="minDateTo" dateFormat="yy-mm-dd" placeholder="To Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group search-cancel">
+        <div class="form-field">
+          <input type="submit" (click)="SubmitAllLeadsProjects()" class="btn btn-blue" value="Search" />
+        </div>
+
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+
+    </form>
+
+    <!-- All leads and projects Admin -->
+    <form [formGroup]="allLeadsProjects" *ngIf="currentSearchForm === 'allLeadsProjectsAdmin'">
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="lead_id" placeholder="Lead Id"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="project_id" placeholder="Project Id"/>
+        </div>
+      </div>
+
+      <!-- <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="consumer_id" placeholder="Consumer Id"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="fname" placeholder="First Name"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="lname" placeholder="Last Name"/>
+        </div>
+      </div> -->
+
+      <!-- <div class="form-group" >
+        <div class="form-field">
+          <input type="text" formControlName="mobile" placeholder="Mobile"/>
+      </div>
+    </div> -->
+
+        <!-- <div class="form-group" >
+          <div class="form-field">
+
+          <ng-select formControlName="source" placeholder="Lead Source" [options]="sourceList" [allowClear]="true"></ng-select>
+        </div>
+        </div> -->
+
+        <!-- <div class="form-group" >
+          <div class="form-field">
+            <ng-select formControlName="lead_updated_by" placeholder="Lead Updated By" [options]="leadEmployeeFilter" [allowClear]="true"></ng-select>
+        </div>
+        </div> -->
+
+        <!-- <div class="form-group" >
+        <div class="form-field">
+          <ng-select formControlName="project_created_by" placeholder="Project Created By" [options]="projEmployeeFilter" [allowClear]="true"></ng-select>
+        </div>
+        </div> -->
+
+        <!-- <div class="form-group" >
+          <div class="form-field">
+            <ng-select formControlName="lead_status" placeholder="Lead status" [options]="leadStatusFilter" [allowClear]="true"></ng-select>
+          </div>
+        </div> -->
+
+        <!-- <div class="form-group" >
+          <div class="form-field">
+            <ng-select formControlName="project_status" placeholder="Project Status" [options]="projectStatusFilter" [allowClear]="true"></ng-select>
+          </div>
+        </div>
+        -->
+
+      <div class="form-group" >
+        <div class="form-field">
+          <p-calendar class="form-text" formControlName="from_date" [utc]="true" (onSelect)="checkDatesFrom()" [minDate]="minDateTo"  dateFormat="yy-mm-dd" placeholder="From Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group" >
+        <div class="form-field">
+          <p-calendar class="form-text" formControlName="to_date" [utc]="true" (onSelect)="checkDatesTo()" [minDate]="minDateTo" dateFormat="yy-mm-dd" placeholder="To Date" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+
+      <div class="form-group search-cancel">
+        <div class="form-field">
+          <input type="submit" (click)="SubmitAllLeadsProjectsAdmin()" class="btn btn-blue" value="Search" />
+        </div>
+
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+
+    </form>
+
+
+    <form [formGroup]="cceLeadFormGroup" *ngIf="currentSearchForm === 'cceleadlisting'">
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Customer ID</span> -->
+          <input type="text" formControlName="project_code" placeholder="Project ID"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Project ID</span> -->
+          <ng-select formControlName="city" placeholder="Select City" [options]="cceLeadCityListing" [allowClear]="true"></ng-select>
+          <!-- <input type="text" formControlName="city" placeholder="City"/> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Project ID</span> -->
+          <input type="text" formControlName="cce_email" placeholder="CCE Email ID"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Contact No.</span> -->
+          <!-- <input type="text" formControlName="proposal_status" placeholder="Proposal Status"/> -->
+          <select formControlName="proposal_status">
+            <option value="">Select Proposal Status</option>
+            <option value="1">Done</option>
+            <option value="2">Pending</option>
+            <option value="3">Not Feasible</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+          <!-- <span class="field-icon">Address</span> -->
+          <!-- <input type="text" formControlName="survey_status" placeholder="Survey Status"/> -->
+          <select formControlName="survey_status">
+            <option value="">Select Survey Status</option>
+            <option value="1">Done</option>
+            <option value="2">Pending</option>
+            <option value="3">Not Feasible</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-field">
+
+          <!-- <span class="field-icon">Payment Status</span> -->
+          <!-- <select formControlName="project_status">
+            <option value="">Select Payment Status</option>
+            <option value="3">Paid</option>
+            <option value="0">Not Paid</option>
+          </select> -->
+          <ng-select formControlName="project_status" placeholder="Select Project Status" [options]="cceLeadProjectStatus" [allowClear]="true"></ng-select>
+          <!-- <input type="text" formControlName="payment_status" /> -->
+        </div>
+      </div>
+      <div class="form-group search-cancel">
+        <div class="form-field">
+          <input type="submit" (click)="submitCceLeadSearchForm()" class="btn btn-blue" value="Search" />
+        </div>
+        <!-- <div class="form-field">
+          <input type="button" (click)="disableSmartSearch()" class="btn btn-blue" value="Cancel" />
+        </div> -->
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!--@description: form for partner lead search
+  @developer:roshan-->
+  <form [formGroup]="partnerQuerySearchForm" *ngIf="currentSearchForm === 'PartnerLogsSearchForm'">
+    <div class="form-group">
+      <div class="form-field">
+        <input type="text" formControlName="partner_mobile" placeholder="Partner Mobile"/>
+      </div>
+    </div>
+
+    <!--div class="form-group">
+      <div class="form-field">
+        <input type="text" formControlName="partner_name" placeholder="Employee name"/>
+      </div>
+    </div-->
+
+    <div class="form-group">
+      <div class="form-field">
+        <select formControlName="status">
+          <option value="0">Fresh</option>
+          <!--option value="2">Imcomplete</option-->
+          <!--option value="3">No Response</option-->
+          <option value="4">Rescheduled</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group search-cancel">
+      <div class="form-field">
+          <input type="submit" (click)="submitPartnerLogSearch()" class="btn btn-blue" value="Search" />
+      </div>
+      <div class="form-field">
+        <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+      </div>
+    </div>
+  </form>
+<!--End partner search Form-->
+
+<!--@description: form for partner lead search
+  @developer:roshan-->
+  <form [formGroup]="partnerQueryUserSearchForm" *ngIf="currentSearchForm === 'PartnerQueryUser'">
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="partner_mobile" placeholder="Partner Mobile"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-field">
+          <input type="text" formControlName="partner_name" placeholder="Partner Name"/>
+        </div>
+      </div>
+
+      <!--div class="form-group">
+        <div class="form-field">
+          <select formControlName="status">
+            <option value="0">Open</option>
+            <option value="1">Close</option>
+          </select>
+        </div>
+      </div-->
+
+      <div class="form-group search-cancel">
+        <div class="form-field">
+            <input type="submit" (click)="submitPartnerQuerySearch()" class="btn btn-blue" value="Search" />
+        </div>
+        <div class="form-field">
+          <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+        </div>
+      </div>
+    </form>
+    <!--End form-->
+    <div class="search-feild smart-box">
+    <form [formGroup]="LeadsListingCceForm" *ngIf="currentSearchForm === 'CceLeadsList'">
+        <div class="form-group">
+            <div class="form-field">
+              <input type="text" formControlName="lead_id" placeholder="Lead Id"/>
+            </div>
+            <div class="field-date">
+              <p-calendar class="form-text" formControlName="lead_date" dateFormat="yy-mm-dd" placeholder="Lead Date"
+              [showIcon]="true"></p-calendar>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-field">
+              <input type="text" formControlName="lead_name" placeholder="Lead Name"/>
+            </div>
+         </div>
+
+        <div class="form-group">
+            <div class="form-field">
+              <input type="text" formControlName="lead_mobile" placeholder="Lead Mobile"/>
+            </div>
+            </div>
+            <div class="form-group">
+            <div class="form-field">
+              <ng-select formControlName="source" placeholder="Lead Source" [options]="sourceList" [allowClear]="true"></ng-select>
+            </div>
+          </div>
+
+        <div class="form-group search-cancel">
+          <div class="form-field">
+              <input type="submit" (click)="submitLeadsListingCceForm()" class="btn btn-blue" value="Search" />
+          </div>
+          <div class="form-field">
+            <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+          </div>
+        </div>
+      </form>
+      </div>
+      <!--End form-->
+
+    <!--Start Employee master serch Form-->
+    <div class="container" *ngIf="currentSearchForm === 'employeeMaster'">
+      <div class="search-feild smart-box">
+    <form [formGroup]="employeeMasterForm" >
+        <div class="form-group">
+          <div class="form-field">
+            <input type="text" formControlName="emp_name" placeholder="First Name"/>
+          </div>
+        </div>
+        <div class="form-group">
+            <div class="form-field">
+              <input type="text" formControlName="emp_lname" placeholder="Last Name"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-field">
+              <input type="text" formControlName="emp_email" placeholder="Email"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-field">
+              <input type="text" formControlName="emp_mobile" placeholder="Mobile"/>
+            </div>
+          </div>
+
+
+          <div class="form-group search-cancel">
+            <div class="form-field">
+                <input type="submit" (click)="submitEmployeeMasterFrom()" class="btn btn-blue" value="Search" />
+            </div>
+            <div class="form-field">
+              <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+            </div>
+          </div>
+    </form>
+    </div>
+    </div>
+    <!--End Form-->
+
+    <!--Project Management project search Form-->
+    <div class="search-feild smart-box">
+    <form   [formGroup]="pmprojectForm" *ngIf="currentSearchForm === 'ongoing' || currentSearchForm === 'allocated' || currentSearchForm === 'completed' || this.currentSearchForm === 'assigned' || currentSearchForm=='pm_view'">
+      <div class="form-group">
+           <div class="form-field">
+            <input type="text" formControlName="project_code" placeholder="Project ID"/>
+          </div>
+          <div class="form-field">
+             <input type="text" formControlName="fname" placeholder="Firstname"/>
+          </div>
+          <div class="form-field">
+            <input type="text" formControlName="lname" placeholder="Lastname"/>
+          </div>
+          <div class="form-field" *ngIf="view_type=='pm_view'">
+            <ng-select [options]="pmlist" formControlName="project_manager" placeholder="Select Project Manager" class="" [allowClear]="true"></ng-select>
+          </div>
+
+      </div>
+      <div class="form-group">
+          <div class="form-field">
+            <ng-select  placeholder="Select Site Surveyor" formControlName="site_surveyor" [options]="siteSurveyorsList" [allowClear]="true"></ng-select>
+          </div>
+          <div class="form-field">
+            <ng-select  placeholder="Select City" formControlName="city" [options]="cityList" (selected)="ifStateIfCityPm('city')" [allowClear]="true"></ng-select>
+          </div>
+          <div class="form-field">
+            <ng-select  placeholder="Select State" formControlName="state" [options]="stateList" (selected)="ifStateIfCityPm('state')"  [allowClear]="true"></ng-select>
+          </div>
+
+        </div>
+        <div class="form-group">
+            <div class="form-field">
+                <input type="text" formControlName="mobile" placeholder="Mobile"/>
+              </div>
+            <div class="form-field col-sm-4">
+                <select formControlName="order_type">
+                   <option value="">Select Order Type</option>
+                   <option value="1">Gold</option>
+                   <option value="2">Silver</option>
+                 </select>
+            </div>
+            <div class="form-field col-sm-4">
+              <select formControlName="grid_type">
+                 <option value="">Select Grid Type</option>
+                 <option value="1">Grid-tied</option>
+                 <option value="2">Off-Grid</option>
+               </select>
+             </div>
+        </div>
+        <div class="form-group search-cancel">
+          <div class="form-field">
+            <input type="submit" (click)="submitPMSearchForm()" class="btn btn-blue" value="Search" />
+          </div>
+         <div class="form-field">
+            <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+          </div>
+        </div>
+      </form>
+  </div>
+    <!--End Form-->
+
+    <!--Finance project search Form-->
+    <div class="container" *ngIf="currentSearchForm == 'paymentToApprove' || currentSearchForm == 'paymentToApproveComplete' || currentSearchForm == 'ReleaseRequest' || currentSearchForm == 'ReleaseRequestOld' || currentSearchForm == 'ReleaseRequestComplete' || currentSearchForm == 'SspPaymentAprroval' ||currentSearchForm == 'FinancePayment' || currentSearchForm == 'OpsHeadApproval'">
+     <div class="search-feild smart-box">
+        <form [formGroup]="financeSearchForm">
+          <div class="form-group">
+               <div class="form-field">
+                <input type="text" formControlName="project_code" placeholder="Project ID"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                 <input type="text" formControlName="fname" placeholder="Customer Firstname"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-field">
+                <input type="text" formControlName="lname" placeholder="Customer Lastname"/>
+              </div>
+            </div>
+          <div *ngIf="currentSearchForm != 'SspPaymentAprroval' && currentSearchForm != 'FinancePayment' && currentSearchForm != 'OpsHeadApproval'" class="form-group">
+              <div class="form-field col-sm-4">
+                  <select formControlName="grid_type">
+                     <option value="">Select Grid Type</option>
+                     <option value="1">Grid-tied</option>
+                     <option value="2">Off-Grid</option>
+                     <option value="3">Hybrid</option>
+                   </select>
+                 </div>
+
+            </div>
+
+            <div *ngIf="(currentSearchForm == 'SspPaymentAprroval' || currentSearchForm == 'FinancePayment' || currentSearchForm == 'OpsHeadApproval') && partnerList.length" class="form-group">
+              <div class="form-field col-sm-4">
+                <ng-select
+                [options]="partnerList"
+                formControlName="partner"
+                placeholder="Select Partner"
+              ></ng-select>
+                 </div>
+            </div>
+
+            <div *ngIf="currentSearchForm == 'SspPaymentAprroval' || currentSearchForm == 'FinancePayment' || currentSearchForm == 'OpsHeadApproval'"  class="form-group col-sm-4">
+              <div class="field-date">
+                <p-calendar class="form-text" formControlName="approval_date_from" dateFormat="yy-mm-dd" placeholder="Approval Date From"
+                [showIcon]="true"></p-calendar>
+              </div>
+            </div>
+
+            <div *ngIf="currentSearchForm == 'SspPaymentAprroval' || currentSearchForm == 'FinancePayment' || currentSearchForm == 'OpsHeadApproval'"  class="form-group col-sm-4">
+              <div class="field-date">
+                <p-calendar class="form-text" formControlName="approval_date_to" dateFormat="yy-mm-dd" placeholder="Approval Date To"
+                [showIcon]="true"></p-calendar>
+              </div>
+            </div>
+
+            <!-- <div *ngIf="currentSearchForm == 'SspPaymentAprroval' || currentSearchForm == 'FinancePayment' || currentSearchForm == 'OpsHeadApproval'" class="form-group">
+              <div class="form-field col-sm-4">
+                  <select formControlName="status">
+                     <option value="">Select Status</option>
+                     <option value="1">To Approve</option>
+                     <option value="2">Approved</option>
+                   </select>
+                 </div>
+
+            </div> -->
+
+            <div class="form-group search-cancel">
+              <div class="form-field">
+                <input type="submit" (click)="submitFianceSearchForm()" class="btn btn-blue" value="Search" />
+              </div>
+             <div class="form-field">
+                <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+        <!--End Form-->
+
+    <!--Finance Approved payments search Form-->
+    <div class="container" *ngIf="currentSearchForm == 'OpsheadApprovedPayments' || currentSearchForm == 'CommercialApprovedPayments' || currentSearchForm == 'FinanceApprovedPayment'">
+      <div class="search-feild smart-box">
+         <form [formGroup]="approvedFinanceSearchForm">
+           <div class="form-group">
+                <div class="form-field">
+                 <input type="text" formControlName="project_code" placeholder="Project ID"/>
+               </div>
+             </div>
+             <div class="form-group">
+               <div class="form-field">
+                  <input type="text" formControlName="name" placeholder="Customer Name"/>
+               </div>
+             </div>
+
+             <div class="form-group col-sm-4">
+              <div class="field-date">
+                <p-calendar class="form-text" formControlName="approval_date_from" dateFormat="yy-mm-dd" placeholder="Approval Date From"
+                [showIcon]="true"></p-calendar>
+              </div>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <div class="field-date">
+                <p-calendar class="form-text" formControlName="approval_date_to" dateFormat="yy-mm-dd" placeholder="Approval Date To"
+                [showIcon]="true"></p-calendar>
+              </div>
+            </div>
+
+
+             <div *ngIf="partnerList.length" class="form-group">
+               <div class="form-field col-sm-4">
+                 <ng-select
+                 [options]="partnerList"
+                 formControlName="partner"
+                 placeholder="Select Partner"
+               ></ng-select>
+                  </div>
+             </div>
+
+             <div class="form-group search-cancel">
+               <div class="form-field">
+                 <input type="submit" (click)="submitApprovedFianceSearchForm()" class="btn btn-blue" value="Search" />
+               </div>
+              <div class="form-field">
+                 <input type="button" (click)="clearSmartSearch()" class="btn btn-blue" value="Reset" />
+               </div>
+             </div>
+           </form>
+       </div>
+     </div>
+         <!--End Form-->
+
+  <div *ngIf="visible === 'button'">
+    <input type="button" (click)="enableSmartSearch()" class="btn btn-blue" value="Smart Search" />
+  </div>
+</div>

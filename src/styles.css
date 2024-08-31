@@ -1,0 +1,634 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+font-family:'Lato',sans-serif;
+color:#616161
+}
+ul{
+padding:0;
+margin:0;
+}
+.pt5 {
+padding-top:5px
+}
+.pt10 {
+padding-top:10px
+}
+
+.pt15 {
+padding-top:15px
+}
+.pt20 {
+padding-top:20px
+}
+.pt25 {
+padding-top:25px
+}
+.pt30 {
+padding-top:30px
+}
+.pt35 {
+padding-top:35px
+}
+.pt65 {
+padding-top:65px
+}
+.pb5 {
+padding-bottom:5px
+}
+.pb10 {
+padding-bottom:10px
+}
+.pb15 {
+padding-bottom:15px
+}
+.pb20 {
+padding-bottom:20px
+}
+.pb25 {
+padding-bottom:25px
+}
+.pb30 {
+padding-bottom:30px
+}
+.pb35 {
+padding-bottom:35px
+}
+
+.pb65 {
+padding-bottom:65px
+}
+
+.text-white {
+color:#fff
+}
+
+li a:hover {
+text-decoration:none
+}
+
+.bg-dark-blue {
+background-color:#04357f!important;
+}
+.sky-blue-bg {
+background:#e0edfe
+}
+
+.dark-brown {
+background:#241905
+}
+
+.dark-blue {
+background:#052d69
+}
+
+.yello-bg{
+background:#f99146;
+border-color: #ffffff;
+box-shadow: 0px 1px 8px #00000047;
+}
+
+.yello-bg:hover,.yello-bg:active,.yello-bg:focus,.yello-bg:visited{
+background:#e67e33;
+border-color: #fff!important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+color:#fff;
+font-size:14px;
+padding-right:1rem;
+padding-left:1rem
+}
+
+.navbar-dark .navbar-nav a.btn-light.nav-link {
+font-size:15px;
+color:#04357f;
+font-weight:600;
+border-radius:20px
+}
+
+.img-responsive {
+width:100%
+}
+
+.text-blue {
+color:#04357f
+}
+
+.text-light-brown {
+color:#a59e93
+}
+
+.desc {
+color:#616161;
+font-size:16px;
+line-height:26px
+}
+
+.text-sm {
+font-size:14px
+}
+
+h4 {
+font-size:22px
+}
+
+.page-title h3 {
+    display: inline-block;
+    font-weight: 300;
+    font-size: 38px;
+}
+
+.border-separator {
+border-bottom:1px solid #d2d2d2
+}
+
+.separator {
+display:block;
+width:100%;
+height:20px;
+background:transparent;
+position:relative
+}
+
+.separator:before {
+content:'';
+position:absolute;
+height:3px;
+width:60px;
+top:1px;
+left:0;
+background:#053680
+}
+
+.page-title .separator:before {
+left:calc(51% - 41px)
+}
+
+ul.footer-links {
+padding:0
+}
+
+.footer-links li {
+list-style:none
+}
+
+.footer-links li a {
+color:#a59e93;
+line-height:28px;
+font-size:14px;
+list-style:none
+}
+
+.copyright {
+font-size:14px;
+color:#80776a
+}
+
+.footer-container .col-md-2 {
+-webkit-box-flex:0;
+-ms-flex:0 0 19.666667%;
+flex:0 0 19.666667%;
+max-width:19.666667%
+}
+
+.footer-container .container-fluid {
+padding-right:35px;
+padding-left:35px
+}
+
+.btn-circle {
+border-radius:20px
+}
+
+.call-request input {
+border-top:none;
+border-left:none;
+border-right:none
+}
+
+.call-request .btn-circle {
+padding:0 24px;
+margin-left:25px
+}
+
+.main-banner img {
+max-width:555px
+}
+
+.banner-img img {
+max-width:318px
+}
+
+.banner-text {
+font-size:38px;
+font-weight:300;
+padding-top:90px
+}
+
+.banner-text span {
+border-bottom:3px solid #75b63b;
+padding-bottom:10px
+}
+
+.banner-text h2 {
+font-size:41px;
+margin-bottom:0
+}
+
+.easy-tabs .nav-tabs {
+display:inline-block;
+border-bottom:none
+}
+
+.easy-tabs .nav-tabs li {
+display:inline;
+border-right:1px solid #d2d2d2
+}
+
+.easy-tabs .nav-tabs li a {
+font-size:15px;
+padding:9px 12px;
+display:inline-block;
+color:#616161
+}
+
+.easy-tabs .nav-tabs li:last-child {
+border-right:none
+}
+
+.easy-tabs .nav-tabs li a:hover,.easy-tabs .nav-tabs li a:active,.easy-tabs .nav-tabs li a.active {
+color:#052d69;
+border-bottom: 1px solid #052d69;
+}
+ul.financing-list {
+padding-left: 35px;
+}
+ul.financing-list li, ul.feature-list li{
+list-style:none;
+line-height: 30px;
+font-size: 15px;
+}
+ul.financing-list li:before, ul.feature-list li:before{
+color: #43669c;
+font: bold 14px/1 FontAwesome;
+display: inline-block;
+width: 1em;
+}
+ul.financing-list li:before {
+content: "\f105";
+}
+ul.feature-list li:before{
+content: "•";
+font-size:25px;
+vertical-align:middle;
+}
+.custom-btn-lg{
+font-size:17px;
+margin-right:15px;
+padding: 6px 24px;
+}
+.form-control::placeholder{color:#252525;font-size:15px;}
+.packages-price-bg {
+background: url(/assets/images/price-bg.png) no-repeat;
+width: 189px;
+height: 51px;
+text-align: center;
+color: #fff;
+padding-top: 10px;
+margin: 0 auto;
+}
+.grid-tied-img, .off-grid-img{
+padding-top:165px;
+}
+.packages-list i.fa-check-circle-o{
+color:#7ca709;
+font-size:23px;
+}
+.package-footer{
+background: #acacac;
+}
+.packages-list .table td {
+padding: 0.35rem .75rem;
+border: none;
+}
+.fade.in {
+opacity: 1;
+}
+#apply-form .modal-header {
+padding: 0.5rem 1rem 0;
+}
+.smart-box form{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.smart-box form .form-group{
+    width: 24%;
+    margin-bottom: 5px;
+    margin-right: 8px;
+}
+.smart-box form .form-group span{
+    display: inline-block;
+}
+.smart-box form .form-group input,.smart-box form .form-group ng-select{
+    width: 100%;
+    height: 36px;
+}
+.smart-box .form-field{
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+  }
+
+ .smart-box form .form-group.projct-status{
+   width: 49.5%;
+   margin: 0;
+}
+.smart-box form .form-group.projct-status ng-select .below{background: #fff;}
+smart-search .container{
+    overflow: visible;
+}
+.smart-box form .form-group.search-cancel{
+    flex: 0 0 100%;
+}
+.smart-box form .form-group.search-cancel input {
+    width: auto;
+
+}
+.search-cancel .form-field{
+    display: inline-block
+}
+.smart-box .field-date-time .field-date{
+    margin-right: 50px;
+    margin-top: 0px;
+}
+.smart-box .field-date-time{
+  flex: 0 0 49.5%;
+}
+.smart-box .projct-status .form-field{
+
+  flex: 0 0 30%
+}
+.smart-box .form-group .form-field select{
+    height: 35px;
+}
+.smart-box .projct-status.form-group .form-field{
+    width: 48.5%;
+    display: inline-flex;
+    margin-right: 5px;
+}
+.smart-box .projct-status.form-group ng-select > div > div.single,.smart-box .form-group ng-select > div > div.single{
+    height: 34px;
+}
+.smart-box .projct-status.form-group ng-select > div > div.single > div.toggle,.smart-box .projct-status.form-group ng-select > div > div.single > div.value{
+    line-height: 37px;
+}
+ng-select > div{
+    background: #fff;
+}
+.smart-box .field-date-time .ui-calendar .ui-calendar-button{
+    width: 3em
+}
+.smart-box .field-date-time .field-date{
+    width: 50%;
+}
+.smart-box .field-date-time .field-date .ui-calendar{
+    width: 100%;
+    display: block;
+}
+
+
+@media(max-width:1199px){
+
+    .fix-strip p{font-size: 14px;
+        line-height: 18px;}
+}
+@media(max-width:991px){
+
+    .fix-strip p{font-size: 12px;
+        line-height: 15px;}
+}
+/*-- custom responsive css start --*/
+@media (max-width:768px){
+.banner-text {
+    font-size: 26px;
+    font-weight: 300;
+    padding-top: 16px;
+}
+.banner-text h2 {
+    font-size: 31px;
+}
+.banner-img img {
+    max-width: 185px;
+}
+.easy-emi.pt65 {
+    padding-top: 20px;
+    padding-bottom: 0;
+}
+.easy-emi .pt35 {
+    padding-top: 4px;
+}
+.page-title h3 {
+    font-size: 30px;
+}
+.sky-blue-bg.pt65.pb65 {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.easy-emi {
+    padding-top: 20px;
+    padding-bottom: 0;
+}
+.call-request {
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+.banner-text span {
+    padding-bottom: 5px;
+}
+.grid-tied-img, .off-grid-img {
+    padding-top: 21px;
+    text-align: center;
+}
+}
+@media (max-width:568px){
+.banner-text {
+    font-size: 26px;
+    padding-top: 16px;
+    text-align: center;
+}
+.banner-text h2 {
+    font-size: 26px;
+}
+.banner-img {
+    text-align: center;
+}
+.banner-img img {
+    float: none;
+}
+.salaried-icon,.self-icon {
+    text-align: center;
+    width: 100%;
+	padding-bottom: 15px;
+}
+.salaried-icon img,.self-icon img {
+    max-width: 142px;
+}
+.custom-btn-lg {
+    width: 100%;
+    margin-bottom: 6px;
+}
+}
+
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+  .yello-bg{ border-radius:5px; border:1px solid #fff; background:#f99146 !important;}
+  .yello-bg:hover{ background: #e67e33 !important;}
+  .table-responsive{ font-size:16px;}
+
+  .btn-bottom-new{
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    padding: 5px 15px;
+    font-size: 16px;
+    color: #fff;
+    background:#f99146;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    box-shadow: 0px 1px 8px #00000047;
+}
+.btn-bottom-new:hover{ background: #e67e33;}
+
+.img-responsive {
+    width: 70%;
+}
+
+.no-data{
+    text-align:center;
+}
+
+.send-pay-button{
+    background-color: blue;
+    border: 2px solid blue;
+    border-radius: 12% !important;
+    color: white;
+    width: 18%;
+}
+@media only screen and (max-width: 1199px) {
+    .header .nav-links li{padding: 0 10px!important}
+
+}
+@media only screen and (max-width: 1020px) and (min-width: 770px) {
+
+    .header .nav-links{text-align: right!important;}
+    .header .nav-links li{line-height: 40px!important;}
+    .header .login-signup-links{margin-bottom: 10px!important;}
+
+}
+@media screen and (max-width: 991px){
+    app-calculator-basic .solar-calculator, app-calculator-advanced .solar-calculator{    margin-top: 85px!important;}
+
+}
+@media screen and (max-width: 767px){
+    .solar-journey .slower.go img{width: 110px;}
+    .solar-journey{margin: 0 auto!important}
+    .solar-journey .journey-data{width: 50px!important;height: 80px!important;}
+    .solar-journey{width: 290px!important;height: 280px!important;}
+    .solar-journey .journey-data>div img{width: 25px!important;height: 25px;}
+    .solar-journey .journey-data>div .name{padding: 4px 0!important;font-size: 10px!important;line-height: 12px!important;}
+    .solar-journey .solar-bulb{text-align: center;}
+    .journey-dboard .animated.fadeIn,.solar-journey .solar-bulb{opacity: 0!important;}
+    .journey-dboard .animated.fadeIn.slower.go,.solar-journey .solar-bulb.slower.go{opacity: 1!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-1 { left: -5px!important; bottom: 0px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-2 { left: -5px!important;  top: 93px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-3 { left: 50px!important; top: 35px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-4 { right: 50px!important; top: 35px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-5 { right: -5px!important; top: 93px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-6 { right: -5px!important; bottom: 0px!important;}
+    .dashboard-container .dashboard-inner{border: none!important}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-1 .journey-data { left: 15px!important; top: 0px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-2 .journey-data { left: 14px!important; top: 7px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-3 .journey-data { left: 28px!important; top: 18px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-4 .journey-data { left: 37px!important; top: 16px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-5 .journey-data { left: 34px!important; top: -1px!important;}
+    .solar-journey [class*="journey-milestone-"].journey-milestone-6 .journey-data { left: 40px!important; top: 1px!important;}
+    .solar-journey+.project-address{margin: 20px 0;}
+    .journey-dboard.dashboard-container .dashboard-title{font-size: 30px;}
+    .nav-settings-n-notifications{position: relative!important; right: 0!important; bottom: 0!important; width: 100%; float: right; text-align: center; margin-top: 10px;}
+    .tabs-project.dashboard-tabs{width: 100%;}
+    .tabs-project.dashboard-tabs a{ margin: 3px 0 0;}
+    .tabs-project.dashboard-tabs a:first-child{margin-right: 30px;}
+    .journey-dboard .ui-panel-titlebar h3.project-id{ padding-right: 28px;}
+    .journey-dboard .ui-panel-titlebar .ui-panel-titlebar-icon{top:5px}
+    .solar-journey .journey-data>div .status{display: none;}
+    #calculator-form .field-tooltip-wrapper [class*="tooltip-"] dfn{ transform: translateX(-88%);}
+    #calculator-form .field-tooltip-wrapper [class*="tooltip-"] dfn:after{ left: 75%;}
+    #calculator-form .switcher .radio+.radio{margin-left: 5px;}
+    #calculator-form .switcher .radio label{padding-left: 28px; font-size: 16px; line-height: 23px; display: block;}
+    .static-page .banner-site-survey .banner-content h1 strong:before{background: none!important;}
+}
+
+@media screen and (max-width: 479px){
+    .header .btn.btn-request-visit{font-size: 12px!important;padding: 0 5px!important;}
+    #benifit-solor .about-solar [class*="luminous-card"]{    background-size: cover;height: 250px;}
+    #benifit-solor .about-solar [class*="luminous-card"] .card-title { font-size: 22px;  line-height: 24px; }
+    .solar-calculator #calculator-form input[type="text"]{padding-right: 26px;}
+
+}
+
+div.survey-page-left .survey-form .ui-panel .ui-panel-titlebar{
+    padding: 4px 0;
+}
+
+.ui-panel.ui-widget .ui-panel-titlebar-icon span{
+ top: -15px;
+}
+pre{
+    white-space: pre-wrap;
+}
+.email_signature p{margin-bottom:0px;}
+/* .visitedDateTime .ui-datepicker{
+    top:0px!important;
+} */
+
+.edit-ic {
+  color:#052d69;
+  font-size: 24px;
+}
+
+.td-edit-item-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 30%;
+}
+
+/* .dbContain {
+  margin-top: 40px
+}
+
+.sidebar {
+  top: 40px !important;
+}
+
+.main-container {
+  padding-top: 20px;
+} */
+.wordwrap {
+  word-wrap: break-word;
+}

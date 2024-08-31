@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: black;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Add padding to containers */
+    .container {
+      padding: 16px;
+      background-color: white;
+    }
+
+
+    /* Overwrite default styles of hr */
+    hr {
+      border: 1px solid #f1f1f1;
+      margin-bottom: 25px;
+    }
+
+    /* Set a style for the submit button */
+    .registerbtn {
+      background-color: #04357f;
+      ;
+      color: white;
+      padding: 16px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      opacity: 0.9;
+    }
+
+    .registerbtn:hover {
+      opacity: 1;
+    }
+
+    /* Add a blue text color to links */
+    a {
+      color: dodgerblue;
+    }
+
+    /* Set a grey background color and center the text of the "sign in" section */
+    .signin {
+      background-color: #f1f1f1;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!--  <div class="container" *ngIf="validurl==1" >
+     <form [formGroup]="taskUpdate"  (ngSubmit)="SaveTaskdata()">
+        <h2>Save Task Info</h2>
+        <p>Please fill in this form to update task info.</p>
+        <hr>
+
+          <div class="left d-flex">
+            
+           <label class="label">Remarks if any:</label>
+           <textarea formControlName="remarks" class="form-control"></textarea>
+           <div class="error" *ngIf="taskUpdate.controls?.remarks?.errors?.required">Remarks is required.</div>
+          </div>
+        <hr>
+        <button type="submit" class="registerbtn">Submit</button>
+
+   </form>
+  </div> -->
+  <div class="">
+    <div class="main-container">
+      <div class="container" *ngIf="validurl==1">
+        <div class="row">
+          <div class="col-lg-12">
+            <form [formGroup]="taskUpdate" (ngSubmit)="SaveTaskdata()">
+              <div class="task-blk">
+                <div class="heading-blk">
+                  <h1 class="main-heading">Task</h1>
+                  <span>{{taskname}}</span>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Actual Start Date</label>
+                    <div class="date">
+                      <span>
+                        <p-calendar disabled="true" showIcon="true" class="form-text" dateFormat="dd/mm/yy"
+                          formControlName="actualstartdate" placeholder="Date"></p-calendar>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-md-4" *ngIf="showactualenddate">
+                    <label>Actual End Date</label>
+                    <div class="date">
+                      <span>
+                        <p-calendar showIcon="true" class="form-text" [maxDate]='currentDate' dateFormat="dd/mm/yy"
+                          formControlName="actualenddate" placeholder="Date"></p-calendar>
+                      </span>
+                    </div>
+                    <div class="error" *ngIf="taskUpdate.controls?.actualenddate?.errors?.required">End Date is
+                      required.</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label>Updated Status</label>
+                    <div class="custom-l-select">
+                      <select class="form-control" (change)="onChangetaskcomplete($event.target.value)"
+                        formControlName="status">
+                        <option value="1" selected>Completed</option>
+                        <option value="3">Ongoing</option>
+                      </select>
+                      <svg height="7" viewBox="0 0 12 8" width="12" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M7 8a.976.976 0 0 1-.693-.288L.287 1.678a.984.984 0 0 1 0-1.39.979.979 0 0 1 1.387 0L7 5.628l5.326-5.34a.979.979 0 0 1 1.387 0 .984.984 0 0 1 0 1.39l-6.02 6.034A.976.976 0 0 1 7 8z"
+                          fill="#003374" fill-rule="nonzero"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="col-md-6" style="margin-top:20px;">
+                    <label>Remarks if any:</label>
+                    <textarea formControlName="remarks" class="form-control"></textarea>
+                    <div class="error" *ngIf="taskUpdate.controls?.remarks?.errors?.required">Remarks is required.</div>
+                  </div>
+                </div>
+                <div class="btn-blk">
+                  <button type="submit" class="btn btn-blue">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+  <div class="main-container" *ngIf="validurl==0">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="main-heading">Page Not Found</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>

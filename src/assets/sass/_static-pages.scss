@@ -1,0 +1,693 @@
+/* static pages */
+
+p-accordion {
+    margin-bottom: 10px;
+    display: flex;
+    .ui-accordion {
+        font-family: 'Lato';
+        .ui-accordion-header {
+            border: none;
+            background-color: transparent;
+            &:not(.ui-state-active):not(.ui-state-disabled):hover {
+                background-color: transparent;
+            }
+            a[role="tab"] {
+                padding: 0;
+                font-size: 18px;
+                color: #04357f;
+                font-weight: 400;
+                margin-bottom: 5px;
+                position: relative;
+                text-decoration: none;
+                &:before {
+                    content: '';
+                    background: url(../images/faq-q-icon.png) no-repeat 0 0;
+                    width: 18px;
+                    height: 18px;
+                    position: absolute;
+                    left: -30px;
+                    top: 3px;
+                    transform: rotate(-90deg);
+                    transition: all 200ms ease-in-out;
+                }
+            }
+            &.ui-state-active {
+                a[role="tab"]:before {
+                    transform: rotate(0);
+                }
+            }
+            .ui-accordion-toggle-icon {
+                display: none;
+            }
+        }
+        .ui-accordion-content {
+            padding: 0;
+            p {
+                line-height: 1.5;
+            }
+        }
+    }
+}
+
+.static-page {
+    padding-bottom: 50px;
+    .banner-site-survey .banner-content h1 {
+        strong {
+            position: relative;
+            &:before {
+                width: 92px;
+                background: #75b63b;
+                height: 3px;
+                content: '';
+                position: absolute;
+                bottom: -12px;
+                left: 0;
+                display: inline-block;
+            }
+        }
+    }
+}
+
+
+/* end static pages */
+
+
+/* start solar basics */
+
+.main-solar-basics {
+    min-height: 500px;
+    background: #fff;
+    .ctr {
+        text-align: center;
+        img {
+            vertical-align: middle;
+        }
+    }
+    h2 {
+        font-size: 26px;
+        color: #04357f;
+        margin-bottom: 10px;
+    }
+    .heading-center {
+        h2 {
+            font-size: 35px;
+        }
+        p {
+            font-size: 14px;
+            color: #04357f;
+            font-weight: 700;
+        }
+    }
+    h3 {
+        font-size: 23px;
+        color: #04357f;
+        font-weight: 400;
+        margin-bottom: 10px;
+    }
+    p {
+        font-size: 16px;
+        color: #616161;
+        line-height: 26px;
+        position: relative;
+        span {
+            font-family: $family-lato;
+            font-weight: $bold;
+            color: #04357f;
+        }
+        span.count {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        i {
+            text-align: right;
+            display: block;
+        }
+    }
+    h4 {
+        font-size: 19px;
+        color: #3c5e97;
+        font-weight: 400;
+    }
+    [class*="col-md-"] {
+        &:not([class*="col-md-12"]) {
+            margin-top: 25px;
+            margin-bottom: 25px;
+            align-self: center;
+        }
+    }
+}
+
+
+/* end solar basics */
+
+
+/* start solar banifits */
+
+.main-solar-benifits {
+    min-height: 500px;
+    background: #fff;
+    .heading-center {
+        h2 {
+            font-size: 35px;
+        }
+    }
+    .why-solar {
+        margin-top: 35px;
+        img {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .detail {
+            position: relative;
+            .detail-txt {
+                position: absolute;
+                bottom: 0px;
+                left: 0;
+                background: rgba(0, 0, 0, 0.5);
+                text-align: center;
+                color: #f0f7ff;
+                padding: 20px 75px;
+                width: 100%;
+                h4 {
+                    font-size: 15px;
+                }
+                p {
+                    margin-bottom: 0;
+                    font-size: 15px;
+                    font-weight: 300;
+                    color: #f0f7ff;
+                }
+            }
+        }
+    }
+    h3 {
+        font-size: 23px;
+        color: #04357f;
+        margin-bottom: 10px;
+        font-weight: 300;
+    }
+    p {
+        font-size: 16px;
+        color: #616161;
+        line-height: 26px;
+        position: relative;
+        span {
+            font-family: $family-lato;
+            color: #48addc;
+        }
+    }
+    .gray-section {
+        background: #efefef;
+    }
+    .why-solar-use {
+        text-align: center;
+        img {
+            max-width: 90px;
+        }
+        >div {
+            padding: 35px 0 35px 0;
+            p {
+                max-width: 80%;
+                margin: 0 auto;
+            }
+        }
+    }
+    .book-a-solar {
+        text-align: center;
+        font-size: 28px;
+        color: #04357f;
+        font-weight: 300;
+        a {
+            color: #38b8f4;
+            text-decoration: underline;
+            font-weight: $bold;
+        }
+    }
+}
+
+
+/* end solar banifits */
+
+
+/* start solar installation */
+
+.main-solar-instllation {
+    min-height: 500px;
+    background: #fff;
+    .heading-center {
+        h2 {
+            font-size: 35px;
+        }
+    }
+    h3 {
+        color: #04357f;
+        font-size: 23px;
+        font-weight: 400;
+        margin-bottom: 10px;
+    }
+    p {
+        font-size: 16px;
+        color: #616161;
+        margin-bottom: 50px;
+        a {
+            display: block;
+            color: #14869e;
+        }
+    }
+    .solar-checklist {
+        text-align: center;
+        img {
+            display: inline-block;
+            vertical-align: top;
+            margin-top: 15px;
+            margin-bottom: 45px;
+        }
+    }
+}
+
+
+/* end solar installation */
+
+
+/* start css Blog page */
+
+.main-blog {
+    background: #fff;
+    .heading-center {
+        h2 {
+            font-size: 35px;
+        }
+    }
+    img {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .mt-bottom-30 {
+        margin-bottom: 30px;
+    }
+    h3 {
+        font-size: 26px;
+        color: #fff;
+        padding: 15px;
+    }
+    .blog-post {
+        margin-top: 40px;
+        [class*="col-md-"] {
+            position: relative;
+        }
+        .blog-pst-txt {
+            position: absolute;
+            bottom: 0;
+            left: 15px;
+            width: 100%;
+        }
+        img {
+            width: 100%;
+        }
+    }
+}
+
+.back-to-blog {
+    position: absolute;
+    right: 15px;
+    top: 0;
+    font-size: 16px;
+    color: #616161;
+    z-index: 9;
+    .fa {
+        font-size: 14px;
+    }
+    &:hover {
+        color: #04357f;
+    }
+}
+
+.blog-detail {
+    p {
+        font-size: 16px;
+        color: #616161;
+        margin-bottom: 40px;
+        a {
+            color: #477ccb;
+            display: inline-block;
+        }
+    }
+    .listing-text {
+        list-style: disc;
+        padding-left: 18px;
+        font-size: 16px;
+        color: #616161;
+        li+li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #477ccb;
+            display: inline-block;
+        }
+    }
+    h3 {
+        font-size: 23px;
+        color: #04357f;
+        padding: 0;
+        font-weight: 400;
+        margin-bottom: 10px;
+    }
+    .detail-caption {
+        margin: 40px 0 50px 0;
+        position: relative;
+        h2 {
+            position: absolute;
+            bottom: 0;
+            color: #fff;
+            font-size: 54px;
+            padding: 10px 25px;
+            line-height: 70px;
+            strong {
+                display: block;
+            }
+        }
+    }
+}
+
+
+/* end css Blog page */
+
+
+/* start css faq */
+
+.main-faq {
+    min-height: 1000px;
+    background: #fff;
+    .heading-center {
+        h2 {
+            font-size: 35px;
+        }
+    }
+    img {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .search-box {
+        text-align: center;
+        width: 72%;
+        margin: 30px auto 0 auto;
+        position: relative;
+        input {
+            background: #e1e1e1;
+            height: 58px;
+            font-size: 26px;
+            padding-left: 20px;
+            border-radius: 50px;
+            color: #a7a7a7;
+            font-weight: 300;
+        }
+        button {
+            background: transparent url(../images/search-icon.png) no-repeat center center;
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            text-indent: -999999px;
+            border: none;
+            padding: 0;
+        }
+    }
+    .type-of-qut {
+        margin: 50px auto;
+        width: 50%;
+        text-align: center;
+        .main-tab {
+            cursor: pointer;
+            figure {
+                height: 93px;
+                position: relative;
+                img {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    margin: 0 auto;
+                    &.active {
+                        opacity: 0;
+                    }
+                }
+            }
+            &.active {
+                figure {
+                    img {
+                        opacity: 0;
+                        &.active {
+                            opacity: 1;
+                        }
+                    }
+                }
+                h3 {
+                    color: #04357f;
+                }
+            }
+        }
+    }
+    h3 {
+        font-size: 27px;
+        color: #878787;
+        font-weight: 700;
+    }
+    p {
+        font-size: 16px;
+        color: #616161;
+    }
+    .generic-questions,
+    .p-specific-questions {
+        h3 {
+            color: #04357f;
+            margin-bottom: 20px;
+        }
+        a {
+            color: #33aeee;
+            text-decoration: underline;
+        }
+    }
+    .p-specific-questions {
+        h3 {
+            margin-top: 30px;
+        }
+    }
+}
+
+
+/* end css faq */
+
+.main-success-stories {
+    min-height: 1000px;
+    background: #fff;
+    .heading-center {
+        margin-bottom: 50px;
+        h2 {
+            font-size: 35px;
+        }
+    }
+    img {
+        display: inline-block;
+        vertical-align: top;
+        +p {
+            margin-top: 50px;
+        }
+    }
+    h3 {
+        font-size: 23px;
+        color: #04357f;
+        font-weight: 400;
+        margin: 50px 0 50px 0;
+    }
+    p {
+        font-size: 16px;
+        color: #616161;
+        a {
+            color: #477ccb;
+            display: inline-block;
+        }
+    }
+    ul {
+        li {
+            font-size: 16px;
+            color: #616161;
+            list-style: inside;
+            padding-bottom: 10px;
+            a {
+                color: #477ccb;
+                display: inline-block;
+            }
+        }
+        ul {
+            margin-left: 30px;
+        }
+    }
+    .pdf-download {
+        text-align: center;
+        h3 {
+            margin: 25px 0 25px 0;
+            text-transform: capitalize;
+        }
+        a {
+            margin: 0 10px;
+            display: inline-block;
+        }
+    }
+}
+
+
+/* start help us */
+
+.help-us {
+    background: #fffbf5;
+    padding: 45px 0;
+    text-align: center;
+    p {
+        font-size: 23px;
+        color: #1d4e98;
+        margin-bottom: 30px;
+    }
+    input {
+        width: 417px;
+        color: #4b4a4a;
+        border-color: #acacac;
+        font-weight: 400;
+         ::-webkit-input-placeholder {
+            /* Chrome/Opera/Safari */
+            color: #4b4a4a;
+        }
+         ::-moz-placeholder {
+            /* Firefox 19+ */
+            color: #4b4a4a;
+        }
+         :-ms-input-placeholder {
+            /* IE 10+ */
+            color: #4b4a4a;
+        }
+         :-moz-placeholder {
+            /* Firefox 18- */
+            color: #4b4a4a;
+        }
+    }
+    button {
+        width: 150px;
+        height: 48px;
+        box-shadow: none;
+    }
+}
+
+
+/* end help us */
+
+
+/*start css static page navigation */
+
+.static-nav {
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    ul {
+        list-style-type: none;
+        li {
+            display: inline-block;
+            vertical-align: top;
+            padding: 15px 0;
+            a {
+                vertical-align: top;
+                padding: 0px 12px 0px 12px;
+                display: inline-block;
+                color: #8d8d8d;
+                font-size: 16px;
+                &.active {
+                    color: #04357f;
+                }
+            }
+            +li {
+                a {
+                    border-left: 1px solid #e0e0e0;
+                }
+            }
+        }
+    }
+}
+
+
+/*end css static page navigation */
+
+
+/* start advantages */
+
+.advantages {
+    .advantages-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 60px 0;
+        div {
+            flex-direction: column;
+            width: 100%;
+            text-align: center;
+        }
+    }
+    h3 {
+        margin: 0;
+    }
+    h2 {
+        margin-bottom: 40px;
+    }
+}
+
+
+/* end advantages */
+
+
+/* easy emi page starts */
+.indivisual-salary {
+    text-align: center;
+    
+    .col-md-12 { 
+        overflow:hidden;
+        display:flex;
+        align-items: top;
+        justify-content: space-between;
+
+        .indivisual-box {
+            border: 1px solid #616161;
+            padding: 0 20px;
+            width: 45%;
+            margin: 20px 0;     
+
+            h3 {
+                margin : 15px 0;
+            }
+            
+            text-align:left;
+            
+        }
+        
+        a.contact-link {
+                color:#1d4e98;
+                font-size:23px;
+                margin-top:30px;
+                display:inline-block;
+
+        }
+       
+        
+    }
+   
+}
+.easy-emi {
+      .text-align-center {
+            text-align:center;
+            display:block;
+      }
+      .img-center {
+           display:block;
+           margin:auto;
+      }
+}
+
+/* easy emi page ends */

@@ -1,0 +1,821 @@
+<div class="main-container">
+    <aside class="sidebar">
+        <div class="employee-info">
+            <div class="pic">
+                <i class="fa fa-user-circle" aria-hidden="true"></i>
+            </div>
+            <div class="detail">
+                <span>Finance</span>
+            </div>
+        </div>
+        <nav class="sidebar-tabs">
+            <a (click)="getPaymentToApproveListing(1)" [ngClass]="{'active':(Listing == 'paymentToApprove')}">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Payments To Approve</span>
+            </a>
+        </nav>
+        <nav class="sidebar-tabs">
+            <a (click)="getPaymentToApproveListingcomplete(1)"
+                [ngClass]="{'active':(Listing == 'paymentToApproveComplete')}">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Approved Payments</span>
+            </a>
+        </nav>
+        <nav class="sidebar-tabs">
+            <a (click)="getPayRequest(1)" [ngClass]="{'active':(Listing == 'ReleaseRequest')}">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Pay Requests</span>
+            </a>
+        </nav>
+        <nav class="sidebar-tabs">
+            <a (click)="getPayRequestComplete(1)" [ngClass]="{'active':(Listing == 'ReleaseRequestComplete')}">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>Pay Requests Completed</span>
+            </a>
+        </nav>
+    </aside>
+    <smart-search [legacy]="true" (SearchResults)="smartSearchResults($event)" *ngIf="showSmartSearchComponent"></smart-search>
+    <div class="container" *ngIf="Listing=='paymentToApprove'">
+        <div class="export-btn-parent">
+            <h2>
+                <a class="exportData btn export-btn" (click)="exportFinancedData('PA')">Export Data</a>
+            </h2>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            S.No.
+                        </th>
+                        <th>
+                            Project ID
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Project Type
+                        </th>
+                        <th>
+                            Dc Capacity
+                        </th>
+                        <th>
+                            Payment Tranche
+                        </th>
+                        <th style="width: 160px;">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="loadingList">
+                    <tr>
+                        <td>
+                             <div class="container">
+                                 <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                             </div>
+                        </td>
+                     </tr>
+                </tbody>
+                <tbody *ngIf="paymentList.length>0">
+                    <tr *ngFor="let payment of paymentList; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{payment.project_code}}</td>
+                        <td>{{payment.cceld_firstname+' '+payment.cceld_lastname}}</td>
+                        <!-- <td>{{(payment.gridtype==2)?'Off-Grid':'Grid-Tied'}}</td> -->
+                        <td>
+                            <span *ngIf="payment.gridtype == 1">Grid-Tied</span>
+                            <span *ngIf="payment.gridtype == 2">Off-Grid</span>
+                            <span *ngIf="payment.gridtype == 3">Hybrid</span>
+                        </td>
+                        <td>{{payment.proposal_dc_capacity}} KWh</td>
+                        <td>{{payment.ptm_name}}</td>
+                        <td><a href="javascript:void(0)" (click)="openTaskFrom(payment)"
+                                class="btn btn-blue mt-0 pt-2">Submit Detail</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container" *ngIf="Listing=='paymentToApproveComplete'">
+        <div class="export-btn-parent">
+            <h2>
+                <a class="exportData btn export-btn" (click)="exportFinancedData('PA_COMPLETE')">Export Data</a>
+            </h2>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            S.No.
+                        </th>
+                        <th>
+                            Project ID
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Project Type
+                        </th>
+                        <th>
+                            Dc Capacity
+                        </th>
+                        <th>
+                            Payment Tranche
+                        </th>
+                        <th>
+                            Project Cost
+                        </th>
+                        <th>
+                            Amount Received
+                        </th>
+                        <th>
+                            Transaction Id
+                        </th>
+                        <th>
+                            Transaction Date
+                        </th>
+                        <th>
+                            Payment Date
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody *ngIf="loadingList">
+                    <tr>
+                        <td>
+                             <div class="container">
+                                 <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                             </div>
+                        </td>
+                     </tr>
+                </tbody>
+                <tbody *ngIf="paymentList.length>0">
+                    <tr *ngFor="let payment of paymentList; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{payment.project_code}}</td>
+                        <td>{{payment.cceld_firstname+' '+payment.cceld_lastname}}</td>
+                        <!-- <td>{{(payment.gridtype==2)?'Off-Grid':'Grid-Tied'}}</td> -->
+                        <td>
+                            <span *ngIf="payment.gridtype == 1">Grid-Tied</span>
+                            <span *ngIf="payment.gridtype == 2">Off-Grid</span>
+                            <span *ngIf="payment.gridtype == 3">Hybrid</span>
+                        </td>
+                        <td>{{payment.proposal_dc_capacity}} KWh</td>
+                        <td>{{payment.ptm_name}}</td>
+                        <td>{{payment.project_value}}
+                        <td>{{payment.planTask.ptask_amount}}</td>
+                        <td>{{payment.planTask.ptask_id}}</td>
+                        <td>{{payment.planTask.ptask_drawn_on_date ? ( payment.planTask.ptask_drawn_on_date | date: 'dd/MM/yyyy') : (payment.planTask.ptask_bank_drawn | date: 'dd/MM/yyyy')  }}</td>
+                        <td>{{payment.planTask.taskenddate | date: 'dd/MM/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container" *ngIf="Listing=='ReleaseRequest'">
+        <div class="export-btn-parent">
+            <h2>
+                <a class="exportData btn export-btn" (click)="exportFinancedData('PR')">Export Data</a>
+            </h2>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            S.No.
+                        </th>
+                        <th>
+                            Project ID
+                        </th>
+                        <th>
+                            Partner Name
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Project Type
+                        </th>
+                        <th>
+                            Dc Capacity
+                        </th>
+                        <th>
+                            Payment Tranche
+                        </th>
+                        <th style="width: 160px;">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="loadingList">
+                    <tr>
+                        <td>
+                             <div class="container">
+                                 <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                             </div>
+                        </td>
+                     </tr>
+                </tbody>
+                <tbody *ngIf="paymentRequestList.length>0">
+                    <tr *ngFor="let payment of paymentRequestList; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{payment.project_code}}</td>
+                        <td>{{payment.Partner_name}}</td>
+                        <td>{{payment.cceld_firstname+' '+payment.cceld_lastname}}</td>
+                        <!-- <td>{{(payment.gridtype==2)?'Off-Grid':'Grid-Tied'}}</td> -->
+                        <td>
+                            <span *ngIf="payment.gridtype == 1">Grid-Tied</span>
+                            <span *ngIf="payment.gridtype == 2">Off-Grid</span>
+                            <span *ngIf="payment.gridtype == 3">Hybrid</span>
+                        </td>
+                        <td>{{payment.proposal_dc_capacity}} KWh</td>
+                        <td>{{payment.ptm_name}}</td>
+                        <td><a href="javascript:void(0)" (click)="openTaskFrom(payment)"
+                                class="btn btn-blue mt-0 pt-2">Submit Detail</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container" *ngIf="Listing=='ReleaseRequestComplete'">
+        <div class="export-btn-parent">
+            <h2>
+                <a class="exportData btn export-btn" (click)="exportFinancedData('PR_COMPLETE')">Export Data</a>
+            </h2>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            S.No.
+                        </th>
+                        <th>
+                            Project ID
+                        </th>
+                        <th>
+                            Partner Name
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Customer City
+                        </th>
+                        <th>
+                            Project Type
+                        </th>
+                        <th>
+                            Dc Capacity
+                        </th>
+                        <th>
+                            Project Cost
+                        </th>
+                        <th>
+                            Payment Tranche
+                        </th>
+                        <th>
+                            Amount Paid
+                        </th>
+                        <th>
+                            Transaction Date
+                        </th>
+                        <th>
+                            Payment Date
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="loadingList">
+                    <tr>
+                        <td>
+                             <div class="container">
+                                 <img src="/assets/images/loader.gif" style="width:30px;height:30px;" alt="LUMINOUS" />
+                             </div>
+                        </td>
+                     </tr>
+                </tbody>
+                <tbody *ngIf="paymentRequestList.length>0">
+                    <tr *ngFor="let payment of paymentRequestList; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{payment.project_code}}</td>
+                        <td>{{payment.Partner_name}}</td>
+                        <td>{{payment.cceld_firstname+' '+payment.cceld_lastname}}</td>
+                        <td>{{payment.district_name+' '+payment.state_name}}</td>
+                        <!-- <td>{{(payment.gridtype==2)?'Off-Grid':'Grid-Tied'}}</td> -->
+                        <td>
+                            <span *ngIf="payment.gridtype == 1">Grid-Tied</span>
+                            <span *ngIf="payment.gridtype == 2">Off-Grid</span>
+                            <span *ngIf="payment.gridtype == 3">Hybrid</span>
+                        </td>
+                        <td>{{payment.proposal_dc_capacity}} KWh</td>
+                        <td>{{payment.project_value}}
+                        <td>{{payment.ptm_name}}</td>
+                        <td>{{payment.planTask.ptask_amount}}</td>
+                        <!-- <td>{{payment.planTask.ptask_bank_drawn | date: 'dd/MM/yyyy' }}</td> -->
+                        <td>{{payment.planTask.ptask_drawn_on_date ? ( payment.planTask.ptask_drawn_on_date | date: 'dd/MM/yyyy') : (payment.planTask.ptask_bank_drawn | date: 'dd/MM/yyyy')  }}</td>
+                        <td>{{payment.planTask.taskenddate | date: 'dd/MM/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <ul *ngIf="pageCount>0 && (Listing == 'paymentToApprove' || Listing == 'paymentToApproveComplete' || Listing == 'ReleaseRequest' || Listing == 'ReleaseRequestComplete')"
+            style="white-space:nowrap;">
+
+
+            &nbsp; &nbsp;
+            <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+            </li>
+            &nbsp; &nbsp;
+
+            <li>
+                <div class="custom-pagination ">
+                    <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                        <div class="row">
+                            <input type="number" formControlName="page_number" class="form-text" min="0"
+                                max="{{pageCount}}" (keypress)=_keyPresspagination($event)>
+                            &nbsp;&nbsp;<button type="submit" class="btn btn-blue btn-md">Go</button>
+                            <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page
+                                number
+                                must be less than or
+                                equal to {{pageCount}}</span>
+                        </div>
+                    </form>
+                </div>
+            </li>
+            <li>Total records: <strong>{{totalItem}}</strong></li>
+        </ul>
+    </div>
+
+</div>
+
+
+<!--Task Form POP UP 1-->
+<div class="modal fade show bg-drop llfModal" id="exampleModal" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" style="display: block; padding-right: 15px;" aria-modal="true"
+    *ngIf="TaskpopUp">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" (click)="TaskpopUp=!TaskpopUp;submitData=false" aria-label="Close"> <span
+                        aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body border-0">
+                <div class="list">
+                    <div class="task-description">
+                        <form [formGroup]="taskForm" (ngSubmit)="SaveTaskdata('exampleModal')">
+                            <div class="top-area row">
+                                <div class="allocate-date col-md-4"> <strong>Actual Start Date</strong>
+                                    <div class="date d-flex align-items-center justify-content-between">
+                                        <p-calendar showIcon="true" class="form-text" dateFormat="dd/mm/yy"
+                                            (keypress)="datecheck($event)" formControlName="actualstartdate"
+                                            disabled="true" placeholder="Date"></p-calendar> <i
+                                            [innerHtml]="svg_calendar"></i>
+                                    </div>
+                                </div>
+                                <div class="allocate-date col-md-4" *ngIf="showactualenddate"> <strong>Actual End
+                                        Date</strong>
+                                    <div class="date d-flex align-items-center justify-content-between"> <span>
+                                            <p-calendar [maxDate]='currentDate' showIcon="true" class="form-text"
+                                                dateFormat="dd/mm/yy" (keypress)="datecheck($event)"
+                                                formControlName="actualenddate" placeholder="Date"></p-calendar>
+                                        </span>
+                                        <i [innerHtml]="svg_calendar"></i>
+                                    </div>
+                                    <ng-container *ngIf="taskForm?.controls?.actualenddate?.errors?.required">
+                                        <ng-container *ngIf="submitData && isEndDate ">
+                                             <div style="color: red;">
+                                                End Date Is Mandatory On Task Complete*
+                                            </div>
+                                        </ng-container>
+                                        </ng-container>
+                                </div>
+                                <div class="status col-md-4">
+                                    <div class="doc-title d-flex align items-center justify-content-between"> <strong
+                                            class="mr-5">Updated Status</strong>
+                                        <!-- <a href="javascript:void(0)" (click)="viewTaskLog(pTaskId, currentHandOffData.h_id)">View Log</a> -->
+                                    </div>
+                                    <div class="select-wrap relative">
+                                        <select formControlName="status" [(ngModel)]="status"
+                                            (change)="onChangetaskcomplete($event.target.value)" class="form-control">
+                                            <option value="1">Completed</option>
+                                            <option value="3">Initiated</option>
+                                        </select>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="7"
+                                            viewBox="0 0 12 8">
+                                            <path fill="#003374" fill-rule="nonzero"
+                                                d="M7 8a.976.976 0 0 1-.693-.288L.287 1.678a.984.984 0 0 1 0-1.39.979.979 0 0 1 1.387 0L7 5.628l5.326-5.34a.979.979 0 0 1 1.387 0 .984.984 0 0 1 0 1.39l-6.02 6.034A.976.976 0 0 1 7 8z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottom-area row">
+                                <div class="payment col-md-12 d-flex mb-3"> <strong>Payment Mode:</strong>
+                                    <div class="radio-group d-flex align-items-center">
+                                        <label class="radio-wrap">
+                                            <input type="radio" formControlName="payment" value="1"> <i
+                                                class="custom-radio"></i>
+                                            Cheque</label>
+                                        <label class="radio-wrap">
+                                            <input type="radio" formControlName="payment" value="2"> <i
+                                                class="custom-radio"></i>
+                                            RTGS/NEFT</label>
+                                    </div>
+                                    <ng-container *ngIf="taskForm?.controls?.payment?.errors?.required">
+                                        <ng-container *ngIf="submitData">
+                                            <div class="paymenterror">
+                                                Payment Mode Required*
+                                                </div>
+                                            </ng-container>
+                                        </ng-container>
+                                </div>
+                                <div class="invoice-wrap cheque-wrap col-md-6 d-flex align-items-center justify-content-between"
+                                    *ngIf="SelectedCheque">
+                                    <div class="invoice mr-0 d-flex align-items-center" *ngIf="SelectedCheque">
+                                        <strong>Cheque Number:</strong>
+                                        <input type="text" formControlName="cheque_no" class="form-control"
+                                            maxlength="10" pattern="[0-9]+" value="">
+                                            <ng-container *ngIf="cheque_no.invalid">
+                                            <ng-container *ngIf="submitData && cheque_no.errors.required">
+                                            <div class="paymenterror">Cheque Number Required*</div>
+                                            </ng-container>
+                                            </ng-container>
+
+                                    </div>
+                                </div>
+                                <div class="invoice-wrap cheque-wrap col-md-6 d-flex align-items-center justify-content-between"
+                                    *ngIf="SelectedCheque">
+                                    <div class="invoice mr-0 d-flex align-items-center" *ngIf="SelectedCheque">
+                                        <strong>Bank Drawn On:</strong>
+                                        <ng-select [options]="BankList" formControlName="bank_drawn_no"
+                                            class="bankdrawnon"></ng-select>
+                                        <!-- <input type="text" formControlName="bank_drawn_no" class="form-control" value=""> -->
+                                        <ng-container *ngIf="bank_drawn_no.invalid">
+                                            <ng-container *ngIf="submitData && bank_drawn_no.errors.required">
+                                            <div class="paymenterror">Bank Drawn On Required*</div>
+                                            </ng-container>
+                                            </ng-container>
+
+                                    </div>
+                                </div>
+                                <div class="invoice-wrap cheque-wrap col-md-6 d-flex align-items-center justify-content-between"
+                                    *ngIf="SelectedNEFT">
+                                    <div class="invoice d-flex align-items-center"> <strong>Invoice Number:</strong>
+                                        <input type="text" formControlName="invoice_no" class="form-control" value="">
+                                        <ng-container *ngIf="invoice_no.invalid">
+                                            <ng-container *ngIf="submitData && invoice_no.errors.required">
+                                            <div class="paymenterror">Invoice Number Required*</div>
+                                            </ng-container>
+                                            </ng-container>
+
+                                    </div>
+                                </div>
+                                <div class="invoice-wrap cheque-wrap col-md-6 d-flex align-items-center justify-content-between"
+                                    *ngIf="SelectedNEFT">
+                                    <div class="invoice d-flex align-items-center"> <strong>A/c No:</strong>
+                                        <input type="text" formControlName="ac_no" pattern="[0-9]+" class="form-control"
+                                            value="">
+                                            <ng-container *ngIf="ac_no.invalid">
+                                                <ng-container *ngIf="submitData && ac_no.errors.required">
+                                                <div class="paymenterror">A/c No Required*</div>
+                                                </ng-container>
+                                                </ng-container>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottom-area row">
+                                <div class="col-md-6 invoice-wrap cheque-wrap drawn-date allocate-date d-flex align-items-center"
+                                    *ngIf="SelectedCheque"> <strong>Deposit Date:</strong>
+                                    <div class="date d-flex align-items-center justify-content-between"> <span>
+                                        <p-calendar showIcon="true" dateFormat="dd/mm/yy" class="form-text"
+                                        formControlName="drawn_on_date"  placeholder="Date"></p-calendar>
+                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20"
+                                            viewBox="0 0 18 20">
+                                            <g fill="#003374" fill-rule="nonzero">
+                                                <path
+                                                    d="M.421 19.36A.421.421 0 0 1 0 18.937V1.78c0-.232.189-.42.421-.42h2.12V.51c0-.233.19-.421.422-.421h2.224c.232 0 .42.188.42.421v.85h6.785V.51c0-.233.189-.421.421-.421h2.224c.233 0 .421.188.421.421v.85h2.121c.232 0 .42.188.421.42v17.158a.421.421 0 0 1-.421.421H.421zm16.737-.843V5.697H.842v12.82h16.316zm0-13.662V2.202h-1.7v.85a.421.421 0 0 1-.42.42h-2.225a.421.421 0 0 1-.42-.42v-.85H5.607v.85a.421.421 0 0 1-.421.42H2.963a.421.421 0 0 1-.421-.42v-.85h-1.7v2.653h16.316zM14.616 2.63V.93h-1.382v1.7h1.382zm-9.85 0V.93H3.384v1.7h1.382z" />
+                                                <path
+                                                    d="M17.579 1.463h-2.224V.51a.317.317 0 0 0-.318-.318h-2.224a.317.317 0 0 0-.317.318v.953H5.504V.51a.317.317 0 0 0-.317-.318H2.963a.317.317 0 0 0-.318.318v.953H.421a.318.318 0 0 0-.318.317v17.158a.317.317 0 0 0 .318.318h17.158a.317.317 0 0 0 .318-.318V1.78a.318.318 0 0 0-.318-.317zM13.131.828h1.589v1.906h-1.59V.828zm-9.85 0h1.588v1.906H3.28V.828zM.738 2.099h1.906v.953a.317.317 0 0 0 .318.317h2.224a.317.317 0 0 0 .317-.317v-.953h6.992v.953a.317.317 0 0 0 .317.317h2.224a.317.317 0 0 0 .318-.317v-.953h1.906v2.86H.74v-2.86zm0 16.522V5.593H17.26v13.028H.74z" />
+                                                <path
+                                                    d="M2.86 16.818V7.397h12.28v9.42H2.86zm11.438-.842v-2.018H12.28v2.018h2.018zm-2.86 0v-2.018H9.421v2.018h2.017zm-2.859 0v-2.018H6.562v2.018h2.017zm-2.86 0v-2.018H3.703v2.018H5.72zm8.579-2.86V11.1H12.28v2.017h2.018zm-2.86 0V11.1H9.421v2.017h2.017zm-2.859 0V11.1H6.562v2.017h2.017zm-2.86 0V11.1H3.703v2.017H5.72zm8.579-2.86V8.239H12.28v2.017h2.018zm-2.86 0V8.239H9.421v2.017h2.017zm-2.859 0V8.239H6.562v2.017h2.017zm-2.86 0V8.239H3.703v2.017H5.72z" />
+                                                <path
+                                                    d="M11.542 7.5h-8.58v9.214h12.075V7.5h-3.495zm-2.224.635h2.224v2.224H9.318V8.135zm2.224 5.085H9.318v-2.224h2.224v2.224zm-5.084-2.224h2.224v2.224H6.458v-2.224zm0-2.86h2.224v2.223H6.458V8.135zm-2.859 0h2.224v2.223H3.6V8.135zm0 2.86h2.224v2.224H3.6v-2.224zm2.224 5.083H3.6v-2.224h2.224v2.224zm2.86 0H6.457v-2.224h2.224v2.224zm2.859 0H9.318v-2.224h2.224v2.224zm2.859 0h-2.224v-2.224H14.4v2.224zm0-2.86h-2.224v-2.223H14.4v2.224zm0-5.084v2.224h-2.224V8.135H14.4z" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <ng-container *ngIf="drawn_on_date.invalid">
+                                        <ng-container *ngIf="submitData && drawn_on_date.errors.required">
+                                        <div class="paymenterror"> Deposit Date Required*</div>
+                                        </ng-container>
+                                        </ng-container>
+
+                                </div>
+                                <div class="col-md-6 invoice-wrap cheque-wrap drawn-date allocate-date d-flex align-items-center"
+                                    *ngIf="SelectedNEFT"> <strong>Transaction Date:</strong>
+                                    <div class="date d-flex align-items-center justify-content-between"> <span>
+                                            <p-calendar showIcon="true" dateFormat="dd/mm/yy" class="form-text"
+                                                formControlName="transaction_date" placeholder="Date"></p-calendar>
+                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20"
+                                            viewBox="0 0 18 20">
+                                            <g fill="#003374" fill-rule="nonzero">
+                                                <path
+                                                    d="M.421 19.36A.421.421 0 0 1 0 18.937V1.78c0-.232.189-.42.421-.42h2.12V.51c0-.233.19-.421.422-.421h2.224c.232 0 .42.188.42.421v.85h6.785V.51c0-.233.189-.421.421-.421h2.224c.233 0 .421.188.421.421v.85h2.121c.232 0 .42.188.421.42v17.158a.421.421 0 0 1-.421.421H.421zm16.737-.843V5.697H.842v12.82h16.316zm0-13.662V2.202h-1.7v.85a.421.421 0 0 1-.42.42h-2.225a.421.421 0 0 1-.42-.42v-.85H5.607v.85a.421.421 0 0 1-.421.42H2.963a.421.421 0 0 1-.421-.42v-.85h-1.7v2.653h16.316zM14.616 2.63V.93h-1.382v1.7h1.382zm-9.85 0V.93H3.384v1.7h1.382z" />
+                                                <path
+                                                    d="M17.579 1.463h-2.224V.51a.317.317 0 0 0-.318-.318h-2.224a.317.317 0 0 0-.317.318v.953H5.504V.51a.317.317 0 0 0-.317-.318H2.963a.317.317 0 0 0-.318.318v.953H.421a.318.318 0 0 0-.318.317v17.158a.317.317 0 0 0 .318.318h17.158a.317.317 0 0 0 .318-.318V1.78a.318.318 0 0 0-.318-.317zM13.131.828h1.589v1.906h-1.59V.828zm-9.85 0h1.588v1.906H3.28V.828zM.738 2.099h1.906v.953a.317.317 0 0 0 .318.317h2.224a.317.317 0 0 0 .317-.317v-.953h6.992v.953a.317.317 0 0 0 .317.317h2.224a.317.317 0 0 0 .318-.317v-.953h1.906v2.86H.74v-2.86zm0 16.522V5.593H17.26v13.028H.74z" />
+                                                <path
+                                                    d="M2.86 16.818V7.397h12.28v9.42H2.86zm11.438-.842v-2.018H12.28v2.018h2.018zm-2.86 0v-2.018H9.421v2.018h2.017zm-2.859 0v-2.018H6.562v2.018h2.017zm-2.86 0v-2.018H3.703v2.018H5.72zm8.579-2.86V11.1H12.28v2.017h2.018zm-2.86 0V11.1H9.421v2.017h2.017zm-2.859 0V11.1H6.562v2.017h2.017zm-2.86 0V11.1H3.703v2.017H5.72zm8.579-2.86V8.239H12.28v2.017h2.018zm-2.86 0V8.239H9.421v2.017h2.017zm-2.859 0V8.239H6.562v2.017h2.017zm-2.86 0V8.239H3.703v2.017H5.72z" />
+                                                <path
+                                                    d="M11.542 7.5h-8.58v9.214h12.075V7.5h-3.495zm-2.224.635h2.224v2.224H9.318V8.135zm2.224 5.085H9.318v-2.224h2.224v2.224zm-5.084-2.224h2.224v2.224H6.458v-2.224zm0-2.86h2.224v2.223H6.458V8.135zm-2.859 0h2.224v2.223H3.6V8.135zm0 2.86h2.224v2.224H3.6v-2.224zm2.224 5.083H3.6v-2.224h2.224v2.224zm2.86 0H6.457v-2.224h2.224v2.224zm2.859 0H9.318v-2.224h2.224v2.224zm2.859 0h-2.224v-2.224H14.4v2.224zm0-2.86h-2.224v-2.223H14.4v2.224zm0-5.084v2.224h-2.224V8.135H14.4z" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <ng-container *ngIf="transaction_date.invalid">
+                                        <ng-container *ngIf="submitData && transaction_date.errors.required">
+                                        <div class="paymenterror"> Transaction Date Required*</div>
+                                        </ng-container>
+                                        </ng-container>
+
+                                </div>
+                                <div class="col-md-6 invoice-wrap cheque-wrap d-flex align-items-center justify-content-between"
+                                    *ngIf="SelectedNEFT || SelectedCheque">
+                                    <div class="invoice d-flex align-items-center"> <strong>Amount:</strong>
+                                        <input type="number" formControlName="amount"  min="0"
+                                            class="form-control" (keypress)="onKeyPress($event)">
+                                            <ng-container *ngIf="amount.invalid">
+                                                <ng-container *ngIf="submitData && amount?.errors?.required">
+                                                <div class="paymenterror">Amount  Required*</div>
+                                                </ng-container>
+                                                </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottom-area row">
+                                <div class="left d-flex col-md-6">
+                                    <label class="label">Remarks if any:</label>
+                                    <textarea formControlName="remarks" class="form-control"></textarea>
+                                </div>
+                                <div class="right pl-3 col-md-6">
+                                    <div class="attach-doc">
+                                        <div class="upload-doc d-flex align-items-center"> <strong>Attach
+                                                Document:</strong>
+                                            <div class="doc d-flex align-items-center justify-content-center" droppable (filesDropped)="handleFilesDropped($event)">
+                                                <div>
+                                                    <strong class="m-0">Drop Here</strong>
+                                                </div>
+                                            </div>
+                                            <div class="browse">
+                                                <input type="file" (change)="fileChange($event)" class="w-100" />
+                                                <span>Browse</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <label class="label">Uploaded Document:</label>
+                                        <div class="doc-links">
+                                            <ul>
+                                                <li *ngFor="let projectDocument of projectDocuments; let i = index"> <i
+                                                        class="fa fa-remove confirmRemove crossign"
+                                                        (click)="confirmDeleteTaskDoc(projectDocument,currentHandOffData)"></i>
+                                                    <a href="{{baseurl}}/public/uploads/task/{{h_id}}/{{projectDocument.tdoc_filename}}"
+                                                        target="_blank">
+                                                        <svg class="pdf-logo" xmlns="http://www.w3.org/2000/svg"
+                                                            width="20" height="26" viewBox="0 0 20 26">
+                                                            <g fill="none" fill-rule="nonzero">
+                                                                <path fill="#E9E9E0"
+                                                                    d="M14.084 0H.892C.525 0 .227.298.227.875V25c0 .157.298.455.665.455h18.216c.367 0 .665-.298.665-.455V5.9c0-.317-.043-.42-.117-.494l-5.29-5.29A.402.402 0 0 0 14.085 0z" />
+                                                                <path fill="#D9D7CA" d="M14.318.069v5.386h5.386z" />
+                                                                <path fill="#CC4B4C"
+                                                                    d="M6.143 15.147a.73.73 0 0 1-.44-.148c-.473-.355-.537-.75-.507-1.019.083-.74.998-1.515 2.72-2.304A30.512 30.512 0 0 0 9.64 6.79c-.454-.987-.895-2.268-.574-3.02.113-.263.254-.465.516-.552.104-.034.365-.078.462-.078.229 0 .43.295.573.477.134.17.438.533-.17 3.092.613 1.265 1.481 2.554 2.313 3.437a8.843 8.843 0 0 1 1.526-.163c.712 0 1.144.166 1.32.508.145.283.085.613-.178.982-.253.354-.602.541-1.009.541-.553 0-1.196-.349-1.914-1.039-1.29.27-2.795.75-4.013 1.283-.38.807-.744 1.456-1.083 1.932-.466.653-.868.957-1.265.957zm1.21-2.33c-.972.546-1.368.995-1.396 1.248-.005.041-.017.151.196.314.067-.021.463-.202 1.2-1.562zm6.198-2.019c.37.285.461.43.704.43.106 0 .41-.005.55-.201a.72.72 0 0 0 .104-.189c-.056-.03-.13-.09-.534-.09-.23.001-.518.011-.824.05zm-3.395-2.992a32.405 32.405 0 0 1-1.216 3.439c.95-.37 1.983-.69 2.953-.919a15.56 15.56 0 0 1-1.737-2.52zM9.88 3.96c-.045.015-.605.799.044 1.462.431-.962-.024-1.468-.044-1.462zM19.108 25.455H.892a.665.665 0 0 1-.665-.665v-7.063h19.546v7.063a.665.665 0 0 1-.665.665z" />
+                                                                <g fill="#FFF">
+                                                                    <path
+                                                                        d="M5.175 24.09h-.746v-4.58h1.317c.195 0 .388.032.578.094.19.062.361.156.513.28.151.124.273.274.367.45.093.176.14.374.14.594 0 .232-.04.442-.119.63a1.319 1.319 0 0 1-.33.476c-.14.128-.31.228-.509.298a1.96 1.96 0 0 1-.658.106h-.553v1.653zm0-4.014v1.815h.684c.09 0 .18-.016.27-.047a.681.681 0 0 0 .426-.447 1.397 1.397 0 0 0 .037-.727.744.744 0 0 0-.127-.28.753.753 0 0 0-.27-.223c-.117-.06-.27-.09-.46-.09h-.56zM11.918 21.674c0 .376-.04.699-.122.966-.08.267-.183.49-.307.671a1.58 1.58 0 0 1-.42.426c-.155.104-.305.181-.45.233a1.861 1.861 0 0 1-.398.1c-.12.014-.21.02-.267.02H8.22v-4.58H9.6c.385 0 .724.062 1.015.184.292.122.535.285.728.488.192.203.336.434.432.693.095.259.143.525.143.799zm-2.213 1.87c.506 0 .87-.161 1.094-.484.224-.324.336-.792.336-1.405 0-.19-.023-.38-.069-.565a1.21 1.21 0 0 0-.264-.507 1.394 1.394 0 0 0-.531-.367c-.224-.093-.514-.14-.87-.14h-.435v3.468h.74zM13.757 20.076v1.442h1.914v.51h-1.914v2.063H13v-4.58h2.865v.565z" />
+                                                                </g>
+                                                            </g>
+                                                        </svg>{{projectDocument.tdoc_filetype}}
+                                                        <svg class="download-arrow" xmlns="http://www.w3.org/2000/svg"
+                                                            width="14" height="15" viewBox="0 0 14 15">
+                                                            <path fill="#003374" fill-rule="nonzero"
+                                                                d="M13.97 7.317a.334.334 0 0 0-.308-.206H10.01V.333A.333.333 0 0 0 9.676 0H4.343a.333.333 0 0 0-.333.333v6.778H.343a.334.334 0 0 0-.236.569l6.65 6.672a.334.334 0 0 0 .472 0l6.67-6.672a.333.333 0 0 0 .071-.363z" />
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="edit-link d-flex align-items-center justify-content-between">
+                                <input type="submit" value="Submit" class="btn fw-400">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!---Task Form POP UP 1 closed-->
+
+<!--Task Form POP UP 2-->
+<div class="modal fade bg-drop show llfModal" id="exampleModal2" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel2" style="display: block; padding-right: 15px;" aria-modal="true"
+    *ngIf="TaskpopUp2">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="exampleModalLabel2"></h5>
+                <button type="button" class="close" (click)="TaskpopUp2=!TaskpopUp2;submitData=false" aria-label="Close"> <span
+                        aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body border-0">
+                <div class="list">
+                    <div class="task-description">
+                        <form [formGroup]="taskForm" (ngSubmit)="SaveTaskdata('exampleModal2')">
+                            <div class="top-area row">
+                                <div class="allocate-date col-md-4"> <strong>Actual Start Date</strong>
+                                    <div class="date d-flex align-items-center justify-content-between">
+                                        <p-calendar showIcon="true" class="form-text" dateFormat="dd/mm/yy"
+                                            formControlName="actualstartdate" disabled="true" placeholder="Date">
+                                        </p-calendar> <i [innerHtml]="svg_calendar"></i>
+                                    </div>
+                                </div>
+                                <div class="allocate-date col-md-4" *ngIf="showactualenddate"> <strong>Actual End
+                                        Date</strong>
+                                    <div class="date d-flex align-items-center justify-content-between"> <span>
+                                            <p-calendar [maxDate]='currentDate' showIcon="true" class="form-text"
+                                                dateFormat="dd/mm/yy" formControlName="actualenddate"
+                                                placeholder="Date"></p-calendar>
+                                        </span>
+                                        <i [innerHtml]="svg_calendar"></i>
+                                    </div>
+                                    <ng-container *ngIf="taskForm?.controls?.actualenddate?.errors?.required">
+                                        <ng-container *ngIf="submitData">
+                                            <div style="color: red;">End Date Is Mandatory On Task Complete*</div>
+                                            </ng-container>
+                                        </ng-container>
+
+                                </div>
+                                <div class="status col-md-4">
+                                    <div class="doc-title d-flex align items-center justify-content-between"> <strong
+                                            class="mr-5">Updated Status</strong>
+                                        <!-- <a href="javascript:void(0)" (click)="viewTaskLog(pTaskId, currentHandOffData.h_id)">View Log</a> -->
+                                    </div>
+                                    <div class="select-wrap relative">
+                                        <select (change)="onChangetaskcomplete($event.target.value)"
+                                            formControlName="status" class="form-control">
+                                            <option value="1">Completed</option>
+                                            <option value="3">Initiated</option>
+                                        </select>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="7"
+                                            viewBox="0 0 12 8">
+                                            <path fill="#003374" fill-rule="nonzero"
+                                                d="M7 8a.976.976 0 0 1-.693-.288L.287 1.678a.984.984 0 0 1 0-1.39.979.979 0 0 1 1.387 0L7 5.628l5.326-5.34a.979.979 0 0 1 1.387 0 .984.984 0 0 1 0 1.39l-6.02 6.034A.976.976 0 0 1 7 8z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="invoice-wrap row">
+                                <div class="col-md-6 d-flex align-items-center"> <strong>SAP Reference Number:</strong>
+                                    <input type="text" formControlName="sap_number" class="form-control" value="">
+                                    <ng-container *ngIf="sap_number.invalid">
+                                    <ng-container *ngIf="submitData && sap_number.errors.required">
+                                        <div class="payrequesterror">Sap Reference Number Required*</div>
+                                        </ng-container>
+                                        </ng-container>
+                                </div>
+
+                                <div class="col-md-6 d-flex align-items-center"> <strong>Bank Reference Number:</strong>
+                                    <input type="text" formControlName="bank_reference_number" class="form-control"
+                                        value="">
+                                        <ng-container *ngIf="bank_reference_number.invalid">
+                                        <ng-container *ngIf="submitData && bank_reference_number.errors.required">
+                                            <div class="payrequesterror">Bank Reference Number Required*</div>
+                                            </ng-container>
+                                            </ng-container>
+                                </div>
+
+
+                            </div>
+                            <div class="invoice-wrap mt-3 row">
+                                <div class="drawn-date  col-md-6 allocate-date d-flex align-items-center"> <strong>Date
+                                        of Transaction:</strong>
+                                    <div class="date d-flex align-items-center justify-content-between"> <span>
+                                            <p-calendar showIcon="true" class="form-text"
+                                                formControlName="transaction_date" ng-model="transaction_date"
+                                                [required]="required" placeholder="Date" dateFormat="dd/mm/yy">
+                                            </p-calendar>
+                                        </span>
+                                        <i [innerHtml]="svg_calendar"></i>
+                                    </div>
+                                    <ng-container *ngIf="taskForm?.controls?.transaction_date.errors?.required">
+                                        <ng-container *ngIf="submitData">
+                                         <div class="payrequesterror">Date Of Transaction Required*</div>
+                                        </ng-container>
+                                        </ng-container>
+                                </div>
+
+                                <div
+                                    class="col-md-6 invoice-wrap cheque-wrap d-flex align-items-center justify-content-between">
+                                    <div class="invoice d-flex align-items-center"> <strong>Amount:</strong>
+                                        <input type="number" formControlName="amount"
+                                            class="form-control" value="">
+                                            <ng-container *ngIf="amount.invalid">
+                                                <ng-container *ngIf="submitData && amount?.errors?.required">
+                                                <div class="payrequesterror">Amount  Required*</div>
+                                                </ng-container>
+                                                </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottom-area row">
+                                <div class="left d-flex col-md-6">
+                                    <label class="label">Remarks if any:</label>
+                                    <textarea formControlName="remarks" class="form-control"></textarea>
+                                </div>
+                                <div class="right pl-3 col-md-6">
+                                    <div class="attach-doc">
+                                        <div class="upload-doc d-flex align-items-center"> <strong>Attach
+                                                Document:</strong>
+                                            <div class="doc d-flex align-items-center justify-content-center">
+                                                <div droppable (filesDropped)="handleFilesDropped($event)"><strong
+                                                        class="m-0">Drop Here</strong>
+                                                </div>
+                                            </div>
+                                            <div class="browse">
+                                                <input type="file" (change)="fileChange($event)" class="w-100" />
+                                                <span>Browse</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex">
+                                        <label class="label">Uploaded Document:</label>
+                                        <div class="doc-links">
+                                            <ul>
+                                                <li *ngFor="let projectDocument of projectDocuments; let i = index"> <i
+                                                        class="fa fa-remove confirmRemove crossign"
+                                                        (click)="confirmDeleteTaskDoc(projectDocument,currentHandOffData)"></i>
+                                                    <a href="{{baseurl}}/public/uploads/task/{{h_id}}/{{projectDocument.tdoc_filename}}"
+                                                        target="_blank">
+                                                        <svg class="pdf-logo" xmlns="http://www.w3.org/2000/svg"
+                                                            width="20" height="26" viewBox="0 0 20 26">
+                                                            <g fill="none" fill-rule="nonzero">
+                                                                <path fill="#E9E9E0"
+                                                                    d="M14.084 0H.892C.525 0 .227.298.227.875V25c0 .157.298.455.665.455h18.216c.367 0 .665-.298.665-.455V5.9c0-.317-.043-.42-.117-.494l-5.29-5.29A.402.402 0 0 0 14.085 0z" />
+                                                                <path fill="#D9D7CA" d="M14.318.069v5.386h5.386z" />
+                                                                <path fill="#CC4B4C"
+                                                                    d="M6.143 15.147a.73.73 0 0 1-.44-.148c-.473-.355-.537-.75-.507-1.019.083-.74.998-1.515 2.72-2.304A30.512 30.512 0 0 0 9.64 6.79c-.454-.987-.895-2.268-.574-3.02.113-.263.254-.465.516-.552.104-.034.365-.078.462-.078.229 0 .43.295.573.477.134.17.438.533-.17 3.092.613 1.265 1.481 2.554 2.313 3.437a8.843 8.843 0 0 1 1.526-.163c.712 0 1.144.166 1.32.508.145.283.085.613-.178.982-.253.354-.602.541-1.009.541-.553 0-1.196-.349-1.914-1.039-1.29.27-2.795.75-4.013 1.283-.38.807-.744 1.456-1.083 1.932-.466.653-.868.957-1.265.957zm1.21-2.33c-.972.546-1.368.995-1.396 1.248-.005.041-.017.151.196.314.067-.021.463-.202 1.2-1.562zm6.198-2.019c.37.285.461.43.704.43.106 0 .41-.005.55-.201a.72.72 0 0 0 .104-.189c-.056-.03-.13-.09-.534-.09-.23.001-.518.011-.824.05zm-3.395-2.992a32.405 32.405 0 0 1-1.216 3.439c.95-.37 1.983-.69 2.953-.919a15.56 15.56 0 0 1-1.737-2.52zM9.88 3.96c-.045.015-.605.799.044 1.462.431-.962-.024-1.468-.044-1.462zM19.108 25.455H.892a.665.665 0 0 1-.665-.665v-7.063h19.546v7.063a.665.665 0 0 1-.665.665z" />
+                                                                <g fill="#FFF">
+                                                                    <path
+                                                                        d="M5.175 24.09h-.746v-4.58h1.317c.195 0 .388.032.578.094.19.062.361.156.513.28.151.124.273.274.367.45.093.176.14.374.14.594 0 .232-.04.442-.119.63a1.319 1.319 0 0 1-.33.476c-.14.128-.31.228-.509.298a1.96 1.96 0 0 1-.658.106h-.553v1.653zm0-4.014v1.815h.684c.09 0 .18-.016.27-.047a.681.681 0 0 0 .426-.447 1.397 1.397 0 0 0 .037-.727.744.744 0 0 0-.127-.28.753.753 0 0 0-.27-.223c-.117-.06-.27-.09-.46-.09h-.56zM11.918 21.674c0 .376-.04.699-.122.966-.08.267-.183.49-.307.671a1.58 1.58 0 0 1-.42.426c-.155.104-.305.181-.45.233a1.861 1.861 0 0 1-.398.1c-.12.014-.21.02-.267.02H8.22v-4.58H9.6c.385 0 .724.062 1.015.184.292.122.535.285.728.488.192.203.336.434.432.693.095.259.143.525.143.799zm-2.213 1.87c.506 0 .87-.161 1.094-.484.224-.324.336-.792.336-1.405 0-.19-.023-.38-.069-.565a1.21 1.21 0 0 0-.264-.507 1.394 1.394 0 0 0-.531-.367c-.224-.093-.514-.14-.87-.14h-.435v3.468h.74zM13.757 20.076v1.442h1.914v.51h-1.914v2.063H13v-4.58h2.865v.565z" />
+                                                                </g>
+                                                            </g>
+                                                        </svg>{{projectDocument.tdoc_filetype}}
+                                                        <svg class="download-arrow" xmlns="http://www.w3.org/2000/svg"
+                                                            width="14" height="15" viewBox="0 0 14 15">
+                                                            <path fill="#003374" fill-rule="nonzero"
+                                                                d="M13.97 7.317a.334.334 0 0 0-.308-.206H10.01V.333A.333.333 0 0 0 9.676 0H4.343a.333.333 0 0 0-.333.333v6.778H.343a.334.334 0 0 0-.236.569l6.65 6.672a.334.334 0 0 0 .472 0l6.67-6.672a.333.333 0 0 0 .071-.363z" />
+                                                        </svg>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="edit-link d-flex align-items-center justify-content-between">
+                                <input type="submit" value="Submit" class="btn fw-400">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Task Form POP UP 2 closed-->
+<!--  pop for delete task documents -->
+<div class="loader-wrapper" *ngIf="ConfirmDeleting">
+    <div class="wraperDelete">
+        <h3 class="padding">Are you sure you want to delete selected document</h3>
+        <div class="alignRight">
+            <input type="button" class="btn acptbtn" (click)="DeleteTaskDocument(pdoc_data,pid, currentHandOffData)"
+                value="Delete">
+            <input type="button" class="btn acptbtn" (click)="hideConfirmDeleting()" value="Close">
+        </div>
+
+    </div>
+    <!-- end of pop for delete task documents -->

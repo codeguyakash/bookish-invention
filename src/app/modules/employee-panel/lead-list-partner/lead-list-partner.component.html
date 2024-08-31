@@ -1,0 +1,265 @@
+<div class="main-container">
+    <aside class="sidebar">
+        <!-- <div class="brand-logo-wrapper">
+            <a class="brand-logo">
+                <img src="/assets/images/logo.png" alt="LUMINOUS" title="Home" />
+            </a>
+        </div> -->
+        <div class="employee-info">
+            <div class="pic">
+                <i class="fa fa-user-circle" aria-hidden="true"></i>
+            </div>
+            <div class="detail">
+                <span>Partner</span>
+            </div>
+        </div>
+        <nav class="sidebar-tabs" *ngIf="isListing == false">
+            <a (click)="getLeadListDetails()">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                <span>SHOW LEAD LISTING</span>
+            </a>
+        </nav>
+
+    </aside>
+    <style>
+        .highlight-row {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+<!-- <smart-search (SearchResults)="submitSmartSearch($event)"></smart-search> -->
+    <div class="container" *ngIf="isListing == true">
+        <h2>Partner Lead-List</h2><br>
+        <h2>Actionable</h2>
+        <div class="table-wrapper" *ngIf="actionableList.length>0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Customer ID
+                        </th>
+                        <th>
+                            Project ID
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Contact No.
+                        </th>
+                        <th>
+                            Address
+                        </th>
+                        <th>
+                            Surveyor Name
+                        </th>
+                        <th>
+                            Project Status
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of actionableList; let i = index" class="highlight-row">
+                        <td>{{data?.cceld_consumerid}}</td>
+                        <td>{{data?.project_code}}</td>
+                        <td>{{data?.cceld_firstname}} {{data?.cceld_middlename}} {{data?.cceld_lastname}}</td>
+                        <td>{{data?.cceld_mobileno}}</td>
+                        <td>{{data?.cceld_address1}}</td>
+                        <!-- <td>{{data?.cceld_scheduledate}}</td> -->
+                        <td>{{data?.cceld_surveyerid}}</td>
+                        <!--|||||||||||||||||||||||-->
+                        <td>
+                            {{data?.pmstate_name}}
+                        </td>
+                        <!--|||||||||||||||||||||||-->
+                        <td>
+                            <a *ngIf="openStates.indexOf(data.project_state)>-1" (click)="openProjectChecklistDetails(data?.project_id)">Open</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="no-data" *ngIf="actionableList.length<=0">
+            No Actionable Projects
+        </div>
+        <br>
+        <h2>Non-Actionable</h2>
+        <div class="table-wrapper" *ngIf="nonActionableList.length>0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Customer ID
+                        </th>
+                        <th>
+                            Project ID
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Contact No.
+                        </th>
+                        <th>
+                            Address
+                        </th>
+                        <th>
+                            Surveyor Name
+                        </th>
+                        <th>
+                            Project Status
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of nonActionableList; let i = index">
+                        <td>{{data?.cceld_consumerid}}</td>
+                        <td>{{data?.project_code}}</td>
+                        <td>{{data?.cceld_firstname}} {{data?.cceld_middlename}} {{data?.cceld_lastname}}</td>
+                        <td>{{data?.cceld_mobileno}}</td>
+                        <td>{{data?.cceld_address1}}</td>
+                        <!-- <td>{{data?.cceld_scheduledate}}</td> -->
+                        <td>{{data?.cceld_surveyerid}}</td>
+                        <!--|||||||||||||||||||||||-->
+                        <td>
+                            {{data?.pmstate_name}}
+                        </td>
+                        <!--|||||||||||||||||||||||-->
+                        <td>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="no-data" *ngIf="nonActionableList.length<=0">
+            No Non-Actionable Projects
+        </div>
+    </div>
+
+    <div class="survey-page-container">
+        <div class="survey-page-left" *ngIf="isListing == false"></div>
+        <div class="survey-page-right" *ngIf="isListing == false">
+            <div class="dashboard-inner">
+                <h2>Project Checklists Details</h2>
+                <form *ngIf="!actionLoader" id="surveyor_checklist_submit" [formGroup]="checklistSubmitForm" (ngSubmit)="changeProjectStatus()">
+                    <div class="col-md-6">
+                        <div class="form-field">
+                            <div class="field-addon">
+                                <span class="field-icon"></span>
+                                <ng-select [options]="ChecklistItems" formControlName="checklist_name" placeholder="Select Checklist" (selected)="checkIfRemarkable($event.value)"></ng-select>
+                            </div>
+                            <div class="error" *ngIf="checklistSubmitForm.controls?.checklist_name?.errors?.required && isSubmitChecklist">
+                                This Is Required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- <div class="form-field">
+                            <h3>Checklist Status</h3>
+                            <div class="field-addon">
+                                <span>
+                                    <label for="">
+                                        <input type="radio" value="0" name="checklist_status" formControlName="checklist_status"> No</label>
+                                </span>
+                                <span>
+                                    <label for="">
+                                        <input type="radio" value="1" name="checklist_status" formControlName="checklist_status"> Yes</label>
+                                </span>
+                            </div>
+                            <div class="error" *ngIf="checklistSubmitForm.controls?.checklist_status?.errors?.required && isSubmitChecklist">
+                                This Is Required
+                            </div>
+                        </div> -->
+                        <div *ngIf="isRemarkable">
+                            <textarea name="remarks" formControlName="remarks" placeholder="Enter Remarks.."></textarea>
+                            <div class="error" *ngIf="checklistSubmitForm.controls?.remarks?.errors?.required && isSubmitChecklist">
+                                This Is Required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actions text-center">
+                        <input type="submit" class="btn btn-green btn-md" value="Submit">
+                    </div>
+                </form>
+
+                <div *ngIf="actionLoader=='checklist_loader'">
+                    <img src="/assets/images/loader1.gif" alt="LUMINOUS" />
+                </div>
+            </div>
+                <form [formGroup]="uploadDocument" *ngIf="isEligibleForDocUpload && !actionLoader">
+                    <h3>Upload Documents</h3>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <ng-select [options]="documentList" formControlName="documentListName" placeholder="Select Document">
+                                </ng-select>
+                                <div class="error" *ngIf="uploadDocument.controls?.documentListName?.errors?.required && isSubmittedDocument">Document is required.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="file" (change)="fileChange($event,currentProjectId)" name="file" formControlName="uploadDocumentFile" />
+                                <div class="error" *ngIf="uploadDocument.controls?.uploadDocumentFile?.errors?.required && isSubmittedDocument">Upload document is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div *ngIf="actionLoader=='upload_loader'">
+                    <img src="/assets/images/loader1.gif" alt="LUMINOUS" />
+                </div>
+
+                <div class="margin-20" [innerHTML]="myHtml">
+                </div>
+
+            <h3>Uploaded Documents</h3>
+            <div *ngIf="actionLoader=='uploadedDocs_loader'">
+                <img src="/assets/images/loader1.gif" alt="LUMINOUS" />
+            </div>
+            <div *ngIf="!actionLoader">
+            <div *ngFor="let docs of projectDocuments">
+                <div *ngIf="['jpeg', 'jpg', 'png', 'JPEG', 'JPG', 'PNG'].indexOf(docs.pdoc_filename.split('.').pop())!=-1">
+                    <a href="{{baseurl}}{{docs.pdoc_filename}}" target="_blank">
+                        <img width="200px" src="{{baseurl}}{{docs.pdoc_filename}}">
+                    </a>
+                    <div>{{docs.pdoc_type}}</div>
+                </div>
+                <div *ngIf="['pdf', 'PDF'].indexOf(docs.pdoc_filename.split('.').pop())!=-1">
+                    <a href="{{baseurl}}{{docs.pdoc_filename}}" target="_blank">
+                        <img width="200px" src="/assets/images/pdf_image.png">
+                    </a>
+                    <div>{{docs.pdoc_type}}</div>
+                </div>
+                <div *ngIf="['doc', 'docx', 'DOC', 'DOCX'].indexOf(docs.pdoc_filename.split('.').pop())!=-1">
+                    <a href="{{baseurl}}{{docs.pdoc_filename}}" target="_blank">
+                        <img width="200px" src="/assets/images/docx.png">
+                    </a>
+                    <div>{{docs.pdoc_type}}</div>
+                </div>
+                <div *ngIf="['xls', 'xlsx', 'csv', 'XLS', 'XLSX', 'CSV'].indexOf(docs.pdoc_filename.split('.').pop())!=-1">
+                    <a href="{{baseurl}}{{docs.pdoc_filename}}" target="_blank">
+                        <img width="200px" src="/assets/images/xls.png">
+                    </a>
+                    <div>{{docs.pdoc_type}}</div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoginEmp == true" style="margin: 30px; padding: 30px; background-color: #fff; font-size: 32px; text-align: center;">
+    <p>Unauthorised Access. Please login to access.</p>
+</div>
+
+<div class="loader-wrapper" [style.display]="!userData ? 'block' : 'none'">
+    <div class="loader"></div>
+</div>

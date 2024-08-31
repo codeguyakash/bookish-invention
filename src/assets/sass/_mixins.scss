@@ -1,0 +1,68 @@
+
+// css3 browser vender prefix mixin
+@mixin prefix($property, $value, $vendors: webkit moz ms o) {
+    @if $vendors {
+        @each $vendor in $vendors {
+            #{"-" + $vendor + "-" + $property}: #{$value};
+        }
+    }
+    #{$property}: #{$value};
+}
+
+
+
+$image-path: '../images';
+@mixin background-image($name, $size:false){
+    background-image: url(#{$image-path}/#{$name}.svg);
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    @if($size){
+        background-size: $size;
+    } @else {
+        background-size: contain;
+    }
+}
+
+
+@mixin button($bg-color, $shadow, $border, $color, $font-size, $height){
+    background-color: $bg-color;
+    box-shadow: $shadow;
+    border: $border;
+    border-radius: $height/2 + px;
+    color: $color;
+    font-size: $font-size;
+    height: $height + px;
+    line-height: $height + px;
+}
+
+
+@mixin grid_boxes(){
+    border-radius: 4px;
+    border-top: 9px solid;
+    padding: 10px 20px;
+    box-shadow: 0px 13px 18px 0px rgba(16, 92, 164, 0.1);
+}
+
+
+
+$rating-gradient-current: 90deg, rgb(250,87,29) 0%, rgb(233,117,14) 100%;
+$rating-gradient-solar: 124deg, rgb(255,187,0) 0%, rgb(255,233,0) 100%;
+@mixin rating-grad($grad){
+    background-image: -moz-linear-gradient($grad);
+    background-image: -webkit-linear-gradient($grad);
+    background-image: -ms-linear-gradient($grad);
+    background-image: linear-gradient($grad);
+}
+
+
+@mixin card-home(){
+    @extend .overflow-hide;
+    @extend .text-center;
+    height: 205px;
+    width: 100%;
+    max-width: 376px;
+    margin: 30px 0 32px;
+    display: inline-flex;
+    background-position: top center;
+    background-repeat: no-repeat;
+}

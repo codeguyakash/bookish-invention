@@ -1,0 +1,340 @@
+
+    .call-history .remarks {
+        width: 50%;
+    }
+
+    ul {
+        overflow: hidden;
+    }
+
+    li {
+        display: inline-block;
+    }
+    .sidebar-tabs a.active {
+        background: #053395;
+        color: #fff;
+    }
+
+    .select-bg {
+        background: #ddd
+    }
+
+    .downLoad {
+        background: #09357f;
+        color: #fff;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .sendBox {
+        position: fixed;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.5);
+        width: 100%;
+        height: 100%;
+        top: -100%;
+        left: 0;
+        opacity: 0
+    }
+
+    .sendBox.hideAside {
+        top: 0;
+        opacity: 1;
+    }
+
+    .box-wrapper {
+        max-width: 500px;
+        margin: 0 auto;
+        height: 100%;
+    }
+
+    .tableBoxx {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cellBoxx {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .sendWrapper {
+        width: 100%;
+        float: left;
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        position: relative
+    }
+
+    .menu.example5 {
+        position: absolute;
+        color: #fff;
+        background: #000;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        line-height: 30px;
+        text-align: center;
+        font-size: 17px;
+        padding: 0;
+        vertical-align: middle;
+        right: -16px;
+        top: -16px;
+    }
+
+    .nbtn.btn.btn-blue.btn-md {
+        margin: 0 0 15px 27px;
+    }
+
+    .field-wrapper .form-field {
+        margin-left: auto;
+    }
+
+    .gbgBtn {
+        background: #018000;
+        color: #fff;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    table tr td {
+        word-wrap: break-word;
+    }
+
+    @media screen and (max-width: 1024px) {
+
+        .survey-page-container {
+            flex-direction: column
+        }
+
+        .survey-page-left {
+            width: 100%;
+        }
+
+        .survey-page-right {
+            width: 100%;
+            margin: 15px 0 0;
+        }
+    }
+
+    .sendBox {
+        position: fixed;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.5);
+        width: 100%;
+        height: 100%;
+        top: -100%;
+        left: 0;
+        opacity: 0
+    }
+
+    .sendBox.hideAside {
+        top: 0;
+        opacity: 1;
+    }
+
+    .box-wrapper {
+        max-width: 500px;
+        margin: 0 auto;
+        height: 100%;
+    }
+
+    .tableBoxx {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cellBoxx {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .sendWrapper {
+        width: 100%;
+        float: left;
+        background: #fff;
+        padding: 0px;
+        border-radius: 5px;
+        position: relative
+    }
+
+    .menu.example5 {
+        position: absolute;
+        color: #fff;
+        background: #000;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        line-height: 30px;
+        text-align: center;
+        font-size: 17px;
+        padding: 0;
+        vertical-align: middle;
+        right: -16px;
+        top: -16px;
+    }
+
+    .sendWrapper h4 {
+        padding: 20px;
+        margin-bottom: 0;
+        background: #09357f;
+        color: #fff;
+    }
+
+    .sendWrapper form .field-wrapper {
+        flex-direction: column;
+    }
+
+    .sendWrapper form .field-wrapper label {
+        padding: 0;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .sendWrapper form .field-wrapper .form-field {
+        width: 100%;
+    }
+
+    .sendWrapper form {
+        padding: 20px;
+    }
+
+    .sendWrapper .btn-blue {
+        margin-top: 0
+    }
+
+    .coldData .btn.btn-blue {
+        font-size: 14px;
+        text-transform: capitalize;
+    }
+
+    .sendWrapper textarea {
+        border: 1px solid #706f6f;
+    }
+
+    .gold_wrapper {width: 48%; float:left; margin-right: 2%;}
+    .silver_wrapper {width: 48%; float:right; margin-left: 2%;}
+    .luminous-panel-heading{display:block; margin-top: 20px; margin-bottom: 20px;}
+    .exportData{float:right;    margin-top: 0px;
+    margin-bottom: 15px;
+    border-radius: 0px;}
+    .reject-leads{
+        float:right;
+        margin-top: 0px;
+        border-radius: 0px;
+    }
+    .clearboth{clear:both;}
+
+    .oNoFFBtn{
+    padding: 15px 25px;
+    position: fixed;
+    top: 45px;
+    right: 0;
+    width: 100%;
+    text-align: right;
+    vertical-align: middle;
+    background: #e0edfd;
+    z-index: 999;
+}
+.oNoFFBtn .switch{vertical-align: middle;margin-left: 5px;}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* input[type=checkbox] { display:none; } */
+ /* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+  }
+
+input[type=checkbox] + label {
+    position: absolute;
+    top: 70px;
+}
+
+input[type=checkbox] + label:before { content: "\f096"; font-size: 30px;} /* unchecked icon */
+input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+
+input[type=checkbox]:checked + label:before { content: "\f046"; font-size: 30px;} /* checked icon */
+input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow space for check mark */
+.checkBoxInput-x + label {
+    display: inline !important;
+    position: initial !important;
+}
+
+h2.table-title {
+    margin: 0px 0px 20px 0px;
+}
+
+.loader-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 9999;
+    padding-bottom: 15%;
+    padding-right: 15%;
+}
+
+.table-wrapper table th:last-child {
+  text-align: center;
+  width: 150px !important;
+}

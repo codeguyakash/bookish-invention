@@ -1,0 +1,476 @@
+@media (min-width: 768px) {
+    .solar-bg {
+        background: url(../images/bottom-bg.png) left bottom / 100% no-repeat #fff;
+    }
+}
+
+@media (min-width: 992px) {
+    // input, button, select, textarea{
+    //     font-size: 18px;
+    // }
+}
+
+@media (min-width: 1200px) {
+    h2 {
+        font-size: 43px;
+    }
+    [class*="heading-"] {
+        h2 {
+            font-size: 43px;
+            line-height: 73px;
+            padding-bottom: 0;
+            &.easy-steps {
+                //position: relative;
+                //top: -100px;
+                font-size: 29px;
+                .digits {
+                    font-size: 69px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .solar-calculator-widget {
+        .container {
+            z-index: 2;
+        }
+    }
+    .main-success-stories {
+        .heading-center-static {
+            margin-top: 15px;
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .header {
+        .nav-links li {
+            padding: 0 10px
+        }
+    }
+    .solar-calculator-widget {
+        .solar-calculator {
+            position: relative;
+            right: 0;
+        }
+    }
+    .benifit-solar {
+        h3 {
+            font-size: 26px;
+        }
+    }
+    /* solar calculater */
+    .advanced-grid-system .advanced-graphs {
+        &.grid-container {
+            flex-direction: column;
+            .grid-center {
+                width: 100%;
+            }
+            .grid-left,
+            .grid-right {
+                .graph {
+                    width: 33%;
+                }
+            }
+        }
+        .grey-box {
+            flex-direction: row;
+            width: 100%;
+            padding: 0;
+            .graph+.graph {
+                border-left: 1px solid #dcdddd;
+                border-top: none;
+            }
+        }
+    }
+    /* solar calculater */
+}
+
+@media screen and (max-width: 768px) {
+    body.scrollOff {
+        overflow: hidden;
+    }
+    .overlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        content: '';
+        background: #000000ad;
+        display: none;
+        z-index: 10;
+        &.active {
+            display: block;
+        }
+    }
+    [class*="heading-"] h2 {
+        font-size: 32px;
+        line-height: 32px;
+        padding-bottom: 16px;
+    }
+    .mob-hide {
+        display: none !important;
+    }
+    .dt-hide,
+    .navbar-toggler {
+        display: inline-block !important;
+    }
+    .luminous-modal {
+        .modal-content {
+            width: 90%;
+        }
+        .modal-body {
+            padding: 0 25px;
+        }
+        .modal-header {
+            h2 {
+                font-size: 30px;
+                margin-bottom: 7px;
+            }
+        }
+    }
+    /*header */
+    .header {
+        padding: 0px;
+        .header-top-links {
+            position: relative;
+            z-index: 1;
+            background: #04357f;
+            padding: 15px;
+            box-shadow: 0px 0px 5px #000;
+        }
+        .nav-primary {
+            display: block;
+        }
+        .nav-links {
+            display: block;
+            width: 100%;
+            position: fixed;
+            left: -310px;
+            top: 0;
+            padding-top: 65px;
+            width: 0px;
+            height: 100%;
+            background: #fff;
+            box-shadow: 0 5px 15px #000;
+            width: 300px;
+            transition: all .4s ease-in-out;
+            &.active {
+                left: 0;
+            }
+            li {
+                float: none;
+                display: block;
+                text-align: left;
+                line-height: 35px;
+                padding: 0 15px;
+            }
+            a {
+                color: #04357f;
+            }
+            .login-signup-links span {
+                color: #04357f;
+            }
+        }
+        .brand-logo {
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .btn.btn-request-visit {
+            height: 35px;
+            line-height: 35px;
+            padding: 0 10px;
+            font-size: 16px;
+            float: right;
+        }
+    }
+    /*header */
+    footer {
+        .col-auto {
+            width: 50%;
+        }
+    }
+    .go-solor-bar {
+        right: 140px;
+    }
+    .banner-home {
+        h1 {
+            strong {
+                font-size: 36px;
+            }
+            span {
+                font-size: 30px;
+            }
+        }
+        .banner-title {
+            left: 15px;
+        }
+    }
+    .solar-calculator-widget {
+        .solar-calculator {
+            width: 95%;
+            padding: 20px 15px;
+            position: relative;
+            right: 0;
+        }
+    }
+    /* site survey */
+    app-site-survey .banner-site-survey {
+        height: 240px;
+        padding-top: 20px;
+    }
+    .banner-site-survey {
+        height: 200px;
+        margin-top: 60px;
+        padding-top: 0;
+        .banner-content {
+            img {
+                display: none;
+            }
+            h1 {
+                font-size: 30px;
+                line-height: 45px;
+                font-weight: 300;
+            }
+        }
+    }
+    /* site servay */
+    /* start solar calculater */
+    .disclaimer-box {
+        padding: 15px;
+        display: block;
+        h4 {
+            text-align: left;
+        }
+        p {
+            padding-left: 0;
+        }
+    }
+    .calculator-actions .container .go-advanced {
+        display: block;
+        height: auto;
+        span {
+            font-weight: 300;
+            padding-right: 0;
+            display: block;
+            line-height: 30px;
+        }
+        .btn.btn-go-advanced {
+            margin-top: 20px;
+        }
+    }
+    app-calculator-basic .solar-calculator,
+    app-calculator-advanced .solar-calculator {
+        margin-top: 60px;
+    }
+    app-calculator-basic .solar-calculator form>div,
+    app-calculator-advanced .solar-calculator form>div {
+        flex-direction: column;
+    }
+    app-calculator-advanced,
+    app-calculator-basic {
+        .solar-calculator .switcher .radio+.radio {
+            margin-left: 0;
+            margin-top: 10px;
+        }
+    }
+    app-calculator-basic .solar-calculator input[type="text"],
+    app-calculator-advanced .solar-calculator input[type="text"] {
+        width: 100% !important;
+    }
+    /* end solar calculater */
+    .main-solar-benifits .why-solar .detail .detail-txt {
+        padding: 10px;
+    }
+    .main-faq .type-of-qut {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+  .indivisual-salary .col-md-12 {
+    flex-direction:column;
+   }
+   .indivisual-salary .col-md-12 .indivisual-box {
+    width: 100%;
+   }
+
+    .calculator-actions .container .go-advanced {
+        display: none;
+    }
+    .calculator-actions .container .save-result {
+        margin-top: 0px;
+    }
+    .grid-system-widget {
+        padding-bottom: 20px;
+    }
+    .advanced-grid-system .advanced-graphs.grid-container .grid-center>div {
+        width: 100%
+    }
+    .advanced-grid-system .advanced-graphs.grid-container .grid-left .grey-box,
+    .advanced-grid-system .advanced-graphs.grid-container .grid-right .grey-box {
+        flex-direction: column;
+    }
+    .advanced-grid-system .advanced-graphs.grid-container .grid-left .graph,
+    .advanced-grid-system .advanced-graphs.grid-container .grid-right .graph {
+        width: 100%;
+    }
+    .advanced-grid-system .advanced-graphs .grey-box .graph+.graph {
+        border-top: 1px solid #dcdddd;
+        border-left: none;
+    }
+    .gosolar-now {
+        margin: 20px 10px 0;
+        flex-direction: column;
+        h2 {
+            font-size: 40px;
+        }
+    }
+    .solar-calculator-widget {
+        .solar-calculator {
+            width: 95%;
+            padding: 20px 10px;
+            .switcher-calculator .switch {
+                font-size: 14px;
+            }
+        }
+    }
+    .solar-calculator .title {
+        font-size: 24px;
+    }
+    .banner-home h1 {
+        line-height: 40px;
+    }
+    /*mobile*/
+    app-calculator-basic .solar-calculator form .switcher {
+        flex-direction: row;
+    }
+    app-calculator-basic .solar-calculator form,
+    app-calculator-advanced .solar-calculator form {
+        flex-direction: column;
+    }
+    app-calculator-advanced,
+    app-calculator-basic {
+        .solar-calculator .switcher .radio+.radio {
+            margin-left: 10px;
+            margin-top: 0px;
+        }
+        form .form-actions .btn.btn-blue {
+            margin-top: 10px;
+        }
+    }
+    $orders: 13;
+    @mixin order-list {
+        @for $i from 1 through $orders {
+            .order#{$i} {
+                order: #{$i}
+            }
+        }
+    }
+    @include order-list;
+    .help-us {
+        padding: 15px;
+        p {
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+    }
+    .main-faq {
+        .search-box,
+        .type-of-qut {
+            width: 100%;
+            h3 {
+                font-size: 20px;
+                color: #878787;
+                font-weight: 700;
+                line-height: 20px;
+                margin-top: 10px;
+            }
+            .main-tab figure {
+                height: 70px;
+                position: relative;
+                width: 70px;
+                margin: auto;
+            }
+        }
+        .p-specific-questions h3 {
+            margin-top: 0;
+        }
+    }
+    .luminous-modal .form-field-otp {
+        flex-direction: column;
+        >div {
+            width: 100%;
+        }
+    }
+    app-calculator-basic,
+    app-calculator-advanced {
+        padding-top: 60px;
+        app-calculator {
+            display: none;
+        }
+        .grid-title {
+            margin: 20px 0 0 0;
+            h2,
+            h1 {
+                >span {
+                    display: block;
+                    font-size: 14px;
+                    text-align: center;
+                    margin: 0;
+                    padding: 0;
+                    span {
+                        margin: 0 3px;
+                    }
+                }
+            }
+        }
+    }
+    .go-solor-bar {
+        display: none;
+    }
+    .request-call-back {
+        .form-field {
+            flex-direction: column;
+            .btn {
+                margin: 10px auto 0 auto;
+            }
+        }
+    }
+    /*.mobile-hide-schedule-visit {
+        display: none;
+    }*/
+    .show-mobile-schedule-visit {
+        display: block;
+    }
+    .footer {
+        padding-bottom: 60px;
+    }
+    .main-success-stories {
+        .heading-center-static {
+            margin: 30px 0;
+        }
+    }
+    [class*="luminous-card"] {
+        max-width: 100%;
+    }
+    .benifit-solar p {
+        max-width: 100%;
+    }
+    .header {
+        .brand-logo {
+            img {
+                width: 110px;
+            }
+        }
+    }
+    .btn.btn-blue {
+        -webkit-appearance: none;
+    }
+}

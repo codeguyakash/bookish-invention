@@ -1,0 +1,2139 @@
+<smart-search (SearchResults)="smartSearchResult($event)" *ngIf="showSmartSearchComponent"></smart-search>
+
+<aside class="sidebar">
+    <!-- <div class="brand-logo-wrapper">
+            <a class="brand-logo">
+                <img src="/assets/images/logo.png" alt="LUMINOUS" title="Home" />
+            </a>
+        </div> -->
+    <div class="employee-info">
+        <div class="pic">
+            <i class="fa fa-user-circle" aria-hidden="true"></i>
+        </div>
+        <div class="detail">
+            <h4>Employee Name</h4>
+            <span>CCE Supervisor</span>
+        </div>
+    </div>
+    <nav class="sidebar-tabs">
+        <a (click)="leadBulkUpload()" [ngClass]="{'active':(isListing == 'bulk_upload')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Bulk Upload</span>
+        </a>
+    </nav>
+    <nav class="sidebar-tabs">
+        <a (click)="surveyorRejectedProjects()" [ngClass]="{'active':(isListing == 'surveyor_rejections')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Surveyor Rejected Projects</span>
+        </a>
+    </nav>
+    <!-- <nav class="sidebar-tabs">
+        <a (click)="getFreshLeadList(1, 'paid')" [ngClass]="{'active':(isListing=='fresh_leads_listing' && freshLeadType == 'paid')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>CONSUMER LEADS(PAID)</span>
+        </a>
+    </nav>
+    <nav class="sidebar-tabs">
+        <a (click)="getFreshLeadList(1, 'unpaid')" [ngClass]="{'active':(isListing=='fresh_leads_listing' && freshLeadType == 'unpaid')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>CONSUMER LEADS(NOT PAID)</span>
+        </a>
+    </nav>
+    <nav class="sidebar-tabs" *ngIf="isSupervisor2">
+        <a (click)="getFreshLeadList(1, 'cbucket')" [ngClass]="{'active':(isListing=='fresh_leads_listing' && freshLeadType == 'cbucket')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>CONSUMER LEADS(COLD BUCKET)</span>
+        </a>
+    </nav> -->
+    <!-- <nav class="sidebar-tabs">
+        <a (click)="getFreshLeadList(1, 'both')" [ngClass]="{'active':(isListing=='fresh_leads_listing' && freshLeadType == 'both')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>CONSUMER LEADS(PAID/UNPAID)</span>
+        </a>
+    </nav> -->
+    <!--nav class="sidebar-tabs" *ngIf = "!isSupervisor2">
+        <a (click)="followupRejectedProjects(1)" [ngClass]="{'active':(isListing == 'followup_rejections')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Followup Rejected Projects</span>
+        </a>
+    </nav-->
+
+    <nav class="sidebar-tabs" *ngIf="!isSupervisor2">
+        <a (click)="getRejectedLeadProjects(1)" [ngClass]="{'active':(isListing == 'coldbucket_leads_project')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Consumer Cold Bucket (Projects/Leads)</span>
+        </a>
+    </nav>
+
+    <nav class="sidebar-tabs" *ngIf="!isSupervisor2">
+        <a (click)="getAllLeadProjects(1)" [ngClass]="{'active':(isListing == 'all_leads_project')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Consumer All Leads</span>
+        </a>
+    </nav>
+
+    <nav class="sidebar-tabs">
+        <a (click)="ResetSmartSearchForm();ShowMissedCallListing(1 , true)"
+            [ngClass]="{'active':(isListing == 'missedCallLogListing')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Missed Call Logs</span>
+        </a>
+    </nav>
+
+    <nav class="sidebar-tabs">
+        <a (click)="ResetSmartSearchForm(); getCCELeadList(1)" [ngClass]="{'active':(isListing=='CCELeadList')}">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>CCE Assigned Leads</span>
+        </a>
+    </nav>
+
+
+
+    <nav class="sidebar-tabs" *ngIf="!isSupervisor2">
+        <a (click)="getListLeadsCce(1)">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>CCE Leads Queue</span>
+        </a>
+    </nav>
+    <!-- <nav class="sidebar-tabs">
+        <a (click)="partnerQueryData(1)">
+            <i class="fa fa-address-card" aria-hidden="true"></i>
+            <span>Partner Query List</span>
+        </a>
+    </nav> -->
+</aside>
+<div class="loader-container" *ngIf="actionLoader == 'upload_loader'">
+    <img
+      src="/assets/images/loader.gif"
+      style="
+        width: 35%;
+      "
+    />
+  </div>
+<div class="container" *ngIf="isListing == 'bulk_upload'">
+    <div>
+        <h2>Consumer Lead Bulk Upload</h2>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>
+            <form [formGroup]="leadBulkUploadForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        Choose File
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="file" formControlName="bulkUploadFile" (change)="fileChange($event)" />
+                            <!--<div class="error" *ngIf="uploadDocument.controls?.uploadDocumentFile?.errors?.required && isSubmittedDocument">Upload document is required.</div>-->
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- File dropalble directive by @ctrl/ngx-droppable@1.2.2  @developer: Roshan-->
+            <div droppable (filesDropped)="handleFilesDropped($event)"
+                style="height:150px; width:40%; border:1px dotted grey">Drop Your File Here</div>
+            <!--Ends dropable-->
+
+            <!-- <div *ngIf="actionLoader=='upload_loader'">
+                <img src="/assets/images/loader1.gif" alt="LUMINOUS" />
+            </div> -->
+        </div>
+    </div>
+
+
+    <div *ngIf="leadBulkSuccessData.length>0 && !dupDataPopUp">
+        <h2>Consumer Lead Uploaded List</h2>
+        <br>
+        <div class="table-wrapper" *ngIf="leadBulkSuccessData.length>0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            First Name
+                        </th>
+                        <th>
+                            Last Name
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Mobile
+                        </th>
+                        <th>
+                            Address1
+                        </th>
+                        <th>
+                            Address2
+                        </th>
+                        <th>
+                            Pincode
+                        </th>
+                        <th>
+                            Source
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of leadBulkSuccessData; let i = index" class="highlight-row">
+                        <td>{{data?.lead_fname}}</td>
+                        <td>{{data?.lead_lname}}</td>
+                        <td>{{data?.lead_email}}</td>
+                        <td>{{data?.lead_mobile}}</td>
+                        <td>{{data?.lead_address1}}</td>
+                        <td>{{data?.lead_address2}}</td>
+                        <td>
+                            {{data?.lead_pincode}}
+                        </td>
+                        <td>{{data?.lead_source}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="leadBulkFailedData.length>0 && !dupDataPopUp">
+        <h2>Consumer Lead Rejected List</h2>
+        <br>
+        <div class="table-wrapper" *ngIf="leadBulkFailedData.length>0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            First Name
+                        </th>
+                        <th>
+                            Last Name
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Mobile
+                        </th>
+                        <th>
+                            Address1
+                        </th>
+                        <th>
+                            Address2
+                        </th>
+                        <th>
+                            Pincode
+                        </th>
+                        <th>
+                            Source
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of leadBulkFailedData; let i = index" class="highlight-row">
+                        <td>{{data?.lead_fname}}</td>
+                        <td>{{data?.lead_lname}}</td>
+                        <td>{{data?.lead_email}}</td>
+                        <td>{{data?.lead_mobile}}</td>
+                        <td>{{data?.lead_address1}}</td>
+                        <td>{{data?.lead_address2}}</td>
+                        <td>
+                            {{data?.lead_pincode}}
+                        </td>
+                        <td>{{data?.lead_source}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="leadWithDuplicateData.length>0 && !dupDataPopUp">
+        <h2>Data With Duplicate Leads</h2>
+        <br>
+        <div class="table-wrapper" *ngIf="leadWithDuplicateData.length>0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            First Name
+                        </th>
+                        <th>
+                            Last Name
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Mobile
+                        </th>
+                        <th>
+                            Address1
+                        </th>
+                        <th>
+                            Address2
+                        </th>
+                        <th>
+                            Pincode
+                        </th>
+                        <th>
+                            Source
+                        </th>
+                        <!-- <th>
+                            Action
+                        </th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of leadWithDuplicateData; let i = index" class="highlight-row">
+                        <td>{{data?.lead_fname}}</td>
+                        <td>{{data?.lead_lname}}</td>
+                        <td>{{data?.lead_email}}</td>
+                        <td>{{data?.lead_mobile}}</td>
+                        <td>{{data?.lead_address1}}</td>
+                        <td>{{data?.lead_address2}}</td>
+                        <td>
+                            {{data?.lead_pincode}}
+                        </td>
+                        <td>{{data?.lead_source}}</td>
+                        <!-- <td><button type="button"
+                                (click)="getExistingLeadsAndProjectsForNumber(data?.lead_mobile)">Click</button></td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="table-wrapper" *ngIf="dupDataPopUp">
+        <div>
+            <button type="button" (click)="toggleDupDataPopUp()">Go Back</button>
+        </div>
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Lead Id</th>
+                    <th>Project Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Lead Status</th>
+                    <th>Project Status</th>
+                    <th>Lead Mobile</th>
+                    <th>Alternate Mobile</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="ongoingLead.length>0">
+                <tr *ngFor="let ongLd of ongoingLead; let i = index">
+                    <td>{{ongLd?.lead_id}}</td>
+                    <td>N/A</td>
+                    <td>{{ongLd?.consumer_full_name}}</td>
+                    <td>{{(ongLd?.address.trim() !='')?ongLd?.address:'N/A'}}</td>
+                    <td>Lead In Progress</td>
+                    <td>N/A</td>
+                    <td>{{ongLd?.lead_mobile}}</td>
+                    <td>{{ongLd?.consumer_mobileno}}</td>
+                </tr>
+            </tbody>
+
+            <tbody *ngIf="coldLead.length>0">
+                <tr *ngFor="let coldLd of coldLead; let j = index">
+                    <td>{{coldLd?.lead_id}}</td>
+                    <td>N/A</td>
+                    <td>{{coldLd?.consumer_full_name}}</td>
+                    <td>{{(coldLd?.address.trim()!='')?coldLd?.address:'N/A'}}</td>
+                    <td>Rejected Lead</td>
+                    <td>N/A</td>
+                    <td>{{coldLd?.lead_mobile}}</td>
+                    <td>{{coldLd?.consumer_mobileno}}</td>
+                </tr>
+            </tbody>
+
+            <tbody *ngIf="ongoingProject.length>0">
+                <tr *ngFor="let ongPj of ongoingProject; let k = index">
+                    <td>{{ongPj?.lead_id}}</td>
+                    <td>{{ongPj?.project_code}}</td>
+                    <td>{{(ongPj?.address.trim()!='')?ongPj?.address:'N/A'}}</td>
+                    <td>{{ongPj?.address}}</td>
+                    <td>N/A</td>
+                    <td>Project In Progress</td>
+                    <td>{{ongPj?.lead_mobile}}</td>
+                    <td>{{ongPj?.consumer_mobileno}}</td>
+                </tr>
+            </tbody>
+
+            <tbody *ngIf="rejectedProject.length>0">
+                <tr *ngFor="let rejPj of rejectedProject; let l = index">
+                    <td>{{rejPj?.lead_id}}</td>
+                    <td>{{rejPj?.project_code}}</td>
+                    <td>{{rejPj?.consumer_full_name}}</td>
+                    <td>{{(ongPj?.address.trim()!='')?ongPj?.address:'N/A'}}</td>
+                    <td>N/A</td>
+                    <td>Project Rejected</td>
+                    <td>{{rejPj?.lead_mobile}}</td>
+                    <td>{{rejPj?.consumer_mobileno}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container" *ngIf="isListing == 'surveyor_rejections'">
+    <h2 class="table-title">Surveyor Rejected Projects
+        <a *ngIf="surveyorRejectedProject.length > 0" class="reject-leads btn btn-blue"
+            (click)="rejectLeadsInBulk(surveyorRejectedProject)">Reject Selected</a>
+    </h2>
+    <div class="table-wrapper" *ngIf="rejectedLeads.length>0">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox"  [checked]="isAllSelected"
+                            (click)="toggleAll($event)">
+                    </th>
+                    <th>
+                        Sr. No.
+                    </th>
+                    <th>
+                        Lead ID
+                    </th>
+                    <th>
+                        Project Code
+                    </th>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Last Name
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    <th>
+                        Surveyor Name
+                    </th>
+                    <th>
+                        Project Status
+                    </th>
+                    <th>
+                        Rejection Remarks
+                    </th>
+                    <th>
+                        Rejection Date
+                    </th>
+                    <th>
+                        Reassign
+                    </th>
+                    <th>
+                        Reject Permanently
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of rejectedLeads; let i = index" class="highlight-row">
+                    <td>
+                        <input type="checkbox"  [checked]="individualRejectCOunt"
+                            (click)="toggleProject($event,data.project_id)">
+                    </td>
+                    <td>{{i+1}}</td>
+                    <td>{{data?.cceld_leadid}}</td>
+                    <td>{{data?.project_code}}</td>
+                    <td>{{data?.cceld_firstname}}</td>
+                    <td>{{data?.cceld_lastname}}</td>
+                    <td>{{data?.cceld_mobileno}}</td>
+                    <td>{{data?.surveyor_name}}</td>
+                    <td>{{data?.pmstate_name}}</td>
+                    <td>{{data?.cold_bucket_remarks}}</td>
+                    <td>{{data?.pstatus_lastmodifiedon}}</td>
+                    <td style="color: #05367f;text-decoration: underline;"><a
+                            (click)="openReallocationForm(data)">Reassign</a></td>
+                    <td style="color: #05367f;text-decoration: underline;"><a
+                            (click)="rejectPermanently(data?.project_id)">Reject</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <style>
+            ul {
+                overflow: hidden;
+            }
+
+            li {
+                display: inline-block;
+            }
+        </style>
+
+    </div>
+    <div class="no-data" *ngIf="rejectedLeads.length<=0">
+        No Data
+    </div>
+</div>
+
+<div class="container" *ngIf="isListing == 'followup_rejections'">
+    <h2>Followup Rejected Projects</h2>
+    <br>
+    <div class="table-wrapper" *ngIf="rejectedProjects.length>0">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Sr. No.
+                    </th>
+                    <th>
+                        Project Code
+                    </th>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Last Name
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    <th>
+                        Rejected By Name
+                    </th>
+                    <th>
+                        Project Rejected Status
+                    </th>
+                    <th>
+                        Rejection Remarks
+                    </th>
+                    <th>
+                        Rejection Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of rejectedProjects; let i = index" class="highlight-row">
+                    <td>{{i+1}}</td>
+                    <td>{{data?.project_code}}</td>
+                    <td>{{data?.cceld_firstname}}</td>
+                    <td>{{data?.cceld_lastname}}</td>
+                    <td>{{data?.cceld_mobileno}}</td>
+                    <td>{{data?.followup_emp_name}}</td>
+                    <td>{{data?.pmstate_name}}</td>
+                    <td>{{data?.rrm_text}}</td>
+                    <td>{{data?.fui_updated_at}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <style>
+            ul {
+                overflow: hidden;
+            }
+
+            li {
+                display: inline-block;
+            }
+        </style>
+        <ul *ngIf="rejectedProjects" style="white-space:nowrap;">
+
+            <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+            </li>
+            <li>
+                <div class="custom-pagination">
+                    <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                        <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                            (keypress)=_keyPress($event)>
+                        <button type="submit" class="btn btn-blue btn-md">Go</button>
+                        <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number
+                            must be less than or
+                            equal to {{pageCount}}</span>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="no-data" *ngIf="rejectedProjects.length<=0">
+        No Data
+    </div>
+</div>
+
+<div class="container" *ngIf="isListing == 'coldbucket_leads_project' && !isSupervisor2">
+    <h2>Cold Bucket Leads And Projects</h2>
+    <br>
+    <img *ngIf="loading" src="/assets/images/loader.gif" style="width:100px;height:100px;" alt="LUMINOUS" />
+    <div class="table-wrapper" *ngIf="!loading && coldBucketLeadsProject.length>0">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Sr. No.
+                    </th>
+                    <th>
+                        Lead Id
+                    </th>
+                    <th>
+                        Project Id
+                    </th>
+                    <th>
+                        Consumer Id
+                    </th>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Last Name
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    <th>
+                        Type
+                    </th>
+                    <th>
+                        Rejected By
+                    </th>
+                    <th>
+                        Project Rejected Status
+                    </th>
+                    <!-- <th>
+                        Rejection Remarks
+                    </th> -->
+                    <th>
+                        Source
+                    </th>
+                    <th>
+                        Rejection Date
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of coldBucketLeadsProject; let i = index" class="highlight-row">
+                    <td>{{i+1}}</td>
+                    <td>{{data?.lead_id}}</td>
+                    <td>{{data?.project_id}}</td>
+                    <td>{{data?.consumer_id}}</td>
+                    <td>{{data?.fname}}</td>
+                    <td>{{data?.lname}}</td>
+                    <td>{{data?.mobile}}</td>
+                    <td>{{data?.type}}</td>
+                    <td>{{data?.emp_name}}</td>
+                    <td>{{data?.status_name}}</td>
+                    <!-- <td>{{data?.remark}}</td> -->
+                    <td>{{data?.source}}</td>
+                    <td>{{data?.updated_on | date: format: mediumDate}}</td>
+                    <td *ngIf="data.type=='project'" style="color: #05367f;text-decoration: underline;"><a
+                            (click)="openProjectReviveForm(data)">Restore {{data?.type}}</a></td>
+                    <td *ngIf="data.type=='lead'" style="color: #05367f;text-decoration: underline;"><a
+                            (click)="openLeadReviveForm(data)">Restore {{data?.type}}</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <style>
+            ul {
+                overflow: hidden;
+            }
+
+            li {
+                display: inline-block;
+            }
+        </style>
+        <ul *ngIf="coldBucketLeadsProject" style="white-space:nowrap;">
+
+            <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+            </li>
+            <li>
+                <div class="custom-pagination">
+                    <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                        <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                            (keypress)=_keyPress($event)>
+                        <button type="submit" class="btn btn-blue btn-md">Go</button>
+                        <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number
+                            must be less than or
+                            equal to {{pageCount}}</span>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="no-data" *ngIf="coldBucketLeadsProject.length<=0">
+        No Data
+    </div>
+</div>
+
+<!--@description: Form To revive the lead form to show the detail and survery to assign
+    @developer: roshan
+-->
+<div class="container" *ngIf="isListing == 'revive_lead'">
+    <div class="box schedule-call-back">
+        <h2 class="box-title">Re-allocate Lead</h2>
+        <section class="box-content">
+            <div class="field-wrapper">
+                <label for="">Lead id</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.lead_id}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Project id</label>
+                <div class="form-field">
+                    <span *ngIf="pDataForReallocation.project_id">{{pDataForReallocation?.project_id}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Consumer Id</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.consumer_id}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Consumer name</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.fname}} {{pDataForReallocation?.lname}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Lead Surveyor</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.surveyor_name}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Lead Status</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.pmstate_name}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Lead Action</label>
+                <div class="form-field">
+                    <button (click)="submitReviveLead(pDataForReallocation.lead_id)">Submit</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<!--@description: Form To revive the Project form to show the detail
+    @developer: roshan
+-->
+<div class="container" *ngIf="isListing == 'revive_project'">
+    <div class="box schedule-call-back">
+        <h2 class="box-title">Re-allocate Project</h2>
+        <section class="box-content">
+            <div class="field-wrapper">
+                <label for="">Project id</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.project_id}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Consumer Id</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.consumer_id}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Consumer name</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.fname}} {{pDataForReallocation?.lname}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Project Surveyor</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.surveyor_name}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Project Status</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.pmstate_name}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Project Action</label>
+                <div class="form-field">
+                    <button (click)="submitReviveProject(pDataForReallocation.project_id)">Submit</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="container" *ngIf="isListing == 'reallocate_surveyor_form'">
+    <div class="box schedule-call-back">
+        <h2 class="box-title">Re-allocate New Site Surveyor</h2>
+        <section class="box-content">
+            <div class="field-wrapper">
+                <label for="">Project Code</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.project_code}}</span>
+                </div>
+            </div>
+            <div class="field-wrapper">
+                <label for="">Customer Name</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.cceld_firstname}} {{pDataForReallocation?.cceld_lasttname}}</span>
+                </div>
+            </div>
+            <div class="field-wrapper">
+                <label for="">Customer Mobile</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.cceld_mobileno}}</span>
+                </div>
+            </div>
+            <div class="field-wrapper">
+                <label for="">Surveyor Name</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.surveyor_name}}</span>
+                </div>
+            </div>
+            <div class="field-wrapper">
+                <label for="">Project Status</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.pmstate_name}}</span>
+                </div>
+            </div>
+            <div class="field-wrapper">
+                <label for="">Rejection Remarks</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.cold_bucket_remarks}}</span>
+                </div>
+            </div>
+            <div class="field-wrapper">
+                <label for="">Rejection Date</label>
+                <div class="form-field">
+                    <span>{{pDataForReallocation?.pstatus_lastmodifiedon}}</span>
+                </div>
+            </div>
+            <form [formGroup]="reallocationForm" (ngSubmit)="reallocationSubmit(pDataForReallocation?.project_id)">
+                <div class="field-wrapper">
+                    <label for="">Select Site Surveyor*</label>
+                    <div class="form-field">
+                        <!-- <select formControlName="cceld_surveyerid">
+                                                        <option value=1>Harish</option>
+                                                        <option value=2>Lovish</option>
+                                                        <option value=3>Amit</option>
+                                                    </select> -->
+                        <ng-select class="mandate-field" [options]="surveyorList" formControlName="project_surveyor"
+                            placeholder="Select Site Surveyor"></ng-select>
+                    </div>
+                </div>
+                <h3>Schedule site visit</h3>
+                <div class="field-wrapper">
+                    <label for="">Date</label>
+                    <div class="form-field">
+                        <p-calendar class="form-text" dateFormat="dd/mm/y" [minDate]="minDate" readonlyInput="true"
+                            (onSelect)="checkTimeSlot()" formControlName="scheduledate" placeholder="Date"></p-calendar>
+                        <div class="error"
+                            *ngIf="reallocationForm.controls?.scheduledate?.errors?.required && isSubmitCustomerFillFormRequest">
+                            {{lead_panal_form.BLANK_FIELD}}
+                        </div>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Time</label>
+                    <div class="form-field">
+                        <!-- <select formControlName="scheduletime"> -->
+                        <ng-select [options]="newSurveyTime" formControlName="scheduletime" placeholder="Select Time">
+                        </ng-select>
+                        <!-- <option value=1>10:00-12:00</option>
+                            <option value=2>12:00-14:00</option>
+                            <option value=3>14:00-16:00</option>
+                            <option value=4>16:00-18:00</option>
+                        </select> -->
+                        <div class="error"
+                            *ngIf="reallocationForm.controls?.scheduletime?.errors?.required && isSubmitCustomerFillFormRequest">
+                            {{lead_panal_form.BLANK_FIELD}}
+                        </div>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Comment</label>
+                    <div class="form-field">
+                        <input type="text" formControlName="comment" placeholder="Add Comment">
+                        <div class="error"
+                            *ngIf="reallocationForm.controls?.comment?.errors?.required && isSubmitCustomerFillFormRequest">
+                            Comment is required</div>
+                        <div class="error"
+                            *ngIf="reallocationForm.controls?.comment?.errors?.minlength && isSubmitCustomerFillFormRequest">
+                            Comment is minimum of 10 Characters</div>
+                        <div class="error"
+                            *ngIf="reallocationForm.controls?.comment?.errors?.maxlength && isSubmitCustomerFillFormRequest">
+                            Comment is maximum of 1000 Characters</div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input class="button button-blue" type="submit" value="Update" *ngIf="!loading">
+                    <button *ngIf="loading" class="button button-blue" type="button">
+                        <img src="/assets/images/loader.gif" style="width:20px;height:20px;" alt="LUMINOUS" />
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+<!-- fresh lead listing -->
+<div class="container" *ngIf="isListing == 'fresh_leads_listing'">
+    <h2 *ngIf="freshLeadType==='paid'">Consumer Leads List(Paid)</h2>
+    <h2 *ngIf="freshLeadType==='unpaid'">Consumer Leads List(Not-Paid)</h2>
+    <h2 *ngIf="freshLeadType==='cbucket'">Consumer Leads List(Cold-Bucket)</h2>
+    <h2 *ngIf="freshLeadType==='both'">Consumer Leads List(Paid/Unpaid)</h2>
+    <div class="table-wrapper coldData">
+        <!-- <p>hello</p> -->
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>
+                        Lead ID
+                    </th>
+                    <th>
+                        Customer Name
+                    </th>
+                    <th>
+                        Contact No.
+                    </th>
+                    <th>
+                        Address
+                    </th>
+                    <th>
+                        Lead Created ON
+                    </th>
+                    <th>
+                        Lead Status
+                    </th>
+                    <th>
+                        Queue Status
+                    </th>
+                    <th>
+                        Locked By CCE
+                    </th>
+                    <th>
+                        CCE ID
+                    </th>
+                    <th>
+                        CCE Mobile
+                    </th>
+                    <th>
+                        Lead Source
+                    </th>
+                    <th>
+                        CCE Email
+                    </th>
+                    <th *ngIf="freshLeadType==='unpaid'">
+                        Send Payment Link
+                    </th>
+                    <th *ngIf="freshLeadType==='cbucket'">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of freshleadData; let i = index">
+                    <td>{{data?.lead_id}}</td>
+                    <td>{{data?.lead_fname}} {{data?.lead_mname}} {{data?.lead_lname}}</td>
+                    <td>{{data?.lead_mobile}}</td>
+                    <td>{{data?.lead_address1}} {{data?.lead_address2}} {{data?.district_name}}
+                        {{data?.state_name}}-{{data?.lead_lead_pincode}}</td>
+                    <td>{{data?.lead_createdon}}</td>
+                    <td>{{data?.lead_status_name}}</td>
+                    <td>{{data?.lead_queuestatus}}</td>
+                    <td>{{data?.emp_name}}</td>
+                    <td>{{data?.emp_code}}</td>
+                    <td>{{data?.emp_mobileno}}</td>
+                    <td>{{data?.source_master_name}}</td>
+                    <td>{{data?.emp_email}}</td>
+                    <td *ngIf="freshLeadType==='unpaid'">
+                        <button *ngIf="!sendLinkLoader || i != currentButton" class="send-pay-button" type="button"
+                            (click)="sendPaymentLink(data?.lead_id, i)">Send</button>
+                        <button *ngIf="sendLinkLoader && i == currentButton" class="send-pay-button" type="button">
+                            <img src="/assets/images/loader.gif" style="width:20px;height:20px;" alt="LUMINOUS" />
+                        </button>
+                    </td>
+                    <td *ngIf="freshLeadType==='cbucket'">
+                        <button class="btn btn-blue btn-md"
+                            (click)="openRevokeCommentBox(data?.lead_id);">Activate</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <style>
+        ul {
+            overflow: hidden;
+        }
+
+        li {
+            display: inline-block;
+        }
+    </style>
+    <ul *ngIf="freshleadData" style="white-space:nowrap;">
+        <!--
+            <li [ngClass]="{disabled:pages === 1}">
+                <a (click)="getFreshLeadList(pages - 1, freshLeadType)">
+                    <i *ngIf="pages > 1" class="fa fa-angle-left" style="cursor:pointer;">
+                    </i>
+                </a>
+            </li>
+            &nbsp; &nbsp; -->
+        <li>
+            <a>Page {{pages}} of {{pageCount}}</a>
+        </li>
+        <!-- &nbsp; &nbsp;
+            <li [ngClass]="{disabled:pages === pageCount}">
+                <a (click)="getFreshLeadList(pages + 1, freshLeadType)">
+                    <i *ngIf="pages < pageCount" class="fa fa-angle-right" style="cursor:pointer;">
+                    </i>
+                </a>
+            </li> -->
+        <li>
+            <div class="custom-pagination">
+                <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                    <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                        (keypress)=_keyPress($event)>
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number
+                        must be less than or
+                        equal to {{pageCount}}</span>
+                </form>
+
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+<!--@description: List all Leads and Project table
+----@Developer: Roshan
+-->
+<div class="container" *ngIf="isListing == 'all_leads_project'">
+    <h2>Consumer All Leads <a *ngIf="allLeadData.length>0" class="exportData btn btn-blue"
+            (click)="exportAllLeadData()">Export Data</a></h2>
+    <br>
+    <div class="table-wrapper" *ngIf="!loading && allLeadData.length>0">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>Lead Id</th>
+                    <th>Project Id</th>
+                    <th>Consumer Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Mobile</th>
+                    <th>Source</th>
+                    <th>Refrence</th>
+                    <th>Surveyor</th>
+                    <th>Lead Updated By</th>
+                    <th>Project Created By</th>
+                    <th>Lead Status</th>
+                    <th>Project Status</th>
+                    <th>Project assigned</th>
+                    <th>Project assigned name</th>
+                    <!-- <th>Lead Entry Date</th> -->
+                    <th>Lead Updated On</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of allLeadData; let i = index" class="highlight-row">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data?.lead_id}}</td>
+                    <td>{{data?.project_code}}</td>
+                    <td>{{data?.consumer_code}}</td>
+                    <td>{{data?.cceld_firstname}}</td>
+                    <td>{{data?.cceld_lastname}}</td>
+                    <td>{{data?.lead_mobile}}</td>
+                    <td>{{data?.source_master_name}}</td>
+                    <td>{{data?.source}}</td>
+                    <td>{{data?.surveyor}}</td>
+                    <td>{{data?.emp_lead_name}}</td>
+                    <td>{{data?.emp_project_name}}</td>
+                    <td>{{data?.lead_status_name}}</td>
+                    <td>{{data?.pmstate_name}}</td>
+                    <td>{{data?.state_of_lead}}</td>
+                    <td>{{data?.emp_current_name}}</td>
+                    <!-- <td>{{data?.fup_created_at}}</td> -->
+                    <td>{{data?.lead_modifiedon | date: format: mediumDate}}</td>
+                    <td><a href="javascript:void(0)" (click)="DetailForLead(data?.lead_id)">Detail</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <style>
+            ul {
+                overflow: hidden;
+            }
+
+            li {
+                display: inline-block;
+            }
+        </style>
+        <ul *ngIf="allLeadData" style="white-space:nowrap;">
+
+            <li>
+                <a>Page {{pages}} of {{pageCount}}</a>
+            </li>
+            <li>
+                <div class="custom-pagination">
+                    <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                        <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}"
+                            (keypress)=_keyPress($event)>
+                        <button type="submit" class="btn btn-blue btn-md">Go</button>
+                        <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number
+                            must be less than or
+                            equal to {{pageCount}}</span>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="table-wrapper" style="padding: 15px;" *ngIf="!loading && allLeadData.length<=0">
+        No Data
+    </div>
+    <img *ngIf="loading" src="/assets/images/loader.gif" style="width:100px;height:100px;" alt="LUMINOUS" />
+</div>
+<!--End List All Project and List-->
+<style>
+    .positionUpLeft {
+        position: absolute;
+        top: 2%;
+        margin-left: 10%;
+    }
+
+    .positionUpRight {
+        position: absolute;
+        top: 2%;
+    }
+</style>
+<div class="container" *ngIf="isListing == 'detail_for_leads'">
+    <div *ngIf="MissedCallDetailPage=='missedCallLogListing'">
+        <a (click)="leadAction(MissedCallId,'createLead')" class="gbgBtn positionUpLeft">Create Lead</a>
+        <a (click)="leadAction(MissedCallId,'closeLead')" class="gbgBtn positionUpRight">Close Lead</a>
+    </div>
+    <div class="survey-form audit-form">
+        <p-panel header="Customer Care Form:" class="luminous-panel-heading" [toggleable]="true">
+            <div class="tab-content-detail">
+                <h3>Consumer Personal Information</h3>
+                <div class="field-wrapper">
+                    <label for="">First Name *</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.cceld_firstname}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Middle Name </label>
+                    <div class="form-field">
+                        <span>{{detailLead?.cceld_middlename}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Last Name *</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.cceld_lastname}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Address 1.</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.cceld_address1}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Address 2</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.cceld_address2}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Pincode</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.cceld_pincode}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">City</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.district_name}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">State</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.state_name}}</span>
+                    </div>
+                </div>
+
+                <div class="field-wrapper">
+                    <label for="">Contact Number</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.cceld_mobileno}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Email ID</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.cceld_email}}</span>
+                    </div>
+                </div>
+
+            </div>
+        </p-panel>
+
+        <p-panel header="Survey Form:" class="luminous-panel-heading" [toggleable]="true">
+            <div class="tab-content-detail">
+                <h3>Electric Parameter</h3>
+                <div class="field-wrapper">
+                    <label for="">Sanctioned Load Capacity</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_sanctioned_load_capacity}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Type of Connection</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_connection_type}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Main Line Transformer Status (If installed by customer)</label>
+                    <div class="form-field">
+                        <span>{{yesNo[detailLead?.sf_mainline_transformer_status]}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Transformer Capacity</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_transformer_capacity}}</span>
+                    </div>
+                </div>
+                <h3>Existing Power Back-Up Solutions</h3>
+
+                <div class="field-wrapper">
+                    <label for="">Availability of Grid (7 AM-6 PM)</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_availability_of_grid1}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Availability of Grid (6PM-7 AM)</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_availability_of_grid2}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Minimum Running Load in day time (7 AM-6 PM)</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_min_running_loadin_daytime}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Load running after (6 PM)</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_load_running_after6}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Operation Hours of Critical Load (Back up Hours)
+
+                    </label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_operation_hour_of_critical_load}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Termination DB/LT panel capacity</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_secondary_source_of_supply_if_available}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Evacuation Voltage</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_evacuation_voltage}}</span>
+                    </div>
+                </div>
+
+                <h3>
+                    SPACE Availability
+                </h3>
+
+                <div class="field-wrapper">
+                    <label for="">Type of Roof</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_type_of_roof}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Shadow Free Area Available</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_shadow_free_area}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Other Spaces Available for Installation</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_other_spaces_available_for_installation}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Chipping on roof allowance</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_chipping_on_roof_allowance}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Can the panels be mounted facing towards true south</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_can_the_panels_be_mounted_facing_towards_true_south}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">In case of non true south sites (mention the diflection / azimuth angle)</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_incase_of_nontrue_southsites}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">In case of shed, is the drilling allowed on it</label>
+                    <div class="form-field">
+                        <span>{{yesNo[detailLead?.sf_incase_of_shed_isdrill_allowed]}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Is the shed facing towards true south</label>
+                    <div class="form-field">
+                        <span>{{yesNo[detailLead?.sf_isthe_shed_facing_towards_true_south]}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Details of Shed</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_details_of_shed}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Area of the place where PCU / Battery to be placed</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_area_of_the_place_where_pcu}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Ventilation Available in Battery/PCU Room</label>
+                    <div class="form-field">
+                        <span>{{yesNo[detailLead?.sf_ventilation_available_in_batterypcu_room]}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Distance from Roof to Inverter / Battery Room</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_distance_from_roof_to_inverter_battery_room}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Distance from Inverter / Battery Room to LT Board</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_distance_from_inverter_battery_room_to_lt_board}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Length of wire-run from each array to Inverter</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_length_of_wirerun_from_each_array_to_inverter}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Space Available for Secure Storage of Material</label>
+                    <div class="form-field">
+                        <span>{{yesNo[detailLead?.sf_space_available_for_secure_storage_of_material]}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Space available for earthing</label>
+                    <div class="form-field">
+                        <span>{{yesNo[detailLead?.sf_space_available_for_earthing]}}</span>
+                    </div>
+                </div>
+                <h3>Shadow Consideration</h3>
+                <div class="field-wrapper">
+                    <label for="">Height of the Parapet Wall</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_height_of_the_parapet_wall}}</span>
+                    </div>
+                </div>
+
+
+                <div class="field-wrapper">
+                    <label for="">Protruding Objects/Mumty in installation location(water tank, Dish,Antennae)</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_protruding_objects_mumty_in_installation_location}}</span>
+                    </div>
+                </div>
+
+                <div class="field-wrapper">
+                    <label for="">Details of High Altitude Trees/Buildings facing south</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_details_of_high_altitude_trees_buildings_facing_south}}</span>
+                    </div>
+                </div>
+
+                <div class="field-wrapper">
+                    <label for="">Latitude, Longitude of site</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.sf_latitude_longitude_of_site}}</span>
+                    </div>
+                </div>
+
+            </div>
+        </p-panel>
+
+        <p-panel header="Solution Designer Form:" class="luminous-panel-heading" [toggleable]="true">
+            <div class="field-wrapper">
+                <label for="">Solution Type</label>
+                <div class="form-field">
+                    <span *ngIf="detailLead?.proposal_solution_type == '1'">On Grid</span>
+                    <span *ngIf="detailLead?.proposal_solution_type == '2'">Off Grid</span>
+                    <span *ngIf="detailLead?.proposal_solution_type == '3'">Hybrid</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Inverter Rating</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_inverter_rating}}</span>
+                </div>
+            </div>
+
+            <div *ngIf="detailLead?.proposal_inverter_rating2" class="field-wrapper">
+                <label for="">Inverter Rating2</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_inverter_rating2}}</span>
+                </div>
+            </div>
+
+            <div *ngIf="detailLead?.proposal_inverter_rating3" class="field-wrapper">
+                <label for="">Inverter Rating3</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_inverter_rating3}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Structure Type</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_structure_type}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">No Of Solar Panel</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_number_of_solar_panel}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Module Capacity</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_module_capacity}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Panel Type</label>
+                <div class="form-field">
+                    <span *ngIf="detailLead?.proposal_panel_type == 1">72-Cell Poly-Crystalline</span>
+                    <span *ngIf="detailLead?.proposal_panel_type == 2">144-Cell Mono PERC Half Cut</span>
+                    <span *ngIf="detailLead?.proposal_panel_type == 3">72-Cell Mono Crystalline</span>
+                    <span *ngIf="detailLead?.proposal_panel_type == 4">72-Cell Mono Crystalline PERC</span>
+                </div>
+            </div>
+
+            <!-- <div class="field-wrapper">
+                                <label for="">Height In MM</label>
+                                <div class="form-field">
+                                    <span>{{detailLead?.proposal_height_mm}}</span>
+                                </div>
+                        </div> -->
+
+            <div class="gold_wrapper">
+                <div class="field-wrapper">
+                    <label for="">Project Value Gold</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_project_value_gold}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Project Advance 1st Tranche</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_advanced}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Project Advance 2nd Tranche</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_payment_2}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Project Advance 3rd Tranche</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_payment_3}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Solar PV Panel</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_solar_pv_panels_gold}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Earthing PV Potection System</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_earthing_pv_protection_system_gold}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">EMI Gold</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_emi_gold}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="silver_wrapper">
+                <div class="field-wrapper">
+                    <label for="">Project Value Silver</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_project_value_silver}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Project Advance 1st Tranche</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_advance_silver}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Project Advance 2nd Tranche</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_advance_silver_1}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Project Advance 3rd Tranche</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_advance_silver_2}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Solar PV Panel</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_solar_pv_panels_silver}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">Earthing PV Potection System</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_earthing_pv_protection_system_silver}}</span>
+                    </div>
+                </div>
+                <div class="field-wrapper">
+                    <label for="">EMI Silver</label>
+                    <div class="form-field">
+                        <span>{{detailLead?.proposal_emi_silver}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: 100%; clear: both;"></div>
+
+            <!-- <div class="field-wrapper">
+                                <label for="">Specific Energy</label>
+                                <div class="form-field">
+                                    <span>{{detailLead?.proposal_specific_energy}}</span>
+                                </div>
+                        </div> -->
+
+            <div class="field-wrapper">
+                <label for="">Specific Yield</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_global_solr_irr}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Electricity Tarrif</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_electricity_terrif}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Service Support</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_service_support}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Proposal Amc</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_amc}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">No Of SPGS</label>
+                <div class="form-field">
+                    <span>{{detailLead?.proposal_no_of_spgs}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Discom</label>
+                <div class="form-field">
+                    <span>{{detailLead?.discom}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Structure Brief</label>
+                <div class="form-field">
+                    <span>{{detailLead?.StrucBOM}}</span>
+                </div>
+            </div>
+
+            <div class="field-wrapper">
+                <label for="">Average Power Cut</label>
+                <div class="form-field">
+                    <span>{{detailLead?.AvgPowerCut}}</span>
+                </div>
+            </div>
+
+        </p-panel>
+
+        <!-- project status detailed part -->
+        <p-panel header="Project History" class="luminous-panel-heading" [toggleable]="true">
+            <div class="table-wrapper">
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th>S.no.</th>
+                        <th>Role</th>
+                        <th>Name</th>
+                        <th>Checklist</th>
+                        <th>Completion</th>
+                        <th>Status</th>
+                        <th>Date & Time</th>
+                        <!-- <th></th> -->
+                    </tr>
+                    <ng-template ngFor let-projectData [ngForOf]="projectDetail" let-i="index">
+                        <tr *ngIf="projectData?.pstatus_lastmodifiedby">
+                            <!-- <tr *ngFor="let projectData of projectDetail; let i = index;"> -->
+                              <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                            <td>
+                                <strong>{{projectData?.role_name}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{projectData?.emp_firstname}} {{projectData?.emp_middlename}}
+                                    {{projectData?.emp_lastname}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{projectData?.psm_status}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{yesNo[projectData?.pstatus_checkliststatus]}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{isSuccess[projectData?.pstatus_checkliststatus]}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{projectData?.pstatus_lastmodifiedon}}</strong>
+                            </td>
+
+                        </tr>
+                    </ng-template>
+
+
+                </table>
+            </div>
+        </p-panel>
+        <!-- rejection details -->
+
+        <p-panel header="Rejection History" class="luminous-panel-heading" [toggleable]="true">
+            <div class="table-wrapper">
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th>S.no.</th>
+                        <th>Role</th>
+                        <th>Name</th>
+                        <th>Checklist</th>
+                        <th>Remarks</th>
+
+                        <!-- <th></th> -->
+                    </tr>
+                    <ng-template ngFor let-rejectionData [ngForOf]="projectRejectionData" let-i="index">
+                        <tr *ngIf="rejectionData?.role_name">
+                               <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                            <td>
+                                <strong>{{rejectionData?.role_name}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{rejectionData?.emp_firstname}} {{projectData?.emp_middlename}}
+                                    {{projectData?.emp_lastname}}</strong>
+                            </td>
+                            <td>
+                                <strong>{{rejectionData?.psm_status}}</strong>
+                            </td>
+
+                            <td>
+                                <strong>{{rejectionData?.prd_remarks}}</strong>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </table>
+            </div>
+        </p-panel>
+        <p-panel header="Data With Duplicate Leads" class="luminous-panel-heading" [toggleable]="true">
+            <div class="table-wrapper">
+                <table cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Lead Id</th>
+                            <th>Project Id</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Lead Status</th>
+                            <th>Project Status</th>
+                            <th>Lead Mobile</th>
+                            <th>Cunsumer Mobile</th>
+                            <!-- <th>Query/Reason</th>
+                                            <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="ongoingLead">
+                        <tr *ngFor="let ongLd of ongoingLead; let i = index">
+                            <td>{{ongLd?.lead_id}}</td>
+                            <td>N/A</td>
+                            <td>{{ongLd?.consumer_full_name}}</td>
+                            <td>{{(ongLd?.address.trim() !='')?ongLd?.address:'N/A'}}</td>
+                            <td>Lead In Progress</td>
+                            <td>N/A</td>
+                            <td>{{ongLd?.lead_mobile}}</td>
+                            <td>{{ongLd?.consumer_mobileno}}</td>
+                            <!-- <td><input type="text" (input)="setQueryText($event.target.value, i, 'ong')"></td>
+                                            <td><button type="button" (click)="updateExistingLead(ongLd?.lead_id, i, 'ong')">Click</button></td> -->
+                        </tr>
+                    </tbody>
+
+                    <tbody *ngIf="coldLead">
+                        <tr *ngFor="let coldLd of coldLead; let j = index">
+                            <td>{{coldLd?.lead_id}}</td>
+                            <td>N/A</td>
+                            <td>{{coldLd?.consumer_full_name}}</td>
+                            <td>{{(coldLd?.address.trim()!='')?coldLd?.address:'N/A'}}</td>
+                            <td>Rejected Lead</td>
+                            <td>N/A</td>
+                            <td>{{coldLd?.lead_mobile}}</td>
+                            <td>{{coldLd?.consumer_mobileno}}</td>
+                            <!-- <td><input type="text" (input)="setQueryText($event.target.value, j, 'cld')"></td>
+                                            <td><button type="button" (click)="updateExistingLead(coldLd?.lead_id, j, 'cld')">Click</button></td> -->
+                        </tr>
+                    </tbody>
+
+                    <tbody *ngIf="ongoingProject">
+                        <tr *ngFor="let ongPj of ongoingProject; let k = index">
+                            <td>{{ongPj?.lead_id}}</td>
+                            <td>{{ongPj?.project_code}}</td>
+                            <td>{{ongPj?.consumer_full_name}}</td>
+                            <td>{{(ongPj?.address.trim()!='')?ongPj?.address:'N/A'}}</td>
+                            <td>N/A</td>
+                            <td>Project In Progress</td>
+                            <td>{{ongPj?.lead_mobile}}</td>
+                            <td>{{ongPj?.consumer_mobileno}}</td>
+                            <!-- <td><input type="text" (input)="setQueryText($event.target.value, k, 'ogp')"></td>
+                                            <td><button type="button" (click)="updateExistingProject(ongPj?.project_id, k, 'ogp')">Click</button></td> -->
+                        </tr>
+                    </tbody>
+
+                    <tbody *ngIf="rejectedProject">
+                        <tr *ngFor="let rejPj of rejectedProject; let l = index">
+                            <td>{{rejPj?.lead_id}}</td>
+                            <td>{{rejPj?.project_code}}</td>
+                            <td>{{rejPj?.consumer_full_name}}</td>
+                            <td>{{(ongPj?.address.trim()!='')?ongPj?.address:'N/A'}}</td>
+                            <td>N/A</td>
+                            <td>Project Rejected</td>
+                            <td>{{rejPj?.lead_mobile}}</td>
+                            <td>{{rejPj?.consumer_mobileno}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </p-panel>
+        <!-- add more code -->
+    </div>
+</div>
+<!--Start for the missedcall logs-->
+<div class="container" *ngIf="isListing == 'CCELeadList' && !showCceForm">
+
+    <h2>CCE Assigned Leads <a *ngIf="cceLeadData.length>0" class="exportData btn btn-blue"
+            (click)="exportCCELEadData()">Export Data</a></h2>
+    <div class="table-wrapper clearboth">
+        <table *ngIf="cceLeadData.length>0">
+            <thead>
+                <tr>
+                    <th>Lead Id</th>
+                    <th>Project Id</th>
+                    <th>Customer Mobile Number</th>
+                    <th>City</th>
+                    <th>CCE Email</th>
+                    <th>Survey Status</th>
+                    <th>Proposal Status</th>
+                    <th>Project Status</th>
+                    <th>Surveyor Name</th>
+                    <th>Surveyor Booked</th>
+                    <th>Surveyor VIsited</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of cceLeadData">
+                    <td>{{data.cceld_leadid}}</td>
+                    <td>{{data.project_code}}</td>
+                    <td>{{data.cceld_mobileno}}</td>
+                    <td>{{data.district_name}}</td>
+                    <td style="text-transform: none">{{data.emp_email}}</td>
+                    <td>{{data.SurveyStatus}}</td>
+                    <td>{{data.ProposalStatus}}</td>
+                    <td>{{data.fpsm_status}}</td>
+                    <td>{{data.surveyorName}}</td>
+                    <td>{{data.ProjectStartDate}}</td>
+                    <td>{{data.ProjectSurveyorCompleted}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="noRecordFound" *ngIf="cceLeadData.length==0">
+            <p style="padding:15px;">No Record Found!</p>
+        </div>
+    </div>
+
+    <ul *ngIf="cceLeadData.length>0" style="white-space:nowrap;">
+
+        <li [ngClass]="{disabled:pages === 1}">
+            <a (click)="getCCELeadList(pages - 1)">
+                <i *ngIf="pages > 1" class="fa fa-angle-left" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        &nbsp; &nbsp;
+        <li>
+            <a>Page {{pages}} of {{pageCount}}</a>
+        </li>
+        &nbsp; &nbsp;
+        <li [ngClass]="{disabled:pages === pageCount}">
+            <a (click)="getCCELeadList(pages + 1)">
+                <i *ngIf="pages < pageCount" class="fa fa-angle-right" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        <li>
+            <div class="custom-pagination">
+                <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                    <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}">
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                        be less than or
+                        equal to {{pageCount}}</span>
+                </form>
+
+            </div>
+        </li>
+    </ul>
+</div>
+<!--End missedcall logs-->
+
+
+<!--Start for the missedcall logs-->
+<div class="container" *ngIf="isListing == 'missedCallLogListing' && !showCceForm">
+
+    <h2>Missed Call Log For Existing Lead</h2>
+    <br>
+    <img *ngIf="loading" src="/assets/images/loader.gif" style="width:100px;height:100px;" alt="LUMINOUS" />
+    <div class="table-wrapper">
+        <table *ngIf="!loading && missedCallLogsList.length>0">
+            <thead>
+                <tr>
+                    <th>Serial No.</th>
+                    <th>Lead Id</th>
+                    <th>Customer No.</th>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Project Id</th>
+                    <th>Call Date / Time</th>
+                    <th>Option Selected</th>
+                    <!--th>Lead Exists</th-->
+                    <th>Project Status</th>
+                    <th>Surveyor</th>
+                    <th>Solution Designer</th>
+                    <th>Ops Head</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of missedCallLogsList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.lead_id}}</td>
+                    <td>{{data.missed_call_customer_number}}</td>
+                    <td>{{data.cceld_firstname+' '+data.cceld_lastname}}</td>
+                    <td>{{data.address}}</td>
+                    <td>{{data.project_code}}</td>
+                    <td>{{data.missed_call_date}} / {{data.missed_call_time}}</td>
+                    <td>{{data.miss_call_department}}</td>
+                    <!--td>{{data.number_exists}}</td-->
+                    <td>{{data.pmstate_name}}</td>
+                    <td>{{data.surveyor_name}}</td>
+                    <td>{{data.solution_desiner_name}}</td>
+                    <td>{{data.ops_head_name}}</td>
+                    <td><a (click)="DetailForLeadMissedCall(data?.lead_id,data?.missed_call_id)"
+                            style="cursor: pointer; color: blue;">Detail</a></td>
+                    <!--td (click)="CreateLead(data.missed_call_customer_number)" class="click">create Lead</td-->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="noRecordFound" *ngIf="noRecords">
+        <span>No Record Found!</span>
+    </div>
+
+    <ul *ngIf="missedCallLogsList.length>0" style="white-space:nowrap;">
+
+        <li [ngClass]="{disabled:pages === 1}">
+            <a (click)="ShowMissedCallListing(pages - 1,true)">
+                <i *ngIf="pages > 1" class="fa fa-angle-left" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        &nbsp; &nbsp;
+        <li>
+            <a>Page {{pages}} of {{pageCount}}</a>
+        </li>
+        &nbsp; &nbsp;
+        <li [ngClass]="{disabled:pages === pageCount}">
+            <a (click)="ShowMissedCallListing(pages + 1,true)">
+                <i *ngIf="pages < pageCount" class="fa fa-angle-right" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        <li>
+            <div class="custom-pagination">
+                <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                    <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}">
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                        be less than or
+                        equal to {{pageCount}}</span>
+                </form>
+
+            </div>
+        </li>
+    </ul>
+</div>
+<!--End missedcall logs-->
+
+<!--Start Partner Query Listing Listing-->
+<div class="container missed-call-listing" *ngIf="isListing=='partnerQueryListing'">
+    <h2>Partner Query Log List <a *ngIf="partnerQueryLogsList.length>0" class="exportData btn btn-blue"
+            (click)="ExportCSVForParterLog()">Export</a></h2>
+
+    <div class="table-wrapper clearboth">
+        <table *ngIf="partnerQueryLogsList.length>0">
+            <thead>
+                <tr>
+                    <th>Serial No.</th>
+                    <th>Phone No.</th>
+                    <th>Query Date / Time</th>
+                    <th>Locked By</th>
+                    <th>Reschedule Date</th>
+                    <th>Status</th>
+                    <!--th>Action</th-->
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of partnerQueryLogsList; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.partnerQuery.prt_mobile}}</td>
+                    <td>{{data.partnerQuery.prt_created}}</td>
+                    <td>{{(data.employee.emp_firstname)?data.employee.emp_firstname +' '+ data.employee.emp_lastname:'N/A'}}
+                    </td>
+                    <td>{{data.partnerQuery.prt_reschedule_date}}</td>
+                    <td>{{data.partnerQuery.prt_status==4?'Reschedule - Partner Query':'New - Partner Query'}}</td>
+                    <!--td (click)="createPartnerForm(data.partnerQuery.prt_id,data.partnerQuery.prt_mobile)" class="click">Query Form</td-->
+                </tr>
+            </tbody>
+        </table>
+        <div class="noRecordFound" *ngIf="partnerQueryLogsList.length==0">
+            <p style="padding:15px;">No Record Found!</p>
+        </div>
+    </div>
+
+    <ul *ngIf="partnerQueryLogsList.length>0" style="white-space:nowrap;">
+
+        <li [ngClass]="{disabled:pages === 1}">
+            <a (click)="partnerQueryLogsList(pages - 1)">
+                <i *ngIf="pages > 1" class="fa fa-angle-left" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        &nbsp; &nbsp;
+        <li>
+            <a>Page {{pages}} of {{pageCount}}</a>
+        </li>
+        &nbsp; &nbsp;
+        <li [ngClass]="{disabled:pages === pageCount}">
+            <a (click)="partnerQueryLogsList(pages + 1)">
+                <i *ngIf="pages < pageCount" class="fa fa-angle-right" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        <li>
+            <div class="custom-pagination">
+                <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                    <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}">
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                        be less than or
+                        equal to {{pageCount}}</span>
+                </form>
+
+            </div>
+        </li>
+    </ul>
+</div>
+<!--End Partner Query Listing -->
+
+<!--Start Consumer Leads Listing-->
+<div class="container missed-call-listing" *ngIf="isListing=='CceLeadsListing'">
+    <div class="oNoFFBtn">
+        <label>
+            Toggle Button For Queue Leads
+        </label>
+        <label class="switch">
+            <input type="checkbox" (click)="toggleLeadQueue($event)" [checked]="toggleValue">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <!--h2>Partner Query Log List <a *ngIf="leadsListCce.length>0" class="exportData btn btn-blue" (click)="ExportCSVForParterLog()">Export</a></h2-->
+    <h2>Consumer Leads Listing
+        <a *ngIf="bulkpriority" class="reject-leads btn btn-blue"
+            (click)="bulkSavePriority()">Save Priority </a>
+    </h2>
+    <div class="table-wrapper clearboth">
+        <table *ngIf="leadsListCce.length>0">
+            <thead>
+                <tr>
+                    <th>Serial No.</th>
+                    <th>Lead Id</th>
+                    <th>Lead Consumer Name</th>
+                    <th>Lead mobile</th>
+                    <th>Lead Schedule Date</th>
+                    <th>Lead Source Master</th>
+                    <th>Lead Priority Action
+                     Select All <input type="checkbox"  [checked]="isAllSelected"
+                        (click)="toggleAllLeadsPriority($event)">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of leadsListCce; let i = index">
+                    <td>{{((pages-1)*itemPerPage) + (i+1)}}</td>
+                    <td>{{data.consumerLead.lead_id}}</td>
+                    <td>{{data.consumerLead.lead_fname}} {{data.consumerLead.lead_lname}}</td>
+                    <td>{{data.consumerLead.lead_mobile}}</td>
+                    <td>{{data.consumerLead.lead_scheduledate}}</td>
+                    <td>{{data.leadSourceMaster.source_master_name}}</td>
+                    <td><input type="checkbox" style="display: block;" [checked]="data.consumerLead.lead_priority==1"
+                            (change)="checkConsumerPriority(data.consumerLead.lead_id,$event)"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="noRecordFound" *ngIf="leadsListCce.length==0">
+            <p style="padding:15px;">No Record Found!</p>
+        </div>
+    </div>
+    <ul *ngIf="leadsListCce.length>0" style="white-space:nowrap;">
+        <li [ngClass]="{disabled:pages === 1}">
+            <a (click)="partnerQueryLogsList(pages - 1)">
+                <i *ngIf="pages > 1" class="fa fa-angle-left" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        &nbsp; &nbsp;
+        <li>
+            <a>Page {{pages}} of {{pageCount}}</a>
+        </li>
+        &nbsp; &nbsp;
+        <li [ngClass]="{disabled:pages === pageCount}">
+            <a (click)="getListLeadsCce(pages + 1)">
+                <i *ngIf="pages < pageCount" class="fa fa-angle-right" style="cursor:pointer;">
+                </i>
+            </a>
+        </li>
+        <li>
+            <div class="custom-pagination">
+                <form [formGroup]="paginationSubmitForm" (ngSubmit)="pageSubmit()">
+                    <input type="number" formControlName="page_number" class="form-text" min="0" max="{{pageCount}}">
+                    <button type="submit" class="btn btn-blue btn-md">Go</button>
+                    <span class="error" *ngIf="paginationSubmitForm.controls?.page_number?.errors?.max">Page number must
+                        be less than or
+                        equal to {{pageCount}}</span>
+                </form>
+            </div>
+        </li>
+    </ul>
+</div>
+<!--End Partner Query Listing -->
+
+
+<div *ngIf="revokeCommentBox" class="sendBox" [ngClass]="{hideAside:revokeCommentBox,showAside:!revokeCommentBox}">
+    <div class="box-wrapper">
+        <div class="tableBoxx">
+            <div class="cellBoxx">
+                <div class="sendWrapper">
+                    <h4>Revoke Lead</h4>
+                    <form [formGroup]="coldBucketCommentForm" (ngSubmit)="submitRevokeColdLead()">
+                        <div class="field-wrapper">
+                            <label for="">Comment</label>
+                            <div class="form-field">
+                                <!--<input type="textbox" formControlName="comment" name="comment" style="height:150px; width:150px;">-->
+                                <textarea formControlName="comment" name="comment" cols="50" rows="3"
+                                    placeholder="Add Comment"></textarea>
+                            </div>
+                            <div class="error" *ngIf="coldBucketCommentForm.controls?.comment?.errors"
+                                style="width:100%;">Please
+                                enter comment</div>
+                        </div>
+                        <div class="field-wrapper">
+                            <div class="form-field">
+                                <button type="submit" class="btn btn-blue btn-md">Save</button>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0)" class="menu example5" (click)="revokeCommentBox=!revokeCommentBox">
+                            <span>x</span>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div *ngIf="isData" style="margin: 30px; padding: 30px; background-color: #fff; font-size: 32px; text-align: center;">
+    <p>{{leadData}}</p>
+</div>
+<div *ngIf="isLoginEmp == true"
+    style="margin: 30px; padding: 30px; background-color: #fff; font-size: 32px; text-align: center;">
+    <p>Unauthorised Access. Please login to access.</p>
+</div>

@@ -1,11 +1,13 @@
 import * as vars from './../static/static-config';
 'use strict';
-export const customerPublicIP: string = 'http://61.16.138.198';
+// export const customerPublicIP: string = 'http://61.16.138.198';
+export const customerPublicIP: string = 'https://api.solarbyluminous.com/';
 export const portNo: number = 8778;
 export var API_BASE_URL: string = vars.API_BASE_URL;
 export const IcallMateURL: string = `${customerPublicIP}:${portNo}`;
 export var SEARCH_RESULT_DOWNLOAD_PATH: string = vars.SEARCH_RESULT_DOWNLOAD_PATH;
 export var STRIP_IMAGE_PATH: string = vars.STRIP_IMAGE_PATH;
+console.warn("@@", vars)
 export var APIS: any = {
       "CONSUMER_REGISTER": `${API_BASE_URL}/registerUser`,
       "GENERATE_OTP": `${API_BASE_URL}/generateOTP/`,
@@ -172,7 +174,6 @@ export var APIS: any = {
       "GET_HANDOFF_DATA": `${API_BASE_URL}/handoff-data`,
       "SUBMIT_HANDOFF_DATA": `${API_BASE_URL}/submitHandoff`,
       "GET_SUBMITTED_HANDOFF_LIST": `${API_BASE_URL}/handoffList`,
-      "GET_SUPPLY_ORDER_LIST": `${API_BASE_URL}/sodesignerlist`,
       "SUBMIT_PM_Allocation": `${API_BASE_URL}/assignProjectManager`,
       "GET_PROJECTS_LIST_PM": `${API_BASE_URL}/ProjectsListPM`,
       "ACCEPT_REJECT_PM": `${API_BASE_URL}/actionProjectManager`,
@@ -215,11 +216,9 @@ export var APIS: any = {
       "MAKE_CALL": `${IcallMateURL}/iCallMateWebSvc/resources/MakeCall`,
       "SCRIPT": `${API_BASE_URL}/scriptexecution`,
       "F_DASHBOARD": `${API_BASE_URL}/funneldashboard`,
-      "UPDATE_SURVEYOR": `${API_BASE_URL}/updateFunnelDashboardSurveyor`
 };
 export const ROLES = {
       CONSUMER_ROLE: 23,
-      SITE_SURVEYOR: 0
 };
 
 export const ALL_ROLES = {
@@ -237,7 +236,6 @@ export const ALL_ROLES = {
       28: 'Partner Query User',
       29: 'Project manager',
       30: 'Project manager(view)',
-      31: 'SO Designer'
 };
 
 export const TIMES = {

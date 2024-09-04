@@ -6,8 +6,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import { SharedServices } from './../../../services/shared.services';
-// import * as globals from './../../../static/static';
-import * as globals from '../../../static/global';
+import * as globals from './../../../static/static';
+// import * as globals from '../../../static/global';
 import { ConsumerProjectMilestone } from './../../../interfaces/consumerProjectMilestone.interface';
 import { Kart } from './../../../interfaces/kartValues.interface';
 import { Header } from 'primeng/primeng';
